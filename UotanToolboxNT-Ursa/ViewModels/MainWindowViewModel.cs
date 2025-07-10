@@ -36,11 +36,5 @@ public partial class MainWindowViewModel : ViewModelBase
         };
     }
 
-    public event PropertyChangedEventHandler? PropertyChanged;
-    protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
-
     public ObservableCollection<MenuItemViewModel> MenuItems { get; set; }
 }

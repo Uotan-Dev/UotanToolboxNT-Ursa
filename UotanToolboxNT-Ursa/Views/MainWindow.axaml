@@ -6,11 +6,17 @@
         xmlns:u="https://irihi.tech/ursa"
         xmlns:iri="https://irihi.tech/shared"
 		xmlns:local="clr-namespace:UotanToolbox"
+        xmlns:converters="clr-namespace:UotanToolboxNT_Ursa.Converters"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="UotanToolboxNT_Ursa.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
         Title="UotanToolboxNT_Ursa">
+
+    <Design.DataContext>
+        <vm:MainViewViewModel />
+    </Design.DataContext>
+
     <Panel>
         <Panel.Styles>
             <Style Selector="Grid.Blur">
@@ -27,6 +33,7 @@
                     ExpandWidth="400"
                     SubMenuBinding="{Binding Children}"
                     HeaderBinding="{Binding MenuHeader}"
+                    CommandBinding="{Binding ActivateCommand}"
                     ItemsSource="{Binding Menus.MenuItems}">
                     <u:NavMenu.Header>
                         <Grid HorizontalAlignment="Center" ColumnDefinitions="Auto, Auto">
@@ -53,6 +60,9 @@
                     Grid.Column="1"
                     Margin="12,36,12,12"
                     Content="{Binding Content}">
+                <ContentControl.ContentTemplate>
+                    <converters:ViewLocator />
+                </ContentControl.ContentTemplate>
             </ContentControl>
         </Grid>
     </Panel>

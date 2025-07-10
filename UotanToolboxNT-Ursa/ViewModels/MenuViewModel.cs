@@ -8,22 +8,19 @@ public class MenuViewModel : ViewModelBase
     {
         MenuItems = new ObservableCollection<MenuItemViewModel>
         {
-            new() { MenuHeader = "Introduction", IsSeparator = false },
-            new() { MenuHeader = "About Us", Key = MenuKeys.MenuKeyAboutUs, IsSeparator = false },
-            new() {
+            new(){
                 MenuHeader = "Introduction",
-                Children = new ObservableCollection<MenuItemViewModel>{
-                    new() {
-                        MenuHeader =  "Getting Started",
-                        Children = new ObservableCollection<MenuItemViewModel>
-                        {
-                            new() { MenuHeader = "Code of Conduct" },
-                            new() { MenuHeader = "How to Contribute" },
-                            new() { MenuHeader = "Development Workflow" },
-                        }
-                    },
-                },
+                Children = new ObservableCollection<MenuItemViewModel>
+                {
+                    new() { MenuHeader = "Code of Conduct" },
+                    new() { MenuHeader = "How to Contribute" },
+                    new() { MenuHeader = "Development Workflow" },
+                }
             },
+            new(){
+                MenuHeader = "About Us",
+                Key = MenuKeys.MenuKeyAboutUs // ±ÿ–Î…Ë÷√Key
+            }
         };
     }
 
