@@ -6,7 +6,7 @@ using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
-namespace Ursa.Demo.ViewModels;
+namespace UotanToolboxNT_Ursa.ViewModels;
 
 public partial class AboutUsDemoViewModel : ObservableObject
 {

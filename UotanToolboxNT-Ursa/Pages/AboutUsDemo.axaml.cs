@@ -1,8 +1,8 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using Ursa.Demo.ViewModels;
+using UotanToolboxNT_Ursa.ViewModels;
 
-namespace Ursa.Demo.Pages;
+namespace UotanToolboxNT_Ursa.Pages;
 
 public partial class AboutUsDemo : UserControl
 {

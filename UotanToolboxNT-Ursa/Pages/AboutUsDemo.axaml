@@ -7,8 +7,7 @@
              xmlns:viewModels="clr-namespace:Ursa.Demo.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800"
              d:DesignHeight="450"
-             x:DataType="viewModels:AboutUsDemoViewModel"
-             x:Class="Ursa.Demo.Pages.AboutUsDemo">
+             x:Class="UotanToolboxNT_Ursa.Pages.AboutUsDemo">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.ThemeDictionaries>
@@ -141,7 +140,6 @@
                     Columns="2">
                     <Button
                         Margin="8"
-                        Command="{Binding NavigateCommand}"
                         CommandParameter="semi"
                         Theme="{DynamicResource TileButton}">
                         <StackPanel HorizontalAlignment="Left">
@@ -155,7 +153,6 @@
                     </Button>
                     <Button
                         Margin="8"
-                        Command="{Binding NavigateCommand}"
                         CommandParameter="ursa"
                         Theme="{DynamicResource TileButton}">
                         <StackPanel HorizontalAlignment="Left">
@@ -169,7 +166,6 @@
                     </Button>
                     <Button
                         Margin="8"
-                        Command="{Binding NavigateCommand}"
                         CommandParameter="mantra"
                         Theme="{DynamicResource TileButton}">
                         <StackPanel HorizontalAlignment="Left">
@@ -183,7 +179,6 @@
                     </Button>
                     <Button
                         Margin="8"
-                        Command="{Binding NavigateCommand}"
                         CommandParameter="huska"
                         Theme="{DynamicResource TileButton}">
                         <StackPanel HorizontalAlignment="Left">
