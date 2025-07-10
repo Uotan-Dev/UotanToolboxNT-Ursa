@@ -1,0 +1,69 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:u="https://irihi.tech/ursa"
+        xmlns:iri="https://irihi.tech/shared"
+		xmlns:local="clr-namespace:UotanToolbox"
+        xmlns:converters="clr-namespace:UotanToolboxNT_Ursa.Converters"
+        xmlns:vm="using:UotanToolboxNT_Ursa.ViewModels"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="UotanToolboxNT_Ursa.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="UotanToolboxNT_Ursa">
+
+    <Design.DataContext>
+        <vm:MainWindowViewModel />
+    </Design.DataContext>
+
+    <Panel>
+        <Panel.Styles>
+            <Style Selector="Grid.Blur">
+                <Setter Property="Effect" Value="blur(10)" />
+            </Style>
+        </Panel.Styles>
+        <Grid Classes.Blur="{Binding $parent[u:UrsaWindow].(u:OverlayDialogHost.IsInModalStatus)}" ColumnDefinitions="Auto, *">
+            <Border
+                Padding="8,4"
+                VerticalAlignment="Stretch"
+                Theme="{DynamicResource CardBorder}">
+                <u:NavMenu
+                    Name="menu"
+                    ExpandWidth="400"
+                    SubMenuBinding="{Binding Children}"
+                    HeaderBinding="{Binding MenuHeader}"
+                    CommandBinding="{Binding ActivateCommand}"
+                    ItemsSource="{Binding Menus.MenuItems}">
+                    <u:NavMenu.Header>
+                        <Grid HorizontalAlignment="Center" ColumnDefinitions="Auto, Auto">
+                            <Panel
+                                VerticalAlignment="Center"
+                                u:NavMenu.CanToggle="True"
+                                Margin="4 12"
+                                Background="Transparent"
+                                DockPanel.Dock="Left">
+                                <iri:IrihiLogo Width="32" Fill="{DynamicResource SemiGrey7}" />
+                            </Panel>
+                            <TextBlock
+                                Grid.Column="1"
+                                VerticalAlignment="Center"
+                                Classes="H5"
+                                IsVisible="{Binding !#menu.IsHorizontalCollapsed}"
+                                Text="Ursa Avalonia"
+                                Theme="{DynamicResource TitleTextBlock}" />
+                        </Grid>
+                    </u:NavMenu.Header>
+                </u:NavMenu>
+            </Border>
+            <ContentControl
+                    Grid.Column="1"
+                    Margin="12,36,12,12"
+                    Content="{Binding Content}">
+                <ContentControl.ContentTemplate>
+                    <converters:ViewLocator />
+                </ContentControl.ContentTemplate>
+            </ContentControl>
+        </Grid>
+    </Panel>
+</Window>

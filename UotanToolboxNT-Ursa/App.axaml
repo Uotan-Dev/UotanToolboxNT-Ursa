@@ -1,14 +1,14 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-			 xmlns:semi="https://irihi.tech/semi"
+             xmlns:semi="https://irihi.tech/semi"
 			 xmlns:u-semi="https://irihi.tech/ursa/themes/semi"
-             x:Class="UotanToolbox.App"
+             x:Class="UotanToolboxNT_Ursa.App"
              RequestedThemeVariant="Default">
              <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
-
+  
     <Application.Styles>
-		<semi:SemiTheme Locale="zh-CN" />
-		<u-semi:SemiTheme Locale="zh-CN"/>
-		<semi:SemiPopupAnimations />
+        <semi:SemiTheme Locale="zh-CN" />
+        <u-semi:SemiTheme Locale="zh-CN"/>
+        <semi:SemiPopupAnimations />
     </Application.Styles>
 </Application>
