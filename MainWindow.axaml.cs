@@ -1,12 +1,6 @@
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 using Avalonia.Controls;
 using Ursa.Controls;
 
@@ -22,10 +16,9 @@ public partial class MainWindow : Window, INotifyPropertyChanged
         DataContext = this; // 添加这一行
     }
 
-    public ObservableCollection<NavMenuItem> MenuItems { get; set; } = new ObservableCollection<NavMenuItem>
-    {
-        new NavMenuItem
-        {
+    public ObservableCollection<NavMenuItem> MenuItems { get; set; } =
+    [
+        new() {
             Header = "Introduction",
             Items =
             {
@@ -52,9 +45,11 @@ public partial class MainWindow : Window, INotifyPropertyChanged
                 },
             }
         }
-    };
+    ];
 
     public event PropertyChangedEventHandler? PropertyChanged;
     protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
 }
