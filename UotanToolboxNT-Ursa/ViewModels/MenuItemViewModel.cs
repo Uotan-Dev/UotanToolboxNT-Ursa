@@ -20,7 +20,7 @@ public class MenuItemViewModel : ViewModelBase
     public string? Status { get; set; }
 
     public bool IsSeparator { get; set; }
-    public ObservableCollection<MenuItemViewModel> Children { get; set; } = new();
+    public ObservableCollection<MenuItemViewModel> Children { get; set; } = [];
 
     public ICommand ActivateCommand { get; set; }
 

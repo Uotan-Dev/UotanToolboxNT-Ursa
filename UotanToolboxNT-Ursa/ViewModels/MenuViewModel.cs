@@ -6,22 +6,22 @@ public class MenuViewModel : ViewModelBase
 {
     public MenuViewModel()
     {
-        MenuItems = new ObservableCollection<MenuItemViewModel>
-        {
+        MenuItems =
+        [
             new(){
                 MenuHeader = "Introduction",
-                Children = new ObservableCollection<MenuItemViewModel>
-                {
+                Children =
+                [
                     new() { MenuHeader = "Code of Conduct" },
                     new() { MenuHeader = "How to Contribute" },
                     new() { MenuHeader = "Development Workflow" },
-                }
+                ]
             },
             new(){
                 MenuHeader = "About Us",
                 Key = MenuKeys.MenuKeyAboutUs // ±ÿ–Î…Ë÷√Key
             }
-        };
+        ];
     }
 
     public ObservableCollection<MenuItemViewModel> MenuItems { get; set; }
