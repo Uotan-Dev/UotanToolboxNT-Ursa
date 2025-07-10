@@ -12,6 +12,8 @@ public partial class MainWindowViewModel : ViewModelBase
     public string Greeting { get; } = "Welcome to Avalonia!";
     public string? Header { get; set; }
 
+    public MenuViewModel Menus { get; set; } = new MenuViewModel();
+
     private object? _content;
 
     public object? Content
@@ -19,6 +21,7 @@ public partial class MainWindowViewModel : ViewModelBase
         get => _content;
         set => SetProperty(ref _content, value);
     }
+
     public MainWindowViewModel()
     {
         WeakReferenceMessenger.Default.Register<MainWindowViewModel, string>(this, OnNavigation);
@@ -28,46 +31,16 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         Content = s switch
         {
-            "Code of Conduct" => new AboutUsDemoViewModel(),
+            MenuKeys.MenuKeyAboutUs => new AboutUsDemoViewModel(),
             _ => throw new ArgumentOutOfRangeException(nameof(s), s, null)
         };
     }
-    public ObservableCollection<NavMenuItem> MenuItems { get; set; } =
-    [
-        new() {
-            Header = "Introduction",
-            Items =
-            {
-                new NavMenuItem
-                {
-                    Header = "Getting Started",
-                    Items =
-                    {
-                        new NavMenuItem { Header = "Code of Conduct" },
-                        new NavMenuItem { Header = "How to Contribute" },
-                        new NavMenuItem { Header = "Development Workflow" },
-                    }
-                },
-                new NavMenuItem { Header = "Design Principles" },
-                new NavMenuItem
-                {
-                    Header = "Contributing",
-                    Items =
-                    {
-                        new NavMenuItem { Header = "Code of Conduct" },
-                        new NavMenuItem { Header = "How to Contribute" },
-                        new NavMenuItem { Header = "Development Workflow" },
-                    }
-                },
-            }
-        }
-    ];
-
-
 
     public event PropertyChangedEventHandler? PropertyChanged;
     protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
+
+    public ObservableCollection<MenuItemViewModel> MenuItems { get; set; }
 }
