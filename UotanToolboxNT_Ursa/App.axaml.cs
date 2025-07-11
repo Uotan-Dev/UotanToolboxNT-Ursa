@@ -16,6 +16,7 @@ public partial class App : Application
 
     public override void OnFrameworkInitializationCompleted()
     {
+        Assets.Resources.Culture = System.Globalization.CultureInfo.GetCultureInfo("zh-CN");
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             // Avoid duplicate validations from both Avalonia and the CommunityToolkit. 
