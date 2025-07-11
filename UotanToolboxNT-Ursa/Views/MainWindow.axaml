@@ -7,11 +7,11 @@
 		xmlns:local="clr-namespace:UotanToolbox"
         xmlns:converters="clr-namespace:UotanToolboxNT_Ursa.Converters"
         xmlns:vm="using:UotanToolboxNT_Ursa.ViewModels"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        mc:Ignorable="d" d:DesignWidth="1100" d:DesignHeight="800"
         x:Class="UotanToolboxNT_Ursa.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
-        Icon="/Assets/avalonia-logo.ico"
-        Title="UotanToolboxNT_Ursa">
+        Icon="/Assets/icon.ico"
+        Title="UotanToolboxNT">
 
     <Design.DataContext>
         <vm:MainWindowViewModel />
@@ -30,29 +30,73 @@
                 Theme="{DynamicResource CardBorder}">
                 <u:NavMenu
                     Name="menu"
-                    ExpandWidth="400"
+                    ExpandWidth="200"
                     SubMenuBinding="{Binding Children}"
                     HeaderBinding="{Binding MenuHeader}"
                     CommandBinding="{Binding ActivateCommand}"
                     ItemsSource="{Binding Menus.MenuItems}">
                     <u:NavMenu.Header>
-                        <Grid HorizontalAlignment="Center" ColumnDefinitions="Auto, Auto">
-                            <Panel
-                                VerticalAlignment="Center"
-                                u:NavMenu.CanToggle="True"
-                                Margin="4 12"
-                                Background="Transparent"
-                                DockPanel.Dock="Left">
-                                <iri:IrihiLogo Width="32" Fill="{DynamicResource SemiGrey7}" />
-                            </Panel>
-                            <TextBlock
-                                Grid.Column="1"
-                                VerticalAlignment="Center"
-                                Classes="H5"
-                                IsVisible="{Binding !#menu.IsHorizontalCollapsed}"
-                                Text="Ursa Avalonia"
-                                Theme="{DynamicResource TitleTextBlock}" />
-                        </Grid>
+                        <StackPanel Orientation="Vertical">
+                            <StackPanel>
+                                <Image Width="80"
+                                       Height="80"
+                                       Margin="50"
+                                       Source="/Assets/OIG.N5o-removebg-preview.png"
+                                       ToolTip.Tip="Uotan Toolbox" />
+                            </StackPanel>
+                            <StackPanel Width="150"
+                                        Margin="0,0,0,30"
+                                        Spacing="5">
+                                <Grid>
+                                    <TextBlock HorizontalAlignment="Left"
+                                                FontSize="13"
+                                                Text="状态"/>
+                                    <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                                        <HyperlinkButton
+                                                Classes="Underline"
+                                                Foreground="Red"
+                                                FontSize="13"
+                                                Content="11111"/>
+                                    </StackPanel>
+                                </Grid>
+                                <Grid>
+                                    <TextBlock HorizontalAlignment="Left"
+                                                FontSize="13"
+                                                Text="代号"/>
+                                    <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                                        <HyperlinkButton
+                                                Classes="Underline"
+                                                Foreground="Red"
+                                                FontSize="13"
+                                                Content="111111"/>
+                                    </StackPanel>
+                                </Grid>
+                                <Grid>
+                                    <TextBlock HorizontalAlignment="Left"
+                                                FontSize="13"
+                                                Text="BL状态"/>
+                                    <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                                        <HyperlinkButton
+                                                Classes="Underline"
+                                                Foreground="Red"
+                                                FontSize="13"
+                                                Content="111"/>
+                                    </StackPanel>
+                                </Grid>
+                                <Grid>
+                                    <TextBlock HorizontalAlignment="Left"
+                                                FontSize="13"
+                                                Text="A/B槽位"/>
+                                    <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                                        <HyperlinkButton
+                                                Classes="Underline"
+                                                Foreground="Red"
+                                                FontSize="13"
+                                                Content="111"/>
+                                    </StackPanel>
+                                </Grid>
+                            </StackPanel>
+                        </StackPanel>
                     </u:NavMenu.Header>
                 </u:NavMenu>
             </Border>
