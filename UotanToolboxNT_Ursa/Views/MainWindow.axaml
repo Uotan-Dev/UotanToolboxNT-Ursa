@@ -3,8 +3,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:u="https://irihi.tech/ursa"
+        xmlns:assets="clr-namespace:UotanToolboxNT_Ursa.Assets"
         xmlns:iri="https://irihi.tech/shared"
-		xmlns:local="clr-namespace:UotanToolbox"
         xmlns:converters="clr-namespace:UotanToolboxNT_Ursa.Converters"
         xmlns:vm="using:UotanToolboxNT_Ursa.ViewModels"
         mc:Ignorable="d" d:DesignWidth="1100" d:DesignHeight="800"
@@ -41,7 +41,7 @@
                                 <Image Width="80"
                                        Height="80"
                                        Margin="50"
-                                       Source="/Assets/OIG.N5o-removebg-preview.png"
+                                       Source="/Assets/UotanToolboxIcon.png"
                                        ToolTip.Tip="Uotan Toolbox" />
                             </StackPanel>
                             <StackPanel Width="150"
@@ -50,7 +50,7 @@
                                 <Grid>
                                     <TextBlock HorizontalAlignment="Left"
                                                 FontSize="13"
-                                                Text="状态"/>
+                                                Text="{x:Static assets:Resources.Home_ConnectionStatus}"/>
                                     <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
                                         <HyperlinkButton
                                                 Classes="Underline"
