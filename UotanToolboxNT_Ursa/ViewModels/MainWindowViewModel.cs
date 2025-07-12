@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
 
 namespace UotanToolboxNT_Ursa.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase
 {
-    public string Greeting { get; } = "Welcome to Avalonia!";
-    public string? Header { get; set; }
-
+    [ObservableProperty] private string _status, _codeName, _bLStatus, _vABStatus;
     public MenuViewModel Menus { get; set; } = new MenuViewModel();
 
     private object? _content;
