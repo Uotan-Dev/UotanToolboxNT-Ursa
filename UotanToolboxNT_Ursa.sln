@@ -4,6 +4,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.14.36221.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UotanToolboxNT_Ursa", "UotanToolboxNT_Ursa\UotanToolboxNT_Ursa.csproj", "{6F367AED-64B3-487A-A7A7-2CAFE6206719}"
+	ProjectSection(ProjectDependencies) = postProject
+		{6F1A3938-6F09-451E-ADB8-B11DBDE54ED8} = {6F1A3938-6F09-451E-ADB8-B11DBDE54ED8}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ADBClient", "ADBClient\ADBClient.csproj", "{6F1A3938-6F09-451E-ADB8-B11DBDE54ED8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +20,10 @@ Global
 		{6F367AED-64B3-487A-A7A7-2CAFE6206719}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6F367AED-64B3-487A-A7A7-2CAFE6206719}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6F367AED-64B3-487A-A7A7-2CAFE6206719}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F1A3938-6F09-451E-ADB8-B11DBDE54ED8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F1A3938-6F09-451E-ADB8-B11DBDE54ED8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F1A3938-6F09-451E-ADB8-B11DBDE54ED8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F1A3938-6F09-451E-ADB8-B11DBDE54ED8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
