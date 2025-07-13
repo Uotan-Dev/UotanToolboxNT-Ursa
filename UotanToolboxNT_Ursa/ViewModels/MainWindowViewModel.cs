@@ -20,6 +20,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
     public MainWindowViewModel()
     {
+        Content = new AboutUsDemoViewModel();
         WeakReferenceMessenger.Default.Register<MainWindowViewModel, string>(this, OnNavigation);
     }
 
