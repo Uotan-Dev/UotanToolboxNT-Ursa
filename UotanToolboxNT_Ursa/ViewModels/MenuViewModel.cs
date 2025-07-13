@@ -9,15 +9,6 @@ public class MenuViewModel : ViewModelBase
         MenuItems =
         [
             new(){
-                MenuHeader = "Introduction",
-                Children =
-                [
-                    new() { MenuHeader = "Code of Conduct" },
-                    new() { MenuHeader = "How to Contribute" },
-                    new() { MenuHeader = "Development Workflow" },
-                ]
-            },
-            new(){
                 MenuHeader = "About Us",
                 Key = MenuKeys.MenuKeyAboutUs // ±ÿ–Î…Ë÷√Key
             }
