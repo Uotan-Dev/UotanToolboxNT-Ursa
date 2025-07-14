@@ -9,7 +9,7 @@ public class MenuViewModel : ViewModelBase
         MenuItems =
         [
             new(){
-                MenuHeader = "About Us",
+                MenuHeader = "Home",
                 Key = MenuKeys.MenuKeyAboutUs // ±ÿ–Î…Ë÷√Key
             }
         ];
@@ -20,5 +20,5 @@ public class MenuViewModel : ViewModelBase
 
 public static class MenuKeys
 {
-    public const string MenuKeyAboutUs = "About Us";
+    public const string MenuKeyAboutUs = "Home";
 }

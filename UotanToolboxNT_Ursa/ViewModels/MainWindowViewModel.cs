@@ -7,7 +7,7 @@ namespace UotanToolboxNT_Ursa.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase
 {
-    [ObservableProperty] private string _status, _codeName, _bLStatus, _vABStatus;
+    [ObservableProperty] private string _status = "--", _codeName = "--", _bLStatus = "--", _vABStatus = "--";
     public MenuViewModel Menus { get; set; } = new MenuViewModel();
 
     private object? _content;
@@ -20,7 +20,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
     public MainWindowViewModel()
     {
-        Content = new AboutUsDemoViewModel();
+        Content = new HomeViewModel();
         WeakReferenceMessenger.Default.Register<MainWindowViewModel, string>(this, OnNavigation);
     }
 
@@ -28,7 +28,7 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         Content = s switch
         {
-            MenuKeys.MenuKeyAboutUs => new AboutUsDemoViewModel(),
+            MenuKeys.MenuKeyAboutUs => new HomeViewModel(),
             _ => throw new ArgumentOutOfRangeException(nameof(s), s, null)
         };
     }

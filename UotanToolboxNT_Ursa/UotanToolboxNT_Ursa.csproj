@@ -54,6 +54,9 @@
         <AutoGen>True</AutoGen>
         <DependentUpon>Resources.resx</DependentUpon>
       </AvaloniaResource>
+      <Compile Update="Pages\Home.axaml.cs">
+        <DependentUpon>Home.axaml</DependentUpon>
+      </Compile>
       <EmbeddedResource Update="Assets\Resources.resx">
         <Generator></Generator>
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

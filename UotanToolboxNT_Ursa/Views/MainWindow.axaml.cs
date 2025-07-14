@@ -8,7 +8,6 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
-        //DataContext = this; // 添加这一行  
     }
 
     public new event PropertyChangedEventHandler? PropertyChanged;

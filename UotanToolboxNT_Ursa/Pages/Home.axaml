@@ -1,0 +1,16 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:collections="clr-namespace:Avalonia.Collections;assembly=Avalonia.Base"
+             xmlns:iri="https://irihi.tech/shared"
+             mc:Ignorable="d" d:DesignWidth="1100" d:DesignHeight="800"
+             x:Class="UotanToolboxNT_Ursa.Pages.Home">
+    <ScrollViewer VerticalScrollBarVisibility="Hidden">
+        <StackPanel Margin="15"
+			        Orientation="Horizontal">
+            <StackPanel >
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

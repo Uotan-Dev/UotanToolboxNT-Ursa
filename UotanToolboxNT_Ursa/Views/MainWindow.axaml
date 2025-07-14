@@ -52,7 +52,7 @@
                                 <Grid>
                                     <TextBlock HorizontalAlignment="Left"
                                                 FontSize="13"
-                                                Text="{x:Static assets:Resources.Home_ConnectionStatus}"/>
+                                                Text="{x:Static assets:Resources.Main_Status}"/>
                                     <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
                                         <HyperlinkButton
                                                 Classes="Underline"
@@ -64,7 +64,7 @@
                                 <Grid>
                                     <TextBlock HorizontalAlignment="Left"
                                                 FontSize="13"
-                                                Text="{x:Static assets:Resources.Home_CodeName}"/>
+                                                Text="{x:Static assets:Resources.Main_Code}"/>
                                     <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
                                         <HyperlinkButton
                                                 Classes="Underline"
@@ -88,7 +88,7 @@
                                 <Grid>
                                     <TextBlock HorizontalAlignment="Left"
                                                 FontSize="13"
-                                                Text="{x:Static assets:Resources.Home_VabStadus}"/>
+                                                Text="{x:Static assets:Resources.Main_VABStatus}"/>
                                     <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
                                         <HyperlinkButton
                                                 Classes="Underline"
