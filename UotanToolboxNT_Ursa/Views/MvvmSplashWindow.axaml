@@ -10,11 +10,13 @@
     Title="Starting Ursa Demo..."
     Width="400"
     Height="300"
+    Background="#fefefe"
     Icon="/Assets/icon.ico"
     x:DataType="viewModels:SplashViewModel"
     CountDown="{x:Null}"
     mc:Ignorable="d">
     <Grid
+        Background="#fefefe"
         HorizontalAlignment="Center"
         VerticalAlignment="Center"
         RowDefinitions="Auto, Auto, Auto">

@@ -18,8 +18,8 @@ public partial class MvvmSplashWindow : SplashWindow
             ? new MainWindow()
             {
                 DataContext = new MainWindowViewModel(),
-                Width = 1100,
-                Height = 800
+                Width = 1197,
+                Height = 825
             }
             : (Window?)null;
     }

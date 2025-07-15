@@ -4,13 +4,54 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:collections="clr-namespace:Avalonia.Collections;assembly=Avalonia.Base"
              xmlns:iri="https://irihi.tech/shared"
-             mc:Ignorable="d" d:DesignWidth="1100" d:DesignHeight="800"
+             mc:Ignorable="d" d:DesignWidth="977" d:DesignHeight="825"
+             Background="#f2f2f6"
              x:Class="UotanToolboxNT_Ursa.Pages.Home">
-    <ScrollViewer VerticalScrollBarVisibility="Hidden">
-        <StackPanel Margin="15"
-			        Orientation="Horizontal">
-            <StackPanel >
+
+     <ScrollViewer VerticalScrollBarVisibility="Hidden">
+            <StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Border Width="520"
+                            Height="450"
+                            CornerRadius="15"
+                            Background="#fefefe"
+                            Margin="10" Theme="{StaticResource CardBorder}">
+                        <TextBlock></TextBlock>
+                    </Border>
+                    <Border Width="200"
+                            Height="450"
+                            CornerRadius="15"
+                            Background="#fefefe"
+                            Margin="10" Theme="{StaticResource CardBorder}">
+                    </Border>
+                    <Border Width="200"
+                            Height="450"
+                            CornerRadius="15"
+                            Background="#fefefe"
+                            Margin="10" Theme="{StaticResource CardBorder}">
+                    </Border>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Border Width="320"
+                            Height="345"
+                            CornerRadius="15"
+                            Background="#fefefe"
+                            Margin="10" Theme="{StaticResource CardBorder}">
+                        <TextBlock></TextBlock>
+                    </Border>
+                    <Border Width="320"
+                            Height="345"
+                            CornerRadius="15"
+                            Background="#fefefe"
+                            Margin="10" Theme="{StaticResource CardBorder}">
+                    </Border>
+                    <Border Width="280"
+                            Height="345"
+                            CornerRadius="15"
+                            Background="#fefefe"
+                            Margin="10" Theme="{StaticResource CardBorder}">
+                    </Border>
+                </StackPanel>
             </StackPanel>
-        </StackPanel>
-    </ScrollViewer>
+        </ScrollViewer>
 </UserControl>
