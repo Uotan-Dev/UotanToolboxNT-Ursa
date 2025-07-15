@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="ADBClient/ADBClient.csproj" />
+  <Project Path="UotanToolboxNT_Ursa/UotanToolboxNT_Ursa.csproj">
+    <BuildDependency Project="ADBClient/ADBClient.csproj" />
+  </Project>
+</Solution>
