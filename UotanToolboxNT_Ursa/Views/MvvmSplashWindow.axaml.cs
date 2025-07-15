@@ -14,15 +14,13 @@ public partial class MvvmSplashWindow : SplashWindow
 
     protected override async Task<Window?> CreateNextWindow()
     {
-        if (this.DialogResult is true)
-        {
-            return new MainWindow()
+        return DialogResult is true
+            ? new MainWindow()
             {
                 DataContext = new MainWindowViewModel(),
                 Width = 1100,
                 Height = 800
-            };
-        }
-        return null;
+            }
+            : (Window?)null;
     }
 }

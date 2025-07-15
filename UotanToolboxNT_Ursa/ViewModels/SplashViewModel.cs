@@ -8,11 +8,11 @@ namespace UotanToolboxNT_Ursa.ViewModels;
 public partial class SplashViewModel : ObservableObject, IDialogContext
 {
     [ObservableProperty] private double _progress;
-    private Random _r = new();
+    private readonly Random _r = new();
 
     public SplashViewModel()
     {
-        DispatcherTimer.Run(OnUpdate, TimeSpan.FromMilliseconds(20), DispatcherPriority.Default);
+        _ = DispatcherTimer.Run(OnUpdate, TimeSpan.FromMilliseconds(20), DispatcherPriority.Default);
     }
 
     private bool OnUpdate()
@@ -28,7 +28,7 @@ public partial class SplashViewModel : ObservableObject, IDialogContext
             return false;
         }
     }
-    
+
     public void Close()
     {
         RequestClose?.Invoke(this, false);
