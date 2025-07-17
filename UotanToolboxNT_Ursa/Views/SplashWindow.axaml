@@ -12,7 +12,7 @@
     Height="300"
     Background="#fefefe"
     Icon="/Assets/icon.ico"
-    x:DataType="viewModels:SplashViewModel"
+    x:DataType="viewModels:SplashWindowViewModel"
     CountDown="{x:Null}"
     mc:Ignorable="d">
     <Grid

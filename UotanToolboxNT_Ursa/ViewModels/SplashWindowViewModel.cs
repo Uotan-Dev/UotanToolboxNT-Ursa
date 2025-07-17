@@ -1,17 +1,15 @@
 using System;
-using System.Threading;
 using System.Threading.Tasks;
-using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Irihi.Avalonia.Shared.Contracts;
 using UotanToolboxNT_Ursa.Models;
 
 namespace UotanToolboxNT_Ursa.ViewModels;
 
-public partial class SplashViewModel : ObservableObject, IDialogContext
+public partial class SplashWindowViewModel : ObservableObject, IDialogContext
 {
     [ObservableProperty] private double _progress;
-    private readonly SplashModel _model;
+    private readonly SplashWindowModel _model;
 
     public string StatusText
     {
@@ -26,9 +24,9 @@ public partial class SplashViewModel : ObservableObject, IDialogContext
         }
     }
 
-    public SplashViewModel()
+    public SplashWindowViewModel()
     {
-        _model = new SplashModel();
+        _model = new SplashWindowModel();
         InitializeAsync();
     }
 

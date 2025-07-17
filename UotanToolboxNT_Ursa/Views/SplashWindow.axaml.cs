@@ -10,7 +10,7 @@ public partial class MvvmSplashWindow : SplashWindow
     public MvvmSplashWindow()
     {
         InitializeComponent();
-        DataContext = new SplashViewModel();
+        DataContext = new SplashWindowViewModel();
     }
 
     protected override Task<Window?> CreateNextWindow()

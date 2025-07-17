@@ -1,7 +1,7 @@
 ﻿
-using Microsoft.Win32;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
+using Microsoft.Win32;
 
 namespace ADBClient;
 public class AdbClient

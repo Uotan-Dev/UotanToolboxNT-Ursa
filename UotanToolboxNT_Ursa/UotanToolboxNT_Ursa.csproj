@@ -53,6 +53,9 @@
       <Compile Update="Pages\Home.axaml.cs">
         <DependentUpon>Home.axaml</DependentUpon>
       </Compile>
+      <Compile Update="Views\SplashWindow.axaml.cs">
+        <DependentUpon>SplashWindow.axaml</DependentUpon>
+      </Compile>
       <EmbeddedResource Update="Assets\Resources.resx">
         <Generator></Generator>
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
