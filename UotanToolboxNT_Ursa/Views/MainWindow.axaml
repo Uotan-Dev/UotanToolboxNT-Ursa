@@ -1,113 +1,19 @@
-<Window xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:u="https://irihi.tech/ursa"
-        xmlns:iri="https://irihi.tech/shared"
-        xmlns:assets="clr-namespace:UotanToolboxNT_Ursa.Assets"
-        xmlns:converters="clr-namespace:UotanToolboxNT_Ursa.Converters"
-        xmlns:vm="using:UotanToolboxNT_Ursa.ViewModels"
-        mc:Ignorable="d" d:DesignWidth="1197" d:DesignHeight="825"
-        x:Class="UotanToolboxNT_Ursa.Views.MainWindow"
-        x:DataType="vm:MainWindowViewModel"
-        Background="#f2f2f6"
-        Icon="/Assets/icon.ico"
-        Title="UotanToolboxNT">
-
-    <Design.DataContext>
-        <vm:MainWindowViewModel />
-    </Design.DataContext>
-    <Viewbox HorizontalAlignment="Left" VerticalAlignment="Top">
-        <Panel>
-            <Grid Classes.Blur="{Binding $parent[u:UrsaWindow].(u:OverlayDialogHost.IsInModalStatus)}" ColumnDefinitions="Auto, *">
-                <Border Padding="8,4"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Top"
-                        Height="815"
-                        CornerRadius="15"
-                        Background="#fefefe"
-                        Theme="{DynamicResource CardBorder}">
-                    <u:NavMenu
-                        Name="menu"
-                        ExpandWidth="190"
-                        SubMenuBinding="{Binding Children}"
-                        HeaderBinding="{Binding MenuHeader}"
-                        CommandBinding="{Binding ActivateCommand}"
-                        ItemsSource="{Binding Menus.MenuItems}">
-                        <u:NavMenu.Header>
-                            <StackPanel Orientation="Vertical">
-                                <StackPanel>
-                                    <Image Width="80"
-                                           Height="80"
-                                           Margin="50"
-                                           Source="/Assets/UotanToolboxIcon.png"
-                                           ToolTip.Tip="Uotan Toolbox" />
-                                </StackPanel>
-                                <StackPanel Width="150"
-                                            Margin="0,0,0,30"
-                                            Spacing="5">
-                                    <Grid>
-                                        <TextBlock HorizontalAlignment="Left"
-                                                    FontSize="13"
-                                                    Text="{x:Static assets:Resources.Main_Status}"/>
-                                        <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
-                                            <HyperlinkButton
-                                                    Classes="Underline"
-                                                    Foreground="Red"
-                                                    FontSize="13"
-                                                    Content="{Binding Status, Mode=TwoWay}"/>
-                                        </StackPanel>
-                                    </Grid>
-                                    <Grid>
-                                        <TextBlock HorizontalAlignment="Left"
-                                                    FontSize="13"
-                                                    Text="{x:Static assets:Resources.Main_Code}"/>
-                                        <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
-                                            <HyperlinkButton
-                                                    Classes="Underline"
-                                                    Foreground="Red"
-                                                    FontSize="13"
-                                                    Content="{Binding CodeName, Mode=TwoWay}"/>
-                                        </StackPanel>
-                                    </Grid>
-                                    <Grid>
-                                        <TextBlock HorizontalAlignment="Left"
-                                                    FontSize="13"
-                                                    Text="{x:Static assets:Resources.Main_BLStatus}"/>
-                                        <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
-                                            <HyperlinkButton
-                                                    Classes="Underline"
-                                                    Foreground="Red"
-                                                    FontSize="13"
-                                                    Content="{Binding BLStatus, Mode=TwoWay}"/>
-                                        </StackPanel>
-                                    </Grid>
-                                    <Grid>
-                                        <TextBlock HorizontalAlignment="Left"
-                                                    FontSize="13"
-                                                    Text="{x:Static assets:Resources.Main_VABStatus}"/>
-                                        <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
-                                            <HyperlinkButton
-                                                    Classes="Underline"
-                                                    Foreground="Red"
-                                                    FontSize="13"
-                                                    Content="{Binding VABStatus, Mode=TwoWay}"/>
-                                        </StackPanel>
-                                    </Grid>
-                                </StackPanel>
-                            </StackPanel>
-                        </u:NavMenu.Header>
-                    </u:NavMenu>
-                </Border>
-                <ContentControl
-                        Grid.Column="1"
-                        Margin="6 -5 -5 -5"
-                        Content="{Binding Content}">
-                    <ContentControl.ContentTemplate>
-                        <converters:ViewLocator />
-                    </ContentControl.ContentTemplate>
-                </ContentControl>
-            </Grid>
-        </Panel>
-    </Viewbox>
-</Window>
+<u:UrsaWindow xmlns="https://github.com/avaloniaui"
+              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+              xmlns:u="https://irihi.tech/ursa"
+              xmlns:iri="https://irihi.tech/shared"
+              xmlns:assets="clr-namespace:UotanToolboxNT_Ursa.Assets"
+              xmlns:converters="clr-namespace:UotanToolboxNT_Ursa.Converters"
+              xmlns:vm="using:UotanToolboxNT_Ursa.ViewModels"
+              xmlns:views="clr-namespace:UotanToolboxNT_Ursa.Views"
+              mc:Ignorable="d" d:DesignWidth="1197" d:DesignHeight="825"
+              x:Class="UotanToolboxNT_Ursa.Views.MainWindow"
+              x:DataType="vm:MainWindowViewModel"
+              Background="#f2f2f6"
+              Icon="/Assets/icon.ico"
+              Title="UotanToolboxNT">
+    
+    <views:MainView />
+</u:UrsaWindow>

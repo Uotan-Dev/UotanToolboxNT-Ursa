@@ -1,12 +1,10 @@
 using System;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using Avalonia;
-using Avalonia.Controls;
 using Irihi.Avalonia.Shared.Helpers;
+using Ursa.Controls;
 
 namespace UotanToolboxNT_Ursa.Views;
-public partial class MainWindow : Window
+public partial class MainWindow : UrsaWindow
 {
     public MainWindow()
     {
@@ -16,12 +14,6 @@ public partial class MainWindow : Window
 
     private const double AspectRatio = 1197.0 / 825.0; // 设定目标宽高比（如16:9）
     private Size _lastSize = new(1197, 825);
-
-    public new event PropertyChangedEventHandler? PropertyChanged;
-    protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
 
     private void OnClientSizeChanged(Size newSize)
     {
