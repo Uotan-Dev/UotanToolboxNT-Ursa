@@ -44,10 +44,6 @@
     <PackageReference Include="Semi.Avalonia" Version="11.2.1.9" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
-
     <ItemGroup>
       <AvaloniaResource Update="Assets\Resources.Designer.cs">
         <DesignTime>True</DesignTime>

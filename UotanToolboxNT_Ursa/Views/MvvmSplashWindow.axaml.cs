@@ -10,17 +10,18 @@ public partial class MvvmSplashWindow : SplashWindow
     public MvvmSplashWindow()
     {
         InitializeComponent();
+        DataContext = new SplashViewModel();
     }
 
-    protected override async Task<Window?> CreateNextWindow()
+    protected override Task<Window?> CreateNextWindow()
     {
-        return DialogResult is true
+        return Task.FromResult(DialogResult is true
             ? new MainWindow()
             {
                 DataContext = new MainWindowViewModel(),
                 Width = 1197,
                 Height = 825
             }
-            : (Window?)null;
+            : (Window?)null);
     }
 }

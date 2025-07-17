@@ -1,33 +1,44 @@
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Irihi.Avalonia.Shared.Contracts;
+using UotanToolboxNT_Ursa.Models;
 
 namespace UotanToolboxNT_Ursa.ViewModels;
 
 public partial class SplashViewModel : ObservableObject, IDialogContext
 {
     [ObservableProperty] private double _progress;
-    private readonly Random _r = new();
+    private readonly SplashModel _model;
+
+    public string StatusText
+    {
+        get => _model.StatusText;
+        set
+        {
+            if (_model.StatusText != value)
+            {
+                _model.StatusText = value;
+                OnPropertyChanged();
+            }
+        }
+    }
 
     public SplashViewModel()
     {
-        _ = DispatcherTimer.Run(OnUpdate, TimeSpan.FromMilliseconds(20), DispatcherPriority.Default);
+        _model = new SplashModel();
+        InitializeAsync();
     }
 
-    private bool OnUpdate()
+    private async void InitializeAsync()
     {
-        Progress += 10 * _r.NextDouble();
-        if (Progress <= 100)
-        {
-            return true;
-        }
-        else
-        {
-            RequestClose?.Invoke(this, true);
-            return false;
-        }
+        _model.Initialize();
+        await Task.Delay(1000);
+        RequestClose?.Invoke(this, true);
     }
+
 
     public void Close()
     {
