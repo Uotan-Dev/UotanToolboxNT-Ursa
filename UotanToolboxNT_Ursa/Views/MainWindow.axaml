@@ -13,7 +13,11 @@
               x:DataType="vm:MainWindowViewModel"
               Background="#f2f2f6"
               Icon="/Assets/icon.ico"
+              SystemDecorations="None"
+              IsFullScreenButtonVisible="False"
+              IsManagedResizerVisible="True"
+              IsRestoreButtonVisible="False"
               Title="UotanToolboxNT">
     
-    <views:MainView />
+    <views:MainView DataContext="{Binding MainViewViewModel}"/>
 </u:UrsaWindow>
