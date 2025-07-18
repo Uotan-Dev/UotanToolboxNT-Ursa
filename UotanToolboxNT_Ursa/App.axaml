@@ -11,4 +11,20 @@
         <u-semi:SemiTheme Locale="zh-CN"/>
         <semi:SemiPopupAnimations />
     </Application.Styles>
+    <Application.Resources>
+        <ControlTheme x:Key="UotanMinimizeButton" TargetType="Button">
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Background" Value="#f2f2f6" />
+            <Style Selector="^:pointerover">
+                <Setter Property="Background" Value="#8ac16c" />
+            </Style>
+        </ControlTheme>
+        <ControlTheme x:Key="UotanCloseButton" TargetType="Button">
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Background" Value="#f2f2f6" />
+            <Style Selector="^:pointerover">
+                <Setter Property="Background" Value="#d2796a" />
+            </Style>
+        </ControlTheme>
+    </Application.Resources>
 </Application>

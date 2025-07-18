@@ -17,7 +17,35 @@
               IsFullScreenButtonVisible="False"
               IsManagedResizerVisible="True"
               IsRestoreButtonVisible="False"
+              IsCloseButtonVisible="False"
+              IsMinimizeButtonVisible="False"
               Title="UotanToolboxNT">
-    
-    <views:MainView DataContext="{Binding MainViewViewModel}"/>
+    <Border>
+        <Grid>
+            <Grid Height="40" Width="1197" Background="Transparent" Name="TitleBar" ZIndex="999" VerticalAlignment="Top"
+                  HorizontalAlignment="Right" PointerPressed="TitleBar_OnPointerPressed">
+                <StackPanel Orientation="Horizontal" Margin="10" Spacing="5" HorizontalAlignment="Right">
+                    <Button Name="PART_MinimizeButton" Theme="{StaticResource UotanMinimizeButton}"
+                            Height="20" Width="20" CornerRadius="10" Click="MinimizeButton_Click">
+                        <PathIcon Height="10" Width="10"
+                                  Name="PART_MinimizeButtonIcon"
+                                  Theme="{StaticResource InnerPathIcon}"
+                                  Data="{StaticResource WindowMinimizeGlyph}"
+                                  Foreground="{Binding $parent[Button].Foreground}"/>
+                    </Button>
+                    <Button Name="PART_CloseButton" Theme="{StaticResource UotanCloseButton}"
+                            Height="20" Width="20" CornerRadius="10" Click="CloseButton_Click">
+                        <PathIcon Height="10" Width="10"
+                                  Name="PART_CloseButtonIcon"
+                                  Theme="{StaticResource InnerPathIcon}"
+                                  Data="{StaticResource WindowCloseIconGlyph}"
+                                  Foreground="{Binding $parent[Button].Foreground}" />
+                    </Button>
+                </StackPanel>
+            </Grid>
+            <Grid>
+                <views:MainView DataContext="{Binding MainViewViewModel}"/>
+            </Grid>
+        </Grid>
+    </Border>
 </u:UrsaWindow>
