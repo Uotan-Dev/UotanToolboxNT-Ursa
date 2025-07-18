@@ -1,4 +1,6 @@
-﻿namespace UotanToolboxNT_Ursa.Models;
+﻿using System;
+
+namespace UotanToolboxNT_Ursa.Models;
 
 public class SplashWindowModel
 {
@@ -9,8 +11,8 @@ public class SplashWindowModel
     /// </summary>
     public void Initialize()
     {
-        StatusText = "正在检查ADB Server...";
-        PerformADBCheck();
+        StatusText = "正在检查运行组件...";
+        PerformCompentCheck();
         StatusText = "正在枚举设备...";
         PerformHardwareCheck();
         StatusText = "正在加载设置...";
@@ -19,17 +21,17 @@ public class SplashWindowModel
     }
 
     /// <summary>
-    /// 检查ADB Server是否可用，不可用则创建ADB Server进程。
+    /// 检查工具箱各组件是否可用
     /// </summary>
-    private void PerformADBCheck()
+    private void PerformCompentCheck()
     {
         try
         {
-
+            StatusText = "功能尚未实现";
         }
-        catch
+        catch (Exception ex)
         {
-
+            throw new Exception(ex.Message);
         }
     }
 
@@ -38,7 +40,23 @@ public class SplashWindowModel
     /// </summary>
     private void PerformHardwareCheck()
     {
-
+        try
+        {
+            StatusText = "正在获取硬件信息...";
+            Global.HardwareInfo.RefreshOperatingSystem();
+            Global.HardwareInfo.RefreshMemoryStatus();
+            Global.HardwareInfo.RefreshBIOSList();
+            Global.HardwareInfo.RefreshCPUList(false, 500, true);
+            Global.HardwareInfo.RefreshMemoryList();
+            Global.HardwareInfo.RefreshNetworkAdapterList(false, true);
+            Global.HardwareInfo.RefreshSoundDeviceList();
+            Global.HardwareInfo.RefreshVideoControllerList();
+        }
+        catch (Exception ex)
+        {
+            StatusText = "获取硬件信息时出错！";
+            throw new Exception(ex.Message);
+        }
     }
 
 
