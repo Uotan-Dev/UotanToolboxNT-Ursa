@@ -7,6 +7,7 @@
     xmlns:iri="https://irihi.tech/shared"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:u="https://irihi.tech/ursa"
+    xmlns:controls="clr-namespace:UotanToolboxNT_Ursa.Controls"
     xmlns:assets="clr-namespace:UotanToolboxNT_Ursa.Assets"
     xmlns:vm="using:UotanToolboxNT_Ursa.ViewModels"
     d:DesignWidth="1197" d:DesignHeight="825"
@@ -25,7 +26,7 @@
                     <Setter Property="Effect" Value="blur(10)" />
                 </Style>
             </Panel.Styles>
-            <Grid Classes.Blur="{Binding $parent[u:UrsaWindow].(u:OverlayDialogHost.IsInModalStatus)}" ColumnDefinitions="Auto, *">
+            <Grid Classes.Blur="{Binding $parent[controls:UotanWindow].(u:OverlayDialogHost.IsInModalStatus)}" ColumnDefinitions="Auto, *">
                 <Border Padding="8,4"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"

@@ -3,10 +3,10 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Irihi.Avalonia.Shared.Helpers;
-using Ursa.Controls;
+using UotanToolboxNT_Ursa.Controls;
 
 namespace UotanToolboxNT_Ursa.Views;
-public partial class MainWindow : UrsaWindow
+public partial class MainWindow : UotanWindow
 {
     public MainWindow()
     {
