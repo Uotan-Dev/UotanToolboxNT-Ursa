@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using AdvancedSharpAdbClient.Models;
 
 namespace UotanToolboxNT_Ursa.Models;
 
@@ -27,7 +29,22 @@ public class SplashWindowModel
     {
         try
         {
-            StatusText = "功能尚未实现";
+            StatusText = "检查ADB Server运行状态...";
+            if (!File.Exists(Path.Combine(Global.BinDirectory.FullName, "platform-tools", "adb.exe")))
+            {
+                StatusText = "ADB Server未找到！";
+                return;
+            }
+            var result = Global.AdbServer.StartServer(Path.Combine(Global.BinDirectory.FullName, "platform-tools", "adb.exe"), false);
+            StatusText = result switch
+            {
+                StartServerResult.Started => "ADB Server启动完成",
+                StartServerResult.AlreadyRunning => "ADB Server正在运行",
+                StartServerResult.RestartedOutdatedDaemon => "ADB Server已过时，正在重新创建",
+                StartServerResult.Starting => "ADB Server正在启动",
+                _ => "未知的ADB Server状态"
+            };
+
         }
         catch (Exception ex)
         {
@@ -54,8 +71,7 @@ public class SplashWindowModel
         }
         catch (Exception ex)
         {
-            StatusText = "获取硬件信息时出错！";
-            throw new Exception(ex.Message);
+            StatusText = $"获取硬件信息时出错！{ex.Message}";
         }
     }
 
