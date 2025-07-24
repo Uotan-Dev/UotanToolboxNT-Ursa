@@ -6,6 +6,7 @@
              xmlns:assets="clr-namespace:UotanToolboxNT_Ursa.Assets"
 			 xmlns:vm="using:UotanToolboxNT_Ursa.ViewModels"
              xmlns:collections="clr-namespace:Avalonia.Collections;assembly=Avalonia.Base"
+			 xmlns:controls="clr-namespace:UotanToolboxNT_Ursa.Controls"
              xmlns:iri="https://irihi.tech/shared"
              mc:Ignorable="d" d:DesignWidth="980" d:DesignHeight="830"
              Background="#f2f2f6"
@@ -299,13 +300,13 @@
 							<TextBlock FontSize="16"
 									   FontWeight="DemiBold"
 									   Text="{x:Static assets:Resources.Home_Battery}" />
-							<ProgressBar Width="160"
-									     Height="160"
-									     FontSize="40"
-										 BorderThickness="160"
-										 ShowProgressText="True"
-									     Theme="{DynamicResource ProgressRing}"
-									     Value="{Binding BatteryLevel, Mode=TwoWay}" />
+							<Viewbox Width="180"
+									 Height="180"
+									 Margin="0,0,0,5"
+									 HorizontalAlignment="Center"
+									 VerticalAlignment="Center">
+								<controls:WaveProgress Value="{Binding BatteryLevel, Mode=TwoWay}" />
+							</Viewbox>
 							<TextBlock  HorizontalAlignment="Center"
 										VerticalAlignment="Bottom"
 										Padding="0 30"
