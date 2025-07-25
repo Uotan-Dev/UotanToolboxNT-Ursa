@@ -11,6 +11,10 @@ public class MenuViewModel : ViewModelBase
             new(){
                 MenuHeader = "Home",
                 Key = MenuKeys.MenuKeyHome // 必须设置Key
+            },
+            new(){
+                MenuHeader = "GlobalLog",
+                Key = MenuKeys.MenuKeyGlobalLog // 必须设置Key
             }
         ];
     }
@@ -21,4 +25,5 @@ public class MenuViewModel : ViewModelBase
 public static class MenuKeys
 {
     public const string MenuKeyHome = "Home";
+    public const string MenuKeyGlobalLog = "GlobalLog";
 }

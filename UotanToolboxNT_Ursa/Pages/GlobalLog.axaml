@@ -1,0 +1,41 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:assets="clr-namespace:UotanToolboxNT_Ursa.Assets"
+			 xmlns:vm="using:UotanToolboxNT_Ursa.ViewModels"
+             xmlns:collections="clr-namespace:Avalonia.Collections;assembly=Avalonia.Base"
+			 xmlns:controls="clr-namespace:UotanToolboxNT_Ursa.Controls"
+             xmlns:iri="https://irihi.tech/shared"
+			 xmlns:u="https://irihi.tech/ursa"
+             mc:Ignorable="d" d:DesignWidth="980" d:DesignHeight="830"
+             Background="#f2f2f6"
+             x:Class="UotanToolboxNT_Ursa.Pages.GlobalLog"
+			 x:DataType="vm:GlobalLogViewModel">
+
+     <ScrollViewer VerticalScrollBarVisibility="Hidden">
+            <StackPanel>
+				<Border Width="959"
+						Height="815"
+						Margin="10"
+						CornerRadius="15"
+						Background="#fefefe"
+						Theme="{StaticResource CardBorder}">
+					<StackPanel>
+						<TextBlock HorizontalAlignment="Left"
+												FontSize="16"
+												FontWeight="DemiBold"
+												Text="全局日志" />
+						<TextBox Margin="0 10 0 0"
+								 CornerRadius="15" 
+								 Width="930" Height="750" 
+								 Classes="TextArea" 
+								 Text="{Binding LogContent, Mode=OneWay}"
+								 TextWrapping="Wrap" 
+								 IsReadOnly="True"/>
+					</StackPanel>
+				</Border>
+            </StackPanel>
+        </ScrollViewer>
+</UserControl>

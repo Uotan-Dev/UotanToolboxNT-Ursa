@@ -31,6 +31,7 @@ public partial class MainViewViewModel : ViewModelBase
         Content = s switch
         {
             MenuKeys.MenuKeyHome => new HomeViewModel(),
+            MenuKeys.MenuKeyGlobalLog => new GlobalLogViewModel(),
             _ => throw new ArgumentOutOfRangeException(nameof(s), s, null)
         };
     }
