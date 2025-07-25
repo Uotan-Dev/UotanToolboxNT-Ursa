@@ -160,7 +160,7 @@
     <value>Copy to clipboard</value>
   </data>
   <data name="Home_CPUABI" xml:space="preserve">
-    <value>CPU Framework</value>
+    <value>ABI</value>
   </data>
   <data name="Home_CPUCode" xml:space="preserve">
     <value>CPU Code Name</value>
