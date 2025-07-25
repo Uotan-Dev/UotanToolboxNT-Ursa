@@ -16,6 +16,8 @@ public partial class HomeViewModel : ObservableObject
     _cPUABI = "--", _displayHW = "--", _density = "--", _boardID = "--", _platform = "--",
     _compile = "--", _kernel = "--", _selectedSimpleContent = null, _diskType = "--",
     _batteryLevel = "0", _batteryInfo = "--", _useMem = "--", _diskInfo = "--";
+    [ObservableProperty] private bool _IsConnecting;
+    [ObservableProperty] private bool _commonDevicesList;
     [ObservableProperty] private static AvaloniaList<string> _simpleContent;
 
     public HomeViewModel()
