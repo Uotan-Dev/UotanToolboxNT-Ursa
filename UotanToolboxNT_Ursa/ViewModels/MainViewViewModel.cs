@@ -32,6 +32,7 @@ public partial class MainViewViewModel : ViewModelBase
         {
             MenuKeys.MenuKeyHome => new HomeViewModel(),
             MenuKeys.MenuKeyGlobalLog => new GlobalLogViewModel(),
+            MenuKeys.MenuKeySettings => new SettingsViewModel(),
             _ => throw new ArgumentOutOfRangeException(nameof(s), s, null)
         };
     }
