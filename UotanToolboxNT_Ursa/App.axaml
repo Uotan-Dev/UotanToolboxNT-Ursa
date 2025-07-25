@@ -11,7 +11,7 @@
         <semi:SemiTheme Locale="zh-CN" />
         <u-semi:SemiTheme Locale="zh-CN"/>
         <semi:SemiPopupAnimations />
-    </Application.Styles>
+	</Application.Styles>
     <Application.Resources>
         <ControlTheme x:Key="InfoButton" TargetType="Button">
             <Setter Property="Foreground" Value="{DynamicResource SukiPrimaryColor}" />
@@ -82,6 +82,43 @@
 								IsVisible="{TemplateBinding Content,
                                                         Converter={x:Static ObjectConverters.IsNotNull}}" />
 						</Grid>
+					</Panel>
+				</ControlTemplate>
+			</Setter>
+		</ControlTheme>
+		<ControlTheme x:Key="{x:Type u:TitleBar}" TargetType="u:TitleBar">
+			<Setter Property="Background" Value="Transparent" />
+			<Setter Property="VerticalAlignment" Value="Top" />
+			<Setter Property="HorizontalAlignment" Value="Stretch" />
+			<Setter Property="Template">
+				<ControlTemplate TargetType="u:TitleBar">
+					<Panel Background="Transparent">
+						<Panel>
+							<u:WindowThumb
+								Background="{TemplateBinding Background}"
+								IsHitTestVisible="{TemplateBinding IsTitleBarHitTestVisible}" />
+							<Grid HorizontalAlignment="Stretch" ColumnDefinitions="Auto, *, Auto, Auto">
+								<ContentPresenter
+									Grid.Column="0"
+									Content="{TemplateBinding LeftContent}"
+									IsVisible="{TemplateBinding IsTitleVisible}" />
+								<ContentPresenter
+									Grid.Column="1"
+									Content="{TemplateBinding Content}"
+									IsVisible="{TemplateBinding IsTitleVisible}" />
+								<ContentPresenter
+									Grid.Column="2"
+									Content="{TemplateBinding RightContent}"
+									IsVisible="{TemplateBinding IsTitleVisible}" />
+								<u:CaptionButtons
+									Name="{x:Static u:TitleBar.PART_CaptionButtons}"
+									Grid.Column="3"
+									HorizontalAlignment="Right"
+									VerticalAlignment="Top"
+									DockPanel.Dock="Right"
+									Foreground="{TemplateBinding Foreground}" />
+							</Grid>
+						</Panel>
 					</Panel>
 				</ControlTemplate>
 			</Setter>
