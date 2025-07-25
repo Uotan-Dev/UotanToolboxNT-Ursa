@@ -43,22 +43,4 @@ public partial class MainWindow : UrsaWindow
 
         _lastSize = new Size(Width, Height);
     }
-
-    private void TitleBar_OnPointerPressed(object? sender, Avalonia.Input.PointerPressedEventArgs e)
-    {
-        if (e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
-        {
-            BeginMoveDrag(e);
-        }
-    }
-
-    private void MinimizeButton_Click(object? sender, RoutedEventArgs e)
-    {
-        WindowState = WindowState.Minimized;
-    }
-
-    private void CloseButton_Click(object? sender, RoutedEventArgs e)
-    {
-        Close();
-    }
 }
