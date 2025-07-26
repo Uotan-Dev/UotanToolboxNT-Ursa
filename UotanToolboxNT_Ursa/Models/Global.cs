@@ -18,4 +18,6 @@ internal class Global
 
     public static DirectoryInfo BinDirectory = new(Path.Join(BaseDirectory.FullName, "Bin"));//工具箱二进制目录
 
+    public static FileInfo SettingsFile = new(Path.Join(BaseDirectory.FullName, "settings.json"));//工具箱配置文件信息
+
 }
