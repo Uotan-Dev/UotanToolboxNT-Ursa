@@ -1,9 +1,6 @@
 using Avalonia.Controls;
-using Avalonia.Controls.Notifications;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using System;
-using UotanToolboxNT_Ursa.Models;
 
 namespace UotanToolboxNT_Ursa.Pages;
 

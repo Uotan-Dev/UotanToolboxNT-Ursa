@@ -1,6 +1,5 @@
 using System;
 using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Irihi.Avalonia.Shared.Helpers;
 using Ursa.Controls;

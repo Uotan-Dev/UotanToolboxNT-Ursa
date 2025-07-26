@@ -1,9 +1,7 @@
+using System.Threading.Tasks;
 using Avalonia.Collections;
-using Avalonia.Controls.Notifications;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System.Threading.Tasks;
-using UotanToolboxNT_Ursa.Models;
 
 namespace UotanToolboxNT_Ursa.ViewModels;
 
@@ -28,7 +26,7 @@ public partial class HomeViewModel : ObservableObject
     [RelayCommand]
     public async Task FreshDeviceList()
     {
-        
+
     }
 
     [RelayCommand]
@@ -58,7 +56,7 @@ public partial class HomeViewModel : ObservableObject
     [RelayCommand]
     public async Task RebootSys()
     {
-        
+
     }
 
     [RelayCommand]
@@ -70,24 +68,24 @@ public partial class HomeViewModel : ObservableObject
     [RelayCommand]
     public async Task RebootBL()
     {
-        
+
     }
 
     [RelayCommand]
     public async Task RebootFB()
     {
-        
+
     }
 
     [RelayCommand]
     public async Task PowerOff()
     {
-        
+
     }
 
     [RelayCommand]
     public async Task RebootEDL()
     {
-        
+
     }
 }

@@ -28,7 +28,7 @@ public partial class WaveProgress : UserControl
                 SetValue(ValueProperty, value);
         }
     }
-    
+
     public static readonly StyledProperty<bool> IsTextVisibleProperty = AvaloniaProperty.Register<WaveProgress, bool>(nameof(IsTextVisible), defaultValue: true);
 
     public bool IsTextVisible

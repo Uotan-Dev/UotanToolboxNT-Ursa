@@ -38,10 +38,7 @@ public partial class SplashWindowViewModel : ObservableObject, IDialogContext
     }
 
 
-    public void Close()
-    {
-        RequestClose?.Invoke(this, false);
-    }
+    public void Close() => RequestClose?.Invoke(this, false);
 
     public event EventHandler<object?>? RequestClose;
 }

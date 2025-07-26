@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Globalization;
 using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Data.Converters;
 using Avalonia.Media;
 using Avalonia.Styling;
@@ -16,7 +15,7 @@ internal class WaveProgressGradientOffsetConverter : IValueConverter
     {
         if (value is not double v)
             return Brushes.Blue;
-            
+
         var primaryColor = Color.Parse("#df4a0f");
         var accentColor = Colors.Transparent;
 
