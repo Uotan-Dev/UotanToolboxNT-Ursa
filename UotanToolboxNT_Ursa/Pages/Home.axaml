@@ -370,7 +370,7 @@
 				
                 <StackPanel Orientation="Horizontal">
                     <!--  Drivers  -->
-                    <Border Width="320"
+                    <Border Width="300"
                             Height="345"
                             CornerRadius="15"
                             Background="#fefefe"
@@ -381,16 +381,36 @@
 										FontWeight="DemiBold"
 										Text="{x:Static assets:Resources.Basicflash_DriverPatch}" />
 							<StackPanel Margin="0 25 0 0" Spacing="20">
-								<Button Width="220" Command="{Binding OpenAFDI}" Content="{x:Static assets:Resources.Basicflash_InstallADBAndFastbootDriver}"></Button>
-								<Button Width="220" Command="{Binding Open9008DI}" Content="{x:Static assets:Resources.Basicflash_Install9008Driver}"></Button>
-								<Button Width="220" Command="{Binding OpenUSBP}" Content="{x:Static assets:Resources.Basicflash_XiaomiUSB}"></Button>
-								<Button Width="220" Command="{Binding OpenReUSBP}" Content="{x:Static assets:Resources.Basicflash_ReXiaomiUSB}"></Button>
+								<Button Width="220"
+										Theme="{DynamicResource OutlineButton}"
+										CornerRadius="8"
+										Command="{Binding OpenAFDI}" 
+										Padding="8"
+										Content="{x:Static assets:Resources.Basicflash_InstallADBAndFastbootDriver}"/>
+								<Button Width="220"
+										Theme="{DynamicResource OutlineButton}"
+										CornerRadius="8"
+										Command="{Binding Open9008DI}" 
+										Padding="8"
+										Content="{x:Static assets:Resources.Basicflash_Install9008Driver}"/>
+								<Button Width="220"
+										Theme="{DynamicResource OutlineButton}"
+										CornerRadius="8"
+										Command="{Binding OpenUSBP}" 
+										Padding="8"
+										Content="{x:Static assets:Resources.Basicflash_XiaomiUSB}"/>
+								<Button Width="220"
+										Theme="{DynamicResource OutlineButton}"
+										CornerRadius="8"
+										Command="{Binding OpenReUSBP}" 
+										Padding="8"
+										Content="{x:Static assets:Resources.Basicflash_ReXiaomiUSB}"/>
 							</StackPanel>
 						</StackPanel>
                     </Border>
 
                     <!--  Reboot  -->
-                    <Border Width="320"
+                    <Border Width="340"
                             Height="345"
                             CornerRadius="15"
                             Background="#fefefe"
@@ -403,6 +423,8 @@
 							<StackPanel Margin="0 40 0 0" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="20">
 								<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="10">
 									<Button Width="140"
+											Theme="{DynamicResource OutlineButton}"
+											CornerRadius="8"
 											HorizontalAlignment="Left"
 											Padding="8"
 											Command="{Binding RebootSys}">
@@ -412,6 +434,8 @@
 										</TextBlock>
 									</Button>
 									<Button Width="140"
+											Theme="{DynamicResource OutlineButton}"
+											CornerRadius="8"
 											HorizontalAlignment="Left"
 											Padding="8"
 											Command="{Binding RebootRec}">
@@ -425,6 +449,8 @@
 											HorizontalAlignment="Center"
 											Spacing="10">
 									<Button Width="140"
+											Theme="{DynamicResource OutlineButton}"
+											CornerRadius="8"
 											HorizontalAlignment="Left"
 											Padding="8"
 											Command="{Binding RebootBL}">
@@ -434,6 +460,8 @@
 										</TextBlock>
 									</Button>
 									<Button Width="140"
+											Theme="{DynamicResource OutlineButton}"
+											CornerRadius="8"
 											HorizontalAlignment="Left"
 											Padding="8"
 											Command="{Binding RebootFB}">
@@ -447,6 +475,8 @@
 											HorizontalAlignment="Center"
 											Spacing="10">
 									<Button Width="140"
+											Theme="{DynamicResource OutlineButton}"
+											CornerRadius="8"
 											HorizontalAlignment="Left"
 											Padding="8"
 											Command="{Binding PowerOff}">
@@ -456,6 +486,8 @@
 										</TextBlock>
 									</Button>
 									<Button Width="140"
+											Theme="{DynamicResource OutlineButton}"
+											CornerRadius="8"
 											HorizontalAlignment="Left"
 											Padding="8"
 											Command="{Binding RebootEDL}">
@@ -486,16 +518,16 @@
 											FontWeight="DemiBold"
 											Text="{x:Static assets:Resources.Home_ChooseDevice}" />
 								<StackPanel Margin="20 15 0 50">
-									<ComboBox Width="200" ItemsSource="{Binding SimpleContent}" SelectedItem="{Binding SelectedSimpleContent}" />
+									<ComboBox Width="200" CornerRadius="8" ItemsSource="{Binding SimpleContent}" SelectedItem="{Binding SelectedSimpleContent}" />
 								</StackPanel>
 								<StackPanel Spacing="20">
-									<Button Width="200" Command="{Binding FreshDeviceListCommand}">
+									<Button Width="200" CornerRadius="8" Theme="{DynamicResource OutlineButton}" Command="{Binding FreshDeviceListCommand}">
 										<TextBlock>
 											<avalonia:MaterialIcon Kind="Reload" />
 											<TextBlock Text="{x:Static assets:Resources.Home_Refresh}"/>
 										</TextBlock>
 									</Button>
-									<Button Width="200">
+									<Button Width="200" CornerRadius="8" Theme="{DynamicResource OutlineButton}">
 										<TextBlock>
 											<avalonia:MaterialIcon Kind="NetworkOutline" />
 											<TextBlock Text="{x:Static assets:Resources.Home_WirelessADB}"/>

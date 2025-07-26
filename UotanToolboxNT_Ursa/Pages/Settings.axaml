@@ -1,0 +1,150 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:assets="clr-namespace:UotanToolboxNT_Ursa.Assets"
+			 xmlns:vm="using:UotanToolboxNT_Ursa.ViewModels"
+             xmlns:collections="clr-namespace:Avalonia.Collections;assembly=Avalonia.Base"
+			 xmlns:controls="clr-namespace:UotanToolboxNT_Ursa.Controls"
+             xmlns:iri="https://irihi.tech/shared"
+			 xmlns:u="https://irihi.tech/ursa"
+             mc:Ignorable="d" d:DesignWidth="980" d:DesignHeight="830"
+             Background="#f2f2f6"
+             x:Class="UotanToolboxNT_Ursa.Pages.Settings"
+			 x:DataType="vm:SettingsViewModel">
+
+     <ScrollViewer VerticalScrollBarVisibility="Hidden">
+            <StackPanel>
+				<StackPanel.Resources>
+					<ControlTheme x:Key="PureCardRadioButton" TargetType="RadioButton">
+						<Setter Property="HorizontalContentAlignment" Value="Left" />
+						<Setter Property="VerticalContentAlignment" Value="Center" />
+						<Setter Property="Padding" Value="{DynamicResource RadioButtonCardPadding}" />
+						<Setter Property="FontSize" Value="{DynamicResource RadioButtonFontSize}" />
+						<Setter Property="CornerRadius" Value="{DynamicResource RadioButtonCardCornerRadius}" />
+						<Setter Property="Background" Value="{DynamicResource RadioButtonCardDefaultBackground}" />
+						<Setter Property="BorderThickness" Value="{DynamicResource RadioButtonBorderThickness}" />
+						<Setter Property="Cursor" Value="Hand" />
+						<Setter Property="Template">
+							<ControlTemplate TargetType="RadioButton">
+								<ContentPresenter
+									Name="PART_ContentPresenter"
+									Padding="{TemplateBinding Padding}"
+									HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+									VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+									Foreground="{TemplateBinding Foreground}"
+									Background="{TemplateBinding Background}"
+									BorderBrush="{TemplateBinding BorderBrush}"
+									BorderThickness="{TemplateBinding BorderThickness}"
+									Content="{TemplateBinding Content}"
+									ContentTemplate="{TemplateBinding ContentTemplate}"
+									CornerRadius="{TemplateBinding CornerRadius}"
+									RecognizesAccessKey="True"
+									UseLayoutRounding="False"
+									TextWrapping="Wrap" />
+							</ControlTemplate>
+						</Setter>
+						<Style Selector="^:unchecked">
+							<Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+								<Setter Property="BorderBrush" Value="{DynamicResource RadioButtonCardDefaultBorderBrush}" />
+							</Style>
+						</Style>
+						<Style Selector="^:checked">
+							<Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+								<Setter Property="BorderBrush" Value="{DynamicResource RadioButtonCardCheckDefaultBorderBrush}" />
+							</Style>
+							<Style Selector="^:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+								<Setter Property="BorderBrush" Value="{DynamicResource RadioButtonCardCheckPointeroverBorderBrush}" />
+							</Style>
+							<Style Selector="^:pressed /template/ ContentPresenter#PART_ContentPresenter">
+								<Setter Property="BorderBrush" Value="{DynamicResource RadioButtonCardCheckPressedBorderBrush}" />
+							</Style>
+						</Style>
+					</ControlTheme>
+				</StackPanel.Resources>
+				<Border Width="959"
+						Margin="10"
+						CornerRadius="15"
+						Background="#fefefe"
+						Theme="{StaticResource CardBorder}">
+					<Grid>
+						<StackPanel>
+							<TextBlock HorizontalAlignment="Left"
+									   VerticalAlignment="Top"
+									   FontSize="25"
+									   Margin="0 0 0 10"
+									   FontWeight="DemiBold"
+									   Text="{x:Static assets:Resources.Settings_BaseTheme}" />
+							<StackPanel HorizontalAlignment="Center"
+									Orientation="Horizontal"
+									Spacing="20">
+								<RadioButton Width="180"
+											 Height="160"
+											 Padding="0"
+											 Content="{x:Static assets:Resources.Settings_LightMode}"
+											 HorizontalContentAlignment="Center"
+											 VerticalContentAlignment="Bottom"
+											 FontWeight="DemiBold"
+											 Background="#fafafa"
+											 Foreground="#555555"
+											 Theme="{DynamicResource PureCardRadioButton}"
+											 CornerRadius="15"
+											 GroupName="RadioBaseTheme"
+											 IsChecked="{Binding IsLightTheme}">
+									
+								</RadioButton>
+								<RadioButton Width="180"
+											 Height="160"
+											 Padding="0"
+											 Content="{x:Static assets:Resources.Settings_DarkMode}"
+											 HorizontalContentAlignment="Center"
+											 VerticalContentAlignment="Bottom"
+											 FontWeight="DemiBold"
+											 Background="#222222"
+											 Foreground="#fafafa"
+											 Theme="{DynamicResource PureCardRadioButton}"
+											 CornerRadius="15"
+											 GroupName="RadioBaseTheme"
+											 IsChecked="{Binding !IsLightTheme}">
+								</RadioButton>
+							</StackPanel>
+						</StackPanel>
+					</Grid>
+				</Border>
+				<Border Width="959"
+						Margin="10"
+						CornerRadius="15"
+						Background="#fefefe"
+						Theme="{StaticResource CardBorder}">
+					<Grid>
+						<StackPanel>
+							<TextBlock HorizontalAlignment="Left"
+									   VerticalAlignment="Top"
+									   FontSize="25"
+									   Margin="0 0 0 10"
+									   FontWeight="DemiBold"
+									   Text="{x:Static assets:Resources.Settings_Other}" />
+							<StackPanel Spacing="25">
+								<DockPanel>
+									<ComboBox DockPanel.Dock="Right"
+											  Width="160"
+											  CornerRadius="8"
+											  ItemsSource="{Binding LanguageList}"
+											  SelectedItem="{Binding SelectedLanguageList}" />
+									<StackPanel HorizontalAlignment="Left">
+										<TextBlock FontSize="16"
+												   FontWeight="DemiBold"
+												   Text="{x:Static assets:Resources.Settings_Language}" />
+										<TextBlock Margin="0,12,0,0"
+												   Text="{x:Static assets:Resources.Settings_ChooseLanguage}"
+												   TextWrapping="Wrap" />
+									</StackPanel>
+								</DockPanel>
+							</StackPanel>
+						</StackPanel>
+					</Grid>
+				</Border>
+            </StackPanel>
+        </ScrollViewer>
+</UserControl>

@@ -53,6 +53,9 @@
         <AutoGen>True</AutoGen>
         <DependentUpon>Resources.resx</DependentUpon>
       </AvaloniaResource>
+      <Compile Update="Pages\Settings.axaml.cs">
+        <DependentUpon>Settings.axaml</DependentUpon>
+      </Compile>
       <Compile Update="Pages\GlobalLog.axaml.cs">
         <DependentUpon>GlobalLog.axaml</DependentUpon>
       </Compile>

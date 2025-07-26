@@ -2,9 +2,9 @@ using Avalonia.Controls;
 
 namespace UotanToolboxNT_Ursa.Pages;
 
-public partial class GlobalLog : UserControl
+public partial class Settings : UserControl
 {
-    public GlobalLog()
+    public Settings()
     {
         InitializeComponent();
     }
