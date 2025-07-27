@@ -6,6 +6,7 @@ namespace UotanToolboxNT_Ursa.Models;
 
 public class SettingsModel
 {
+    //想要保存的设置属性就添加到这里，然后下面的new方法也要添加对应的默认值。最后再在vm那里添加对应的属性绑定
     [JsonPropertyName("isLightTheme")]
     public bool IsLightTheme { get; set; }
 

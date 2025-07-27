@@ -21,14 +21,16 @@ public partial class SettingsViewModel : ObservableObject
         _isLightTheme = settings.IsLightTheme;
         _selectedLanguageList = settings.SelectedLanguageList;
     }
-
+    //这里是属性变化的处理方法，每添加一个属性都需要添加一个对应的处理方法
     partial void OnIsLightThemeChanged(bool value)
     {
+        GlobalLogModel.AddLog($"主题切换为 {(value ? "浅色" : "深色")} 模式", GlobalLogModel.LogLevel.Info);
         SaveSettings();
     }
 
     partial void OnSelectedLanguageListChanged(string value)
     {
+        GlobalLogModel.AddLog($"语言切换为 {value}", GlobalLogModel.LogLevel.Info);
         SaveSettings();
     }
 

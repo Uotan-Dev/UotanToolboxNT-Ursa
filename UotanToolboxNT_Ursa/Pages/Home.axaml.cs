@@ -15,11 +15,11 @@ public partial class Home : UserControl
     {
         if (sender is Button button)
         {
-            Avalonia.Input.Platform.IClipboard clipboard = TopLevel.GetTopLevel(this)?.Clipboard;
-            DataObject dataObject = new DataObject();
+            var clipboard = TopLevel.GetTopLevel(this)?.Clipboard;
+            var dataObject = new DataObject();
             if (button.Content != null)
             {
-                string text = button.Content.ToString();
+                var text = button.Content.ToString();
                 if (text != null)
                 {
                     dataObject.Set(DataFormats.Text, text);
