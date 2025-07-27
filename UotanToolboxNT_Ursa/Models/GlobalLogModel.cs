@@ -7,7 +7,7 @@ using UotanToolboxNT_Ursa.ViewModels;
 
 namespace UotanToolboxNT_Ursa.Models;
 
-public class GlobalLogModel
+public partial class GlobalLogModel
 {
     private static readonly Lock LockObject = new();
 
@@ -54,7 +54,7 @@ public class GlobalLogModel
         {
             return null;
         }
-        var match = Regex.Match(logLine, @"\[(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})\]");
+        var match = Timestamp().Match(logLine);
         if (match.Success)
         {
             if (DateTime.TryParse(match.Groups[1].Value, out var dateTime))
@@ -64,4 +64,7 @@ public class GlobalLogModel
         }
         return null;
     }
+
+    [GeneratedRegex(@"\[(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})\]")]
+    private static partial Regex Timestamp();
 }
