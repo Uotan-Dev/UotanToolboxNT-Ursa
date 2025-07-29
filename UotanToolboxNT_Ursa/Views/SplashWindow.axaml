@@ -10,13 +10,13 @@
     Title="Starting Ursa Demo..."
     Width="400"
     Height="300"
-    Background="#fefefe"
+    Background="{DynamicResource PageBackground}"
     Icon="/Assets/icon.ico"
     x:DataType="viewModels:SplashWindowViewModel"
     CountDown="{x:Null}"
     mc:Ignorable="d">
     <Grid
-        Background="#fefefe"
+        Background="{DynamicResource PageBackground}"
         HorizontalAlignment="Center"
         VerticalAlignment="Center"
         RowDefinitions="Auto, Auto, Auto">

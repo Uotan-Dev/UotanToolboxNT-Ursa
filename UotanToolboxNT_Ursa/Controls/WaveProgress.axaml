@@ -79,8 +79,7 @@
                                            HorizontalAlignment="Center"
                                            VerticalAlignment="Center"
                                            Classes="h2"
-                                           Foreground="{TemplateBinding Value,
-                                                                        Converter={StaticResource WValueColorConverter}}"
+                                           Foreground="{DynamicResource TextForeground}"
                                            Text="{TemplateBinding Value,
                                                                   Converter={StaticResource WValueTextConverter}}">
                                     <TextBlock.Transitions>

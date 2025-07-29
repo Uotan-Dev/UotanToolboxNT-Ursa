@@ -10,7 +10,7 @@
              xmlns:iri="https://irihi.tech/shared"
 			 xmlns:u="https://irihi.tech/ursa"
              mc:Ignorable="d" d:DesignWidth="980" d:DesignHeight="830"
-             Background="#f2f2f6"
+             Background="{DynamicResource PageBackground}"
              x:Class="UotanToolboxNT_Ursa.Pages.Home"
 			 x:DataType="vm:HomeViewModel">
 
@@ -27,7 +27,6 @@
 						<Border Width="520"
 								Height="450"
 								CornerRadius="15"
-								Background="#fefefe"
 								Theme="{StaticResource CardBorder}">
 							<StackPanel>
 								<TextBlock HorizontalAlignment="Left"
@@ -302,7 +301,6 @@
                     <Border Width="200"
                             Height="450"
                             CornerRadius="15"
-                            Background="#fefefe"
                             Margin="10" Theme="{StaticResource CardBorder}">
 						<Grid>
 							<TextBlock FontSize="16"
@@ -328,7 +326,6 @@
                     <Border Width="200"
                             Height="450"
                             CornerRadius="15"
-                            Background="#fefefe"
                             Margin="10" Theme="{StaticResource CardBorder}">
 						<StackPanel Spacing="10">
 							<TextBlock FontSize="16"
@@ -373,7 +370,6 @@
                     <Border Width="300"
                             Height="345"
                             CornerRadius="15"
-                            Background="#fefefe"
                             Margin="10" Theme="{StaticResource CardBorder}">
 						<StackPanel Orientation="Vertical" Spacing="10">
 							<TextBlock HorizontalAlignment="Left"
@@ -413,7 +409,6 @@
                     <Border Width="340"
                             Height="345"
                             CornerRadius="15"
-                            Background="#fefefe"
                             Margin="10" Theme="{StaticResource CardBorder}">
 						<StackPanel Spacing="10">
 							<TextBlock HorizontalAlignment="Left"
@@ -510,7 +505,6 @@
 						<Border Width="280"
 								Height="345"
 								CornerRadius="15"
-								Background="#fefefe"
 								Theme="{StaticResource CardBorder}">
 							<StackPanel Orientation="Vertical" Spacing="10">
 								<TextBlock HorizontalAlignment="Left"

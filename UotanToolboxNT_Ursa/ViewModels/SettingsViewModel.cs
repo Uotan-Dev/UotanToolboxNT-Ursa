@@ -1,6 +1,7 @@
 using Avalonia.Collections;
 using CommunityToolkit.Mvvm.ComponentModel;
 using UotanToolboxNT_Ursa.Models;
+using UotanToolboxNT_Ursa.Themes;
 
 namespace UotanToolboxNT_Ursa.ViewModels;
 
@@ -25,6 +26,8 @@ public partial class SettingsViewModel : ObservableObject
     partial void OnIsLightThemeChanged(bool value)
     {
         GlobalLogModel.AddLog($"主题切换为 {(value ? "浅色" : "深色")} 模式", GlobalLogModel.LogLevel.Info);
+        string themeKey = IsLightTheme ? "LightColors" : "DarkColors";
+        ThemeLoader.ApplyTheme(themeKey);
         SaveSettings();
     }
 

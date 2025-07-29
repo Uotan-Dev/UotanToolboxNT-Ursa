@@ -10,7 +10,7 @@
              xmlns:iri="https://irihi.tech/shared"
 			 xmlns:u="https://irihi.tech/ursa"
              mc:Ignorable="d" d:DesignWidth="980" d:DesignHeight="830"
-             Background="#f2f2f6"
+             Background="{DynamicResource PageBackground}"
              x:Class="UotanToolboxNT_Ursa.Pages.GlobalLog"
 			 x:DataType="vm:GlobalLogViewModel">
 
@@ -20,7 +20,6 @@
 						Height="815"
 						Margin="10"
 						CornerRadius="15"
-						Background="#fefefe"
 						Theme="{StaticResource CardBorder}">
 					<StackPanel>
 						<TextBlock HorizontalAlignment="Left"

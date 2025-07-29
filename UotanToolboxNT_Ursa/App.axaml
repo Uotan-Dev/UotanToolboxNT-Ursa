@@ -4,15 +4,31 @@
 			 xmlns:u-semi="https://irihi.tech/ursa/themes/semi"
 			 xmlns:u="https://irihi.tech/ursa"
              x:Class="UotanToolboxNT_Ursa.App"
-             RequestedThemeVariant="Light">
+			 RequestedThemeVariant="Light">
              <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
   
     <Application.Styles>
         <semi:SemiTheme Locale="zh-CN" />
         <u-semi:SemiTheme Locale="zh-CN"/>
         <semi:SemiPopupAnimations />
+		<Style Selector="TextBlock">
+			<Setter Property="Foreground" Value="{DynamicResource TextForeground}" />
+		</Style>
+		<Style Selector="TextBox">
+			<Setter Property="Foreground" Value="{DynamicResource TextForeground}" />
+		</Style>
+		<Style Selector="Button">
+			<Setter Property="Foreground" Value="{DynamicResource TextForeground}" />
+		</Style>
+		<Style Selector="Border">
+			<Setter Property="Background" Value="{DynamicResource CardBackground}"/>
+		</Style>
 	</Application.Styles>
     <Application.Resources>
+		<ResourceDictionary>
+			<ResourceInclude x:Key="LightColors" Source="avares://UotanToolboxNT_Ursa/Themes/LightColors.axaml"/>
+			<ResourceInclude x:Key="DarkColors" Source="avares://UotanToolboxNT_Ursa/Themes/DarkColors.axaml"/>
+		</ResourceDictionary>
         <ControlTheme x:Key="InfoButton" TargetType="Button">
             <Setter Property="Foreground" Value="{DynamicResource SukiPrimaryColor}" />
             <Setter Property="Cursor" Value="Hand" />
@@ -128,7 +144,7 @@
 			<Setter Property="Template">
 				<ControlTemplate TargetType="u:CaptionButtons">
 					<StackPanel Orientation="Horizontal" Margin="10" Spacing="5">
-						<Button Height="20" Width="20" Name="PART_FullScreenButton" Background="#f2f2f6" Theme="{StaticResource CaptionButton}" CornerRadius="15">
+						<Button Height="20" Width="20" Name="PART_FullScreenButton" Background="{DynamicResource PageBackground}" Theme="{StaticResource CaptionButton}" CornerRadius="15">
 							<PathIcon
 								Name="PART_FullScreenButtonIcon"
 								Height="10"
@@ -137,7 +153,7 @@
 								Data="{StaticResource WindowExpandGlyph}"
 								Foreground="{Binding $parent[Button].Foreground}" />
 						</Button>
-						<Button Height="20" Width="20" Name="PART_MinimizeButton" Background="#f2f2f6" Theme="{StaticResource CaptionButton}" CornerRadius="15">
+						<Button Height="20" Width="20" Name="PART_MinimizeButton" Background="{DynamicResource PageBackground}" Theme="{StaticResource CaptionButton}" CornerRadius="15">
 							<PathIcon
 								Name="PART_MinimizeButtonIcon"
 								Height="10"
@@ -146,7 +162,7 @@
 								Data="{StaticResource WindowMinimizeGlyph}"
 								Foreground="{Binding $parent[Button].Foreground}" />
 						</Button>
-						<Button Height="20" Width="20" Name="PART_RestoreButton" Background="#f2f2f6" Theme="{StaticResource CaptionButton}" CornerRadius="15">
+						<Button Height="20" Width="20" Name="PART_RestoreButton" Background="{DynamicResource PageBackground}" Theme="{StaticResource CaptionButton}" CornerRadius="15">
 							<PathIcon
 								Name="PART_RestoreButtonIcon"
 								Height="10"
@@ -155,7 +171,7 @@
 								Data="{StaticResource WindowMaximizeGlyph}"
 								Foreground="{Binding $parent[Button].Foreground}" />
 						</Button>
-						<Button Height="20" Width="20" Name="PART_CloseButton" Background="#f2f2f6" Theme="{StaticResource CaptionButton}" CornerRadius="15">
+						<Button Height="20" Width="20" Name="PART_CloseButton" Background="{DynamicResource PageBackground}" Theme="{StaticResource CaptionButton}" CornerRadius="15">
 							<PathIcon
 								Name="PART_CloseButtonIcon"
 								Height="10"

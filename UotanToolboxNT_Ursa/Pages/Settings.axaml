@@ -10,7 +10,7 @@
              xmlns:iri="https://irihi.tech/shared"
 			 xmlns:u="https://irihi.tech/ursa"
              mc:Ignorable="d" d:DesignWidth="980" d:DesignHeight="830"
-             Background="#f2f2f6"
+             Background="{DynamicResource PageBackground}"
              x:Class="UotanToolboxNT_Ursa.Pages.Settings"
 			 x:DataType="vm:SettingsViewModel">
 
@@ -66,7 +66,6 @@
 				<Border Width="959"
 						Margin="10"
 						CornerRadius="15"
-						Background="#fefefe"
 						Theme="{StaticResource CardBorder}">
 					<Grid>
 						<StackPanel>
@@ -86,13 +85,12 @@
 											 HorizontalContentAlignment="Center"
 											 VerticalContentAlignment="Bottom"
 											 FontWeight="DemiBold"
-											 Background="#fafafa"
-											 Foreground="#555555"
+											 Background="#f2f2f6"
+											 Foreground="#1c1c1e"
 											 Theme="{DynamicResource PureCardRadioButton}"
 											 CornerRadius="15"
 											 GroupName="RadioBaseTheme"
 											 IsChecked="{Binding IsLightTheme}">
-									
 								</RadioButton>
 								<RadioButton Width="180"
 											 Height="160"
@@ -101,8 +99,8 @@
 											 HorizontalContentAlignment="Center"
 											 VerticalContentAlignment="Bottom"
 											 FontWeight="DemiBold"
-											 Background="#222222"
-											 Foreground="#fafafa"
+											 Background="#1c1c1e"
+											 Foreground="#f2f2f6"
 											 Theme="{DynamicResource PureCardRadioButton}"
 											 CornerRadius="15"
 											 GroupName="RadioBaseTheme"
@@ -115,7 +113,6 @@
 				<Border Width="959"
 						Margin="10"
 						CornerRadius="15"
-						Background="#fefefe"
 						Theme="{StaticResource CardBorder}">
 					<Grid>
 						<StackPanel>

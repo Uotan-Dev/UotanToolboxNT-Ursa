@@ -11,7 +11,7 @@
               mc:Ignorable="d" d:DesignWidth="1197" d:DesignHeight="825"
               x:Class="UotanToolboxNT_Ursa.Views.MainWindow"
               x:DataType="vm:MainWindowViewModel"
-              Background="#f2f2f6"
+              Background="{DynamicResource PageBackground}"
               Icon="/Assets/icon.ico"
               IsFullScreenButtonVisible="False"
               IsRestoreButtonVisible="False"

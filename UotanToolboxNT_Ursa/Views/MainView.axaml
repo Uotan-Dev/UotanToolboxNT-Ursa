@@ -11,7 +11,7 @@
     xmlns:vm="using:UotanToolboxNT_Ursa.ViewModels"
     d:DesignWidth="1197" d:DesignHeight="825"
     x:CompileBindings="True"
-    Background="#f2f2f6"
+    Background="{DynamicResource PageBackground}"
     x:DataType="vm:MainViewViewModel"
     mc:Ignorable="d">
 
@@ -31,7 +31,6 @@
                         VerticalAlignment="Top"
                         Height="816"
                         CornerRadius="15"
-                        Background="#fefefe"
                         Theme="{DynamicResource CardBorder}">
                     <u:NavMenu
                         Name="menu"
