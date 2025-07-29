@@ -6,18 +6,19 @@ namespace UotanToolboxNT_Ursa.Models;
 
 public class SettingsModel
 {
-    //想要保存的设置属性就添加到这里，然后下面的new方法也要添加对应的默认值。最后再在vm那里添加对应的属性绑定
+    // 想要保存的设置属性就添加到这里，然后下面的new方法也要添加对应的默认值。最后再在vm那里添加对应的属性绑定
     [JsonPropertyName("isLightTheme")]
     public bool IsLightTheme { get; set; }
 
     [JsonPropertyName("selectedLanguageList")]
     public string SelectedLanguageList { get; set; }
 
+    private static readonly JsonSerializerOptions CachedJsonOptions = new() { WriteIndented = true };
+
     // 保存设置到 JSON 文件
     public static void Save(SettingsModel settings)
     {
-        var options = new JsonSerializerOptions { WriteIndented = true };
-        var json = JsonSerializer.Serialize(settings, options);
+        var json = JsonSerializer.Serialize(settings, CachedJsonOptions);
         File.WriteAllText(Global.SettingsFile.FullName, json);
     }
 
@@ -34,6 +35,6 @@ public class SettingsModel
         }
 
         var json = File.ReadAllText(Global.SettingsFile.FullName);
-        return JsonSerializer.Deserialize<SettingsModel>(json) ?? new SettingsModel();
+        return JsonSerializer.Deserialize<SettingsModel>(json, CachedJsonOptions) ?? new SettingsModel();
     }
 }

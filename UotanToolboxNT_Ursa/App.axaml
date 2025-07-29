@@ -26,10 +26,7 @@
 	</Application.Styles>
     <Application.Resources>
 		<ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceInclude Source="/Assets/zh-CN.axaml" />
-                <ResourceInclude Source="/Assets/en-US.axaml" />
-            </ResourceDictionary.MergedDictionaries>
+            <ResourceInclude x:Key="zh-CN" Source="avares://UotanToolboxNT_Ursa/Locale/zh-CN.axaml" />
 			<ResourceInclude x:Key="LightColors" Source="avares://UotanToolboxNT_Ursa/Themes/LightColors.axaml"/>
 			<ResourceInclude x:Key="DarkColors" Source="avares://UotanToolboxNT_Ursa/Themes/DarkColors.axaml"/>
 		</ResourceDictionary>

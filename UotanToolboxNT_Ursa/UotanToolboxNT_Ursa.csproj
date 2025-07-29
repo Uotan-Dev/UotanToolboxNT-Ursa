@@ -45,18 +45,6 @@
   </ItemGroup>
 
     <ItemGroup>
-      <AvaloniaResource Update="Assets\en-US.axaml">
-        <SubType>Designer</SubType>
-      </AvaloniaResource>
-      <AvaloniaResource Update="Assets\en-US.axaml">
-        <SubType>Designer</SubType>
-      </AvaloniaResource>
-      <AvaloniaResource Update="Assets\zh-CN.axaml">
-        <SubType>Designer</SubType>
-      </AvaloniaResource>
-      <AvaloniaResource Update="Assets\zh-CN.axaml">
-        <SubType>Designer</SubType>
-      </AvaloniaResource>
       <Compile Update="Pages\Settings.axaml.cs">
         <DependentUpon>Settings.axaml</DependentUpon>
       </Compile>
@@ -72,6 +60,12 @@
     </ItemGroup>
 
 	<ItemGroup>
+		<AvaloniaResource Include="Locale\en-US.axaml">
+		  <SubType>Designer</SubType>
+		</AvaloniaResource>
+		<AvaloniaResource Include="Locale\zh-CN.axaml">
+		  <SubType>Designer</SubType>
+		</AvaloniaResource>
 		<AvaloniaResource Include="Themes\DarkColors.axaml" />
 		<AvaloniaResource Include="Themes\LightColors.axaml" />
 	</ItemGroup>

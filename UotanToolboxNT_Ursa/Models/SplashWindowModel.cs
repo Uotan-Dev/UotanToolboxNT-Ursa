@@ -64,6 +64,9 @@ public class SplashWindowModel
             Global.HardwareInfo.RefreshNetworkAdapterList(false, true);
             Global.HardwareInfo.RefreshSoundDeviceList();
             Global.HardwareInfo.RefreshVideoControllerList();
+            //配置文件读取逻辑暂时在这里先放一下
+            AddLog("正在读取设置信息...", LogLevel.Info);
+            SettingsModel.Load();
         }
         catch (Exception ex)
         {
