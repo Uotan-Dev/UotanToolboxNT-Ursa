@@ -74,14 +74,14 @@
 									   FontSize="25"
 									   Margin="0 0 0 10"
 									   FontWeight="DemiBold"
-									   Text="{x:Static assets:Resources.Settings_BaseTheme}" />
+									   Text="{DynamicResource Settings_BaseTheme}" />
 							<StackPanel HorizontalAlignment="Center"
 									Orientation="Horizontal"
 									Spacing="20">
 								<RadioButton Width="180"
 											 Height="160"
 											 Padding="0"
-											 Content="{x:Static assets:Resources.Settings_LightMode}"
+											 Content="{DynamicResource Settings_LightMode}"
 											 HorizontalContentAlignment="Center"
 											 VerticalContentAlignment="Bottom"
 											 FontWeight="DemiBold"
@@ -95,7 +95,7 @@
 								<RadioButton Width="180"
 											 Height="160"
 											 Padding="0"
-											 Content="{x:Static assets:Resources.Settings_DarkMode}"
+											 Content="{DynamicResource Settings_DarkMode}"
 											 HorizontalContentAlignment="Center"
 											 VerticalContentAlignment="Bottom"
 											 FontWeight="DemiBold"
@@ -121,7 +121,7 @@
 									   FontSize="25"
 									   Margin="0 0 0 10"
 									   FontWeight="DemiBold"
-									   Text="{x:Static assets:Resources.Settings_Other}" />
+									   Text="{DynamicResource Settings_Other}" />
 							<StackPanel Spacing="25">
 								<DockPanel>
 									<ComboBox DockPanel.Dock="Right"
@@ -132,9 +132,9 @@
 									<StackPanel HorizontalAlignment="Left">
 										<TextBlock FontSize="16"
 												   FontWeight="DemiBold"
-												   Text="{x:Static assets:Resources.Settings_Language}" />
+												   Text="{DynamicResource Settings_Language}" />
 										<TextBlock Margin="0,12,0,0"
-												   Text="{x:Static assets:Resources.Settings_ChooseLanguage}"
+												   Text="{DynamicResource Settings_ChooseLanguage}"
 												   TextWrapping="Wrap" />
 									</StackPanel>
 								</DockPanel>

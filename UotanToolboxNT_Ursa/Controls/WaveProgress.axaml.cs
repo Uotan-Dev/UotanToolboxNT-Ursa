@@ -25,7 +25,9 @@ public partial class WaveProgress : UserControl
         set
         {
             if (value is >= 0 and <= 100)
+            {
                 SetValue(ValueProperty, value);
+            }
         }
     }
 

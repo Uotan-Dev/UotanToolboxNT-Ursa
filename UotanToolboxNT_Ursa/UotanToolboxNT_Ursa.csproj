@@ -20,11 +20,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <AvaloniaResource Remove="Assets\Resources.resx" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Remove="Assets\Resources.zh-CN.resx" />
+    <AvaloniaXaml Remove="Assets\en-US.axaml" />
+    <AvaloniaXaml Remove="Assets\zh-CN.axaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -48,10 +45,17 @@
   </ItemGroup>
 
     <ItemGroup>
-      <AvaloniaResource Update="Assets\Resources.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>Resources.resx</DependentUpon>
+      <AvaloniaResource Update="Assets\en-US.axaml">
+        <SubType>Designer</SubType>
+      </AvaloniaResource>
+      <AvaloniaResource Update="Assets\en-US.axaml">
+        <SubType>Designer</SubType>
+      </AvaloniaResource>
+      <AvaloniaResource Update="Assets\zh-CN.axaml">
+        <SubType>Designer</SubType>
+      </AvaloniaResource>
+      <AvaloniaResource Update="Assets\zh-CN.axaml">
+        <SubType>Designer</SubType>
       </AvaloniaResource>
       <Compile Update="Pages\Settings.axaml.cs">
         <DependentUpon>Settings.axaml</DependentUpon>
@@ -65,14 +69,10 @@
       <Compile Update="Views\SplashWindow.axaml.cs">
         <DependentUpon>SplashWindow.axaml</DependentUpon>
       </Compile>
-      <EmbeddedResource Update="Assets\Resources.resx">
-        <Generator></Generator>
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </EmbeddedResource>
     </ItemGroup>
 
 	<ItemGroup>
-		<AvaloniaResource Include="Themes\DarkColors.axaml"  />
-		<AvaloniaResource Include="Themes\LightColors.axaml"  />
+		<AvaloniaResource Include="Themes\DarkColors.axaml" />
+		<AvaloniaResource Include="Themes\LightColors.axaml" />
 	</ItemGroup>
 </Project>

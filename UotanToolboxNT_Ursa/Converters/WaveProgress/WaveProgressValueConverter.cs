@@ -10,7 +10,11 @@ public class WaveProgressValueConverter : IValueConverter
 
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        if (value is not double i) return 0;
+        if (value is not double i)
+        {
+            return 0;
+        }
+
         return 155 - i * 2.1;
     }
 

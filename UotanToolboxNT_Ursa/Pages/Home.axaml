@@ -23,7 +23,7 @@
 						Width="520"
 						Margin="10"
                         IsLoading="{Binding IsConnecting}"
-                        LoadingMessage="{x:Static assets:Resources.Home_Fetching}">
+                        LoadingMessage="{DynamicResource Home_Fetching}">
 						<Border Width="520"
 								Height="450"
 								CornerRadius="15"
@@ -32,7 +32,7 @@
 								<TextBlock HorizontalAlignment="Left"
 												FontSize="16"
 												FontWeight="DemiBold"
-												Text="{x:Static assets:Resources.Home_DeviceInfo}" />
+												Text="{DynamicResource Home_DeviceInfo}" />
 								<StackPanel Orientation="Horizontal" Spacing="15" Margin="0 20 0 0">
 									<StackPanel Orientation="Vertical" Width="230" Margin="0 0 0 0" Spacing="15">
 										<Grid>
@@ -40,7 +40,7 @@
 														FontSize="13"
 														FontWeight="DemiBold"
 														Foreground="{DynamicResource SukiLowText}"
-														Text="{x:Static assets:Resources.Home_DeviceBrand}"/>
+														Text="{DynamicResource Home_DeviceBrand}"/>
 											<StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
 												<Button Theme="{StaticResource InfoButton}"
 														Foreground="White"
@@ -54,7 +54,7 @@
 														FontSize="13"
 														FontWeight="DemiBold"
 														Foreground="{DynamicResource SukiLowText}"
-														Text="{x:Static assets:Resources.Home_DeviceModel}" />
+														Text="{DynamicResource Home_DeviceModel}" />
 											<StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
 												<Button Theme="{StaticResource InfoButton}"
 														Foreground="White"
@@ -68,7 +68,7 @@
 														FontSize="13"
 														FontWeight="DemiBold"
 														Foreground="{DynamicResource SukiLowText}"
-														Text="{x:Static assets:Resources.Home_CodeName}" />
+														Text="{DynamicResource Home_CodeName}" />
 											<StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
 												<Button Theme="{StaticResource InfoButton}"
 														Foreground="White"
@@ -82,7 +82,7 @@
 														FontSize="13"
 														FontWeight="DemiBold"
 														Foreground="{DynamicResource SukiLowText}"
-														Text="{x:Static assets:Resources.Home_System}" />
+														Text="{DynamicResource Home_System}" />
 											<StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
 												<Button Theme="{StaticResource InfoButton}"
 														Foreground="White"
@@ -96,7 +96,7 @@
 														FontSize="13"
 														FontWeight="DemiBold"
 														Foreground="{DynamicResource SukiLowText}"
-														Text="{x:Static assets:Resources.Home_CPUABI}" />
+														Text="{DynamicResource Home_CPUABI}" />
 											<StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
 												<Button Theme="{StaticResource InfoButton}"
 														Foreground="White"
@@ -110,7 +110,7 @@
 														FontSize="13"
 														FontWeight="DemiBold"
 														Foreground="{DynamicResource SukiLowText}"
-														Text="{x:Static assets:Resources.Home_Resolution}" />
+														Text="{DynamicResource Home_Resolution}" />
 											<StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
 												<Button Theme="{StaticResource InfoButton}"
 														Foreground="White"
@@ -124,7 +124,7 @@
 														FontSize="13"
 														FontWeight="DemiBold"
 														Foreground="{DynamicResource SukiLowText}"
-														Text="{x:Static assets:Resources.Home_DisplayDensity}" />
+														Text="{DynamicResource Home_DisplayDensity}" />
 											<StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
 												<Button Theme="{StaticResource InfoButton}"
 														Foreground="White"
@@ -140,7 +140,7 @@
 														FontSize="13"
 														FontWeight="DemiBold"
 														Foreground="{DynamicResource SukiLowText}"
-														Text="{x:Static assets:Resources.Home_ConnectionStatus}"/>
+														Text="{DynamicResource Home_ConnectionStatus}"/>
 											<StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
 												<Button Theme="{StaticResource InfoButton}"
 														Foreground="White"
@@ -154,7 +154,7 @@
 														FontSize="13"
 														FontWeight="DemiBold"
 														Foreground="{DynamicResource SukiLowText}"
-														Text="{x:Static assets:Resources.Home_BootloaderLock}"/>
+														Text="{DynamicResource Home_BootloaderLock}"/>
 											<StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
 												<Button Theme="{StaticResource InfoButton}"
 														Foreground="White"
@@ -168,7 +168,7 @@
 														FontSize="13"
 														FontWeight="DemiBold"
 														Foreground="{DynamicResource SukiLowText}"
-														Text="{x:Static assets:Resources.Home_VabStadus}"/>
+														Text="{DynamicResource Home_VabStadus}"/>
 											<StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
 												<Button Theme="{StaticResource InfoButton}"
 														Foreground="White"
@@ -182,7 +182,7 @@
 														FontSize="13"
 														FontWeight="DemiBold"
 														Foreground="{DynamicResource SukiLowText}"
-														Text="{x:Static assets:Resources.Home_VNDKVersion}"/>
+														Text="{DynamicResource Home_VNDKVersion}"/>
 											<StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
 												<Button Theme="{StaticResource InfoButton}"
 														Foreground="White"
@@ -196,7 +196,7 @@
 														FontSize="13"
 														FontWeight="DemiBold"
 														Foreground="{DynamicResource SukiLowText}"
-														Text="{x:Static assets:Resources.Home_CPUCode}"/>
+														Text="{DynamicResource Home_CPUCode}"/>
 											<StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
 												<Button Theme="{StaticResource InfoButton}"
 														Foreground="White"
@@ -210,7 +210,7 @@
 														FontSize="13"
 														FontWeight="DemiBold"
 														Foreground="{DynamicResource SukiLowText}"
-														Text="{x:Static assets:Resources.Home_PowerOnTime}"/>
+														Text="{DynamicResource Home_PowerOnTime}"/>
 											<StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
 												<Button Theme="{StaticResource InfoButton}"
 														Foreground="White"
@@ -224,7 +224,7 @@
 														FontSize="13"
 														FontWeight="DemiBold"
 														Foreground="{DynamicResource SukiLowText}"
-														Text="{x:Static assets:Resources.Home_FlashType}"/>
+														Text="{DynamicResource Home_FlashType}"/>
 											<StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
 												<Button Theme="{StaticResource InfoButton}"
 														Foreground="White"
@@ -241,7 +241,7 @@
 													FontSize="13"
 													FontWeight="DemiBold"
 													Foreground="{DynamicResource SukiLowText}"
-													Text="{x:Static assets:Resources.Home_MotherboardID}" />
+													Text="{DynamicResource Home_MotherboardID}" />
 										<StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
 											<Button Theme="{StaticResource InfoButton}"
 														Foreground="White"
@@ -255,7 +255,7 @@
 													FontSize="13"
 													FontWeight="DemiBold"
 													Foreground="{DynamicResource SukiLowText}"
-													Text="{x:Static assets:Resources.Home_Platform}" />
+													Text="{DynamicResource Home_Platform}" />
 										<StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
 											<Button Theme="{StaticResource InfoButton}"
 														Foreground="White"
@@ -269,7 +269,7 @@
 													FontSize="13"
 													FontWeight="DemiBold"
 													Foreground="{DynamicResource SukiLowText}"
-													Text="{x:Static assets:Resources.Home_CompiledVersion}" />
+													Text="{DynamicResource Home_CompiledVersion}" />
 										<StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
 											<Button Theme="{StaticResource InfoButton}"
 													Foreground="White"
@@ -283,7 +283,7 @@
 													FontSize="13"
 													FontWeight="DemiBold"
 													Foreground="{DynamicResource SukiLowText}"
-													Text="{x:Static assets:Resources.Home_KernalVersion}" />
+													Text="{DynamicResource Home_KernalVersion}" />
 										<StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
 											<Button Theme="{StaticResource InfoButton}"
 													Foreground="White"
@@ -305,7 +305,7 @@
 						<Grid>
 							<TextBlock FontSize="16"
 									   FontWeight="DemiBold"
-									   Text="{x:Static assets:Resources.Home_Battery}" />
+									   Text="{DynamicResource Home_Battery}" />
 							<Viewbox Width="180"
 									 Height="180"
 									 Margin="0,0,0,5"
@@ -330,7 +330,7 @@
 						<StackPanel Spacing="10">
 							<TextBlock FontSize="16"
 									   FontWeight="DemiBold"
-									   Text="{x:Static assets:Resources.Home_StorageAndMemory}" />
+									   Text="{DynamicResource Home_StorageAndMemory}" />
 							<StackPanel Orientation="Vertical" Margin="0 20 0 0" Spacing="10">
 								<StackPanel Orientation="Vertical">
 									<ProgressBar Width="130"
@@ -375,32 +375,32 @@
 							<TextBlock HorizontalAlignment="Left"
 										FontSize="15"
 										FontWeight="DemiBold"
-										Text="{x:Static assets:Resources.Basicflash_DriverPatch}" />
+										Text="{DynamicResource Basicflash_DriverPatch}" />
 							<StackPanel Margin="0 25 0 0" Spacing="20">
 								<Button Width="220"
 										Theme="{DynamicResource OutlineButton}"
 										CornerRadius="8"
 										Command="{Binding OpenAFDI}" 
 										Padding="8"
-										Content="{x:Static assets:Resources.Basicflash_InstallADBAndFastbootDriver}"/>
+										Content="{DynamicResource Basicflash_InstallADBAndFastbootDriver}"/>
 								<Button Width="220"
 										Theme="{DynamicResource OutlineButton}"
 										CornerRadius="8"
 										Command="{Binding Open9008DI}" 
 										Padding="8"
-										Content="{x:Static assets:Resources.Basicflash_Install9008Driver}"/>
+										Content="{DynamicResource Basicflash_Install9008Driver}"/>
 								<Button Width="220"
 										Theme="{DynamicResource OutlineButton}"
 										CornerRadius="8"
 										Command="{Binding OpenUSBP}" 
 										Padding="8"
-										Content="{x:Static assets:Resources.Basicflash_XiaomiUSB}"/>
+										Content="{DynamicResource Basicflash_XiaomiUSB}"/>
 								<Button Width="220"
 										Theme="{DynamicResource OutlineButton}"
 										CornerRadius="8"
 										Command="{Binding OpenReUSBP}" 
 										Padding="8"
-										Content="{x:Static assets:Resources.Basicflash_ReXiaomiUSB}"/>
+										Content="{DynamicResource Basicflash_ReXiaomiUSB}"/>
 							</StackPanel>
 						</StackPanel>
                     </Border>
@@ -414,7 +414,7 @@
 							<TextBlock HorizontalAlignment="Left"
 										FontSize="15"
 										FontWeight="DemiBold"
-										Text="{x:Static assets:Resources.Basicflash_Reboot}" />
+										Text="{DynamicResource Basicflash_Reboot}" />
 							<StackPanel Margin="0 40 0 0" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="20">
 								<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="10">
 									<Button Width="140"
@@ -425,7 +425,7 @@
 											Command="{Binding RebootSys}">
 										<TextBlock>
 											<avalonia:MaterialIcon Kind="Android" />
-											<TextBlock Text="{x:Static assets:Resources.Home_System}"/>
+											<TextBlock Text="{DynamicResource Home_System}"/>
 										</TextBlock>
 									</Button>
 									<Button Width="140"
@@ -436,7 +436,7 @@
 											Command="{Binding RebootRec}">
 										<TextBlock>
 											<avalonia:MaterialIcon Kind="NetworkOutline" />
-											<TextBlock Text="{x:Static assets:Resources.Home_Recovery}"/>
+											<TextBlock Text="{DynamicResource Home_Recovery}"/>
 										</TextBlock>
 									</Button>
 								</StackPanel>
@@ -451,7 +451,7 @@
 											Command="{Binding RebootBL}">
 										<TextBlock>
 											<avalonia:MaterialIcon Kind="ProgressDownload" />
-											<TextBlock Text="{x:Static assets:Resources.Home_Bootloader}"/>
+											<TextBlock Text="{DynamicResource Home_Bootloader}"/>
 										</TextBlock>
 									</Button>
 									<Button Width="140"
@@ -462,7 +462,7 @@
 											Command="{Binding RebootFB}">
 										<TextBlock>
 											<avalonia:MaterialIcon Kind="ProgressDownload" />
-											<TextBlock Text="{x:Static assets:Resources.Home_Fastbootd}"/>
+											<TextBlock Text="{DynamicResource Home_Fastbootd}"/>
 										</TextBlock>
 									</Button>
 								</StackPanel>
@@ -477,7 +477,7 @@
 											Command="{Binding PowerOff}">
 										<TextBlock>
 											<avalonia:MaterialIcon Kind="Power" />
-											<TextBlock Text="{x:Static assets:Resources.Home_Shutdown}"/>
+											<TextBlock Text="{DynamicResource Home_Shutdown}"/>
 										</TextBlock>
 									</Button>
 									<Button Width="140"
@@ -488,7 +488,7 @@
 											Command="{Binding RebootEDL}">
 										<TextBlock>
 											<avalonia:MaterialIcon Kind="ProgressDownload" />
-											<TextBlock Text="{x:Static assets:Resources.Home_Boot9008}"/>
+											<TextBlock Text="{DynamicResource Home_Boot9008}"/>
 										</TextBlock>
 									</Button>
 								</StackPanel>
@@ -501,7 +501,7 @@
 										Height="345"
 										Margin="10"
 										IsLoading="{Binding CommonDevicesList}"
-										LoadingMessage="{x:Static assets:Resources.Home_Fetching}">
+										LoadingMessage="{DynamicResource Home_Fetching}">
 						<Border Width="280"
 								Height="345"
 								CornerRadius="15"
@@ -510,7 +510,7 @@
 								<TextBlock HorizontalAlignment="Left"
 											FontSize="15"
 											FontWeight="DemiBold"
-											Text="{x:Static assets:Resources.Home_ChooseDevice}" />
+											Text="{DynamicResource Home_ChooseDevice}" />
 								<StackPanel Margin="20 15 0 50">
 									<ComboBox Width="200" CornerRadius="8" ItemsSource="{Binding SimpleContent}" SelectedItem="{Binding SelectedSimpleContent}" />
 								</StackPanel>
@@ -518,13 +518,13 @@
 									<Button Width="200" CornerRadius="8" Theme="{DynamicResource OutlineButton}" Command="{Binding FreshDeviceListCommand}">
 										<TextBlock>
 											<avalonia:MaterialIcon Kind="Reload" />
-											<TextBlock Text="{x:Static assets:Resources.Home_Refresh}"/>
+											<TextBlock Text="{DynamicResource Home_Refresh}"/>
 										</TextBlock>
 									</Button>
 									<Button Width="200" CornerRadius="8" Theme="{DynamicResource OutlineButton}">
 										<TextBlock>
 											<avalonia:MaterialIcon Kind="NetworkOutline" />
-											<TextBlock Text="{x:Static assets:Resources.Home_WirelessADB}"/>
+											<TextBlock Text="{DynamicResource Home_WirelessADB}"/>
 										</TextBlock>
 									</Button>
 								</StackPanel>

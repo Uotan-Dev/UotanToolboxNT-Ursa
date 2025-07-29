@@ -14,7 +14,9 @@ internal class WaveProgressGradientOffsetConverter : IValueConverter
     public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         if (value is not double v)
+        {
             return Brushes.Blue;
+        }
 
         var primaryColor = Color.Parse("#df4a0f");
         var accentColor = Colors.Transparent;
@@ -22,7 +24,9 @@ internal class WaveProgressGradientOffsetConverter : IValueConverter
         v /= 100;
         v += Application.Current!.RequestedThemeVariant == ThemeVariant.Light ? 0.2 : 0.4;
         if (v > 1)
+        {
             v = 1;
+        }
 
         return new LinearGradientBrush()
         {

@@ -13,8 +13,16 @@ public class WaveProgressValueColorConverter : IValueConverter
 
     public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        if (value is not double d) return Brushes.Black;
-        if (d > 50) return Brushes.GhostWhite;
+        if (value is not double d)
+        {
+            return Brushes.Black;
+        }
+
+        if (d > 50)
+        {
+            return Brushes.GhostWhite;
+        }
+
         return Application.Current?.ActualThemeVariant == ThemeVariant.Dark ? Brushes.GhostWhite : Brushes.Black;
     }
 

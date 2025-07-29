@@ -54,7 +54,7 @@
                                     <Grid>
                                         <TextBlock HorizontalAlignment="Left"
                                                     FontSize="13"
-                                                    Text="{x:Static assets:Resources.Main_Status}"/>
+                                                    Text="{DynamicResource Main_Status}"/>
                                         <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
                                             <HyperlinkButton
                                                     Classes="Underline"
@@ -66,7 +66,7 @@
                                     <Grid>
                                         <TextBlock HorizontalAlignment="Left"
                                                     FontSize="13"
-                                                    Text="{x:Static assets:Resources.Main_Code}"/>
+                                                    Text="{DynamicResource Main_Code}"/>
                                         <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
                                             <HyperlinkButton
                                                     Classes="Underline"
@@ -78,7 +78,7 @@
                                     <Grid>
                                         <TextBlock HorizontalAlignment="Left"
                                                     FontSize="13"
-                                                    Text="{x:Static assets:Resources.Main_BLStatus}"/>
+                                                    Text="{DynamicResource Main_BLStatus}"/>
                                         <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
                                             <HyperlinkButton
                                                     Classes="Underline"
@@ -90,7 +90,7 @@
                                     <Grid>
                                         <TextBlock HorizontalAlignment="Left"
                                                     FontSize="13"
-                                                    Text="{x:Static assets:Resources.Main_VABStatus}"/>
+                                                    Text="{DynamicResource Main_VABStatus}"/>
                                         <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
                                             <HyperlinkButton
                                                     Classes="Underline"

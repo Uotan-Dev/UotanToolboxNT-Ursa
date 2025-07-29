@@ -4,7 +4,7 @@
 			 xmlns:u-semi="https://irihi.tech/ursa/themes/semi"
 			 xmlns:u="https://irihi.tech/ursa"
              x:Class="UotanToolboxNT_Ursa.App"
-			 RequestedThemeVariant="Light">
+			 RequestedThemeVariant="Default">
              <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
   
     <Application.Styles>
@@ -26,6 +26,10 @@
 	</Application.Styles>
     <Application.Resources>
 		<ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="/Assets/zh-CN.axaml" />
+                <ResourceInclude Source="/Assets/en-US.axaml" />
+            </ResourceDictionary.MergedDictionaries>
 			<ResourceInclude x:Key="LightColors" Source="avares://UotanToolboxNT_Ursa/Themes/LightColors.axaml"/>
 			<ResourceInclude x:Key="DarkColors" Source="avares://UotanToolboxNT_Ursa/Themes/DarkColors.axaml"/>
 		</ResourceDictionary>

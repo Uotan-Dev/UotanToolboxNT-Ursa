@@ -33,8 +33,9 @@ public partial class SettingsViewModel : ObservableObject
 
     partial void OnSelectedLanguageListChanged(string value)
     {
-        GlobalLogModel.AddLog($"”Ô—‘«–ªªŒ™ {value}", GlobalLogModel.LogLevel.Info);
+        GlobalLogModel.AddLog($"≥¢ ‘«–ªª”Ô—‘Œ™ {value}", GlobalLogModel.LogLevel.Info);
         SaveSettings();
+
     }
 
     private void SaveSettings()
