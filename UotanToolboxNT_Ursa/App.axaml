@@ -4,7 +4,7 @@
 			 xmlns:u-semi="https://irihi.tech/ursa/themes/semi"
 			 xmlns:u="https://irihi.tech/ursa"
              x:Class="UotanToolboxNT_Ursa.App"
-			 RequestedThemeVariant="Default">
+			 RequestedThemeVariant="Light">
              <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
   
     <Application.Styles>
