@@ -9,7 +9,7 @@ public class SplashWindowModel
 {
     public string StatusText = "工具箱正在启动...";
 
-    public void Initialize()
+    public static void Initialize()
     {
         AddLog("正在检查运行组件...", LogLevel.Info);
         PerformCompentCheck();
@@ -21,7 +21,7 @@ public class SplashWindowModel
     /// <summary>
     /// 检查工具箱各组件是否可用
     /// </summary>
-    private void PerformCompentCheck()
+    private static void PerformCompentCheck()
     {
         try
         {
@@ -51,7 +51,7 @@ public class SplashWindowModel
     /// <summary>
     /// 检查用户详细硬件信息
     /// </summary>
-    private void PerformHardwareCheck()
+    private static void PerformHardwareCheck()
     {
         try
         {
@@ -67,6 +67,7 @@ public class SplashWindowModel
             //配置文件读取逻辑暂时在这里先放一下
             AddLog("正在读取设置信息...", LogLevel.Info);
             SettingsModel.Load();
+            SettingsModel.ChangeLaguage(SettingsModel.Load().SelectedLanguageList);
         }
         catch (Exception ex)
         {

@@ -35,7 +35,7 @@ public partial class SettingsViewModel : ObservableObject
     {
         GlobalLogModel.AddLog($"≥¢ ‘«–ªª”Ô—‘Œ™ {value}", GlobalLogModel.LogLevel.Info);
         SaveSettings();
-
+        SettingsModel.ChangeLaguage(value);
     }
 
     private void SaveSettings()

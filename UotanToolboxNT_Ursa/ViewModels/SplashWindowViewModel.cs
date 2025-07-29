@@ -32,7 +32,7 @@ public partial class SplashWindowViewModel : ObservableObject, IDialogContext
 
     private async void InitializeAsync()
     {
-        _model.Initialize();
+        SplashWindowModel.Initialize();
         await Task.Delay(1000);
         RequestClose?.Invoke(this, true);
     }

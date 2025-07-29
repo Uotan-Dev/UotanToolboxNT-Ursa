@@ -1,12 +1,8 @@
-using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
-using Semi.Avalonia.Locale;
 using UotanToolboxNT_Ursa.ViewModels;
 using UotanToolboxNT_Ursa.Views;
 
@@ -29,7 +25,7 @@ public partial class App : Application
         base.OnFrameworkInitializationCompleted();
     }
 
-    private void DisableAvaloniaDataAnnotationValidation()
+    private static void DisableAvaloniaDataAnnotationValidation()
     {
         var dataValidationPluginsToRemove =
             BindingPlugins.DataValidators.OfType<DataAnnotationsValidationPlugin>().ToArray();
@@ -37,103 +33,6 @@ public partial class App : Application
         foreach (var plugin in dataValidationPluginsToRemove)
         {
             _ = BindingPlugins.DataValidators.Remove(plugin);
-        }
-    }
-    private static readonly Dictionary<CultureInfo, ResourceDictionary> _localeToResource = new()
-    {
-        { new CultureInfo("zh-cn"), new zh_cn() },
-        { new CultureInfo("en-us"), new en_us() }
-    };
-    private static readonly ResourceDictionary _defaultResource = new zh_cn();
-
-    private CultureInfo? _locale;
-    public CultureInfo? Locale
-    {
-        get => _locale;
-        set
-        {
-            try
-            {
-                if (TryGetLocaleResource(value, out var resource) && resource is not null)
-                {
-                    _locale = value;
-                    foreach (var kv in resource)
-                    {
-                        Resources[kv.Key] = kv.Value;
-                    }
-                }
-                else
-                {
-                    _locale = new CultureInfo("zh-CN");
-                    foreach (var kv in _defaultResource)
-                    {
-                        Resources[kv.Key] = kv.Value;
-                    }
-                }
-            }
-            catch
-            {
-                _locale = CultureInfo.InvariantCulture;
-            }
-        }
-    }
-    private static bool TryGetLocaleResource(CultureInfo? locale, out ResourceDictionary? resourceDictionary)
-    {
-        if (Equals(locale, CultureInfo.InvariantCulture))
-        {
-            resourceDictionary = _defaultResource;
-            return true;
-        }
-
-        if (locale is null)
-        {
-            resourceDictionary = _defaultResource;
-            return false;
-        }
-
-        if (_localeToResource.TryGetValue(locale, out var resource))
-        {
-            resourceDictionary = resource;
-            return true;
-        }
-
-        resourceDictionary = _defaultResource;
-        return false;
-    }
-
-    public static void OverrideLocaleResources(Application application, CultureInfo? culture)
-    {
-        if (culture is null)
-        {
-            return;
-        }
-
-        if (!_localeToResource.TryGetValue(culture, out var resources))
-        {
-            return;
-        }
-
-        foreach (var kv in resources)
-        {
-            application.Resources[kv.Key] = kv.Value;
-        }
-    }
-
-    public static void OverrideLocaleResources(StyledElement element, CultureInfo? culture)
-    {
-        if (culture is null)
-        {
-            return;
-        }
-
-        if (!_localeToResource.TryGetValue(culture, out var resources))
-        {
-            return;
-        }
-
-        foreach (var kv in resources)
-        {
-            element.Resources[kv.Key] = kv.Value;
         }
     }
 }
