@@ -69,4 +69,8 @@
 		<AvaloniaResource Include="Themes\DarkColors.axaml" />
 		<AvaloniaResource Include="Themes\LightColors.axaml" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Services\" />
+	</ItemGroup>
 </Project>

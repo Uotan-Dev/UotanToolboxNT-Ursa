@@ -1,8 +1,10 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Avalonia.Markup.Xaml.Styling;
+using UotanToolboxNT_Ursa.Helper;
 
 namespace UotanToolboxNT_Ursa.Models;
 
@@ -13,7 +15,7 @@ public class SettingsModel
     public bool IsLightTheme { get; set; }
 
     [JsonPropertyName("selectedLanguageList")]
-    public string SelectedLanguageList { get; set; }
+    public string SelectedLanguageList { get; set; } = "Settings_Default";
 
     private static readonly JsonSerializerOptions CachedJsonOptions = new() { WriteIndented = true };
 
@@ -41,12 +43,7 @@ public class SettingsModel
     }
     private static void UpdateaAxaml(string language)
     {
-        var file = $"avares://UotanToolboxNT_Ursa/Locale/{language}.axaml";
-        var data = new ResourceInclude(new Uri(file, UriKind.Absolute))
-        {
-            Source = new Uri(file, UriKind.Absolute)
-        };
-        Avalonia.Application.Current!.Resources.MergedDictionaries[0] = data;
+        ResourceManager.ApplyLanguage(language);
     }
     public static void ChangeLaguage(string value)
     {
