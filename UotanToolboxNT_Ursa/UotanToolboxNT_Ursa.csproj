@@ -51,6 +51,9 @@
       <Compile Update="Pages\Appmgr.axaml.cs">
         <DependentUpon>Appmgr.axaml</DependentUpon>
       </Compile>
+      <Compile Update="Pages\Wiredflash.axaml.cs">
+        <DependentUpon>Wiredflash.axaml</DependentUpon>
+      </Compile>
       <Compile Update="Pages\Settings.axaml.cs">
         <DependentUpon>Settings.axaml</DependentUpon>
       </Compile>

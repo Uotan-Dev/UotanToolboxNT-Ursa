@@ -1,0 +1,213 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:assets="clr-namespace:UotanToolboxNT_Ursa.Assets"
+			 xmlns:vm="using:UotanToolboxNT_Ursa.ViewModels"
+             xmlns:collections="clr-namespace:Avalonia.Collections;assembly=Avalonia.Base"
+			 xmlns:controls="clr-namespace:UotanToolboxNT_Ursa.Controls"
+             xmlns:iri="https://irihi.tech/shared"
+			 xmlns:u="https://irihi.tech/ursa"
+             mc:Ignorable="d" d:DesignWidth="980" d:DesignHeight="830"
+             Background="{DynamicResource PageBackground}"
+             x:Class="UotanToolboxNT_Ursa.Pages.Wiredflash"
+			 x:DataType="vm:WiredflashViewModel">
+
+     <ScrollViewer VerticalScrollBarVisibility="Hidden">
+            <StackPanel>
+				<u:LoadingContainer
+							Margin="5"
+							IsLoading=""
+							LoadingMessage="{DynamicResource Basicflash_Executing}">
+					<Border Width="960"
+							Height="160"
+							CornerRadius="15"
+							Theme="{StaticResource CardBorder}">
+						<StackPanel Spacing="30">
+							<StackPanel>
+								<TextBlock HorizontalAlignment="Left"
+										   VerticalAlignment="Top"
+										   FontWeight="DemiBold"
+										   Text="{DynamicResource Wiredflash_TXTFlash}" />
+								<StackPanel Orientation="Horizontal" Spacing="15">
+									<StackPanel Spacing="10">
+										<StackPanel Margin="0" Orientation="Horizontal">
+											<TextBlock Width="80"
+													   Margin="8,0,0,0"
+													   VerticalAlignment="Center"
+													   FontSize="13"
+													   Text="FASTBOOT" />
+											<TextBox Width="600"
+													 Classes="Bordered"
+													 Text=""
+													 />
+											<Button Height="35"
+													Padding="10,0,10,0"
+													Theme="{DynamicResource OutlineButton}"
+													
+													Content="{DynamicResource Common_ChooseFile}">
+											</Button>
+										</StackPanel>
+										<StackPanel Margin="0" Orientation="Horizontal">
+											<TextBlock Width="80"
+													   Margin="8,0,0,0"
+													   VerticalAlignment="Center"
+													   FontSize="13"
+													   Text="FASTBOOTD" />
+											<TextBox Width="600"
+													 Classes="Bordered"
+													 Text=""
+													 />
+											<Button Height="35"
+													Padding="10,0,10,0"
+													Theme="{DynamicResource OutlineButton}"
+													
+													Content="{DynamicResource Common_ChooseFile}">
+											</Button>
+										</StackPanel>
+									</StackPanel>
+									<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="5">
+										<StackPanel Margin="5 0 0 0" Height="20" HorizontalAlignment="Center" Orientation="Horizontal" Spacing="10">
+											<CheckBox IsChecked="False" Checked=""/>
+											<TextBlock VerticalAlignment="Center"
+													   Margin="0 -5 0 0"
+													   FontSize="13"
+													   Text="{DynamicResource Wiredflash_AddMagisk}" />
+										</StackPanel>
+										<StackPanel Height="30" HorizontalAlignment="Center" Orientation="Horizontal" Spacing="10">
+											<CheckBox IsChecked="False" />
+											<TextBlock VerticalAlignment="Center"
+													   Margin="0 -15 0 0"
+													   FontSize="13"
+													   Text="{DynamicResource Wiredflash_ClearAllData}" />
+										</StackPanel>
+										<Button Width="115"
+												Height="35"
+												Margin="0 -15 0 0"
+												HorizontalAlignment="Left"
+												Theme="{DynamicResource OutlineButton}"
+												
+												Content="{DynamicResource Wiredflash_StartFlashing}">
+										</Button>
+									</StackPanel>
+								</StackPanel>
+							</StackPanel>
+						</StackPanel>
+					</Border>
+				</u:LoadingContainer>
+
+				<u:LoadingContainer
+							Margin="5"
+							IsLoading=""
+							LoadingMessage="{DynamicResource Basicflash_Executing}">
+					<Border Width="960"
+							Height="210"
+							CornerRadius="15"
+							Theme="{StaticResource CardBorder}">
+						<StackPanel Spacing="30">
+							<StackPanel>
+								<TextBlock HorizontalAlignment="Left"
+										   VerticalAlignment="Top"
+										   FontWeight="DemiBold"
+										   Text="{DynamicResource Wiredflash_MoreFlash}" />
+								<StackPanel Orientation="Horizontal" Spacing="15">
+									<StackPanel Spacing="15">
+										<StackPanel Margin="0" Orientation="Horizontal">
+											<TextBlock Width="110"
+													   Margin="8,0,0,0"
+													   VerticalAlignment="Center"
+													   FontSize="13"
+													   Text="ADB Sideload" />
+											<TextBox Width="570"
+													 Classes="Bordered"
+													 Text=""
+													 />
+											<Button Height="35"
+													Padding="10,0,10,0"
+													Theme="{DynamicResource OutlineButton}"
+													
+													Content="{DynamicResource Common_ChooseFile}">
+											</Button>
+										</StackPanel>
+										<StackPanel Margin="0" Orientation="Horizontal">
+											<TextBlock Width="110"
+													   Margin="8,0,0,0"
+													   VerticalAlignment="Center"
+													   FontSize="13"
+													   Text="Fastboot Updated" />
+											<TextBox Width="570"
+													 Classes="Bordered"
+													 Text=""
+													 />
+											<Button Height="35"
+													Padding="10,0,10,0"
+													Theme="{DynamicResource OutlineButton}"
+													
+													Content="{DynamicResource Common_ChooseFile}">
+											</Button>
+										</StackPanel>
+										<StackPanel Margin="0" Orientation="Horizontal">
+											<TextBlock Width="110"
+													   Margin="8,0,0,0"
+													   VerticalAlignment="Center"
+													   FontSize="13"
+													   Text="{DynamicResource Wiredflash_XiaomiFlashScript}" />
+											<TextBox Width="570" 
+													 Classes="Bordered"
+													 Text=""
+													 />
+											<Button Height="35"
+													Padding="10,0,10,0"
+													Theme="{DynamicResource OutlineButton}"
+													
+													Content="{DynamicResource Common_ChooseFile}">
+											</Button>
+										</StackPanel>
+									</StackPanel>
+									<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="10">
+										<Button Width="115"
+												Height="35"
+												HorizontalAlignment="Left"
+												Theme="{DynamicResource OutlineButton}"
+												
+												Content="{DynamicResource Wiredflash_SwitchToASlot}">
+										</Button>
+										<Button Width="115"
+												Height="35"
+												HorizontalAlignment="Left"
+												Theme="{DynamicResource OutlineButton}"
+												
+												Content="{DynamicResource Wiredflash_SwitchToBSlot}">
+										</Button>
+										<Button Width="115"
+												Height="35"
+												HorizontalAlignment="Left"
+												Theme="{DynamicResource OutlineButton}"
+												
+												Content="{DynamicResource Wiredflash_StartFlashing}">
+										</Button>
+									</StackPanel>
+								</StackPanel>
+							</StackPanel>
+						</StackPanel>
+					</Border>
+				</u:LoadingContainer>
+
+				<Border Width="960"
+						Height="410"
+						Margin="10"
+						CornerRadius="15"
+						Theme="{StaticResource CardBorder}">
+					<TextBox Margin="0 0 0 0"
+							 CornerRadius="15"
+							 Width="930" Height="380"
+							 Watermark="{DynamicResource Common_Log}"
+							 Classes="TextArea"
+							 Text=""
+							 TextWrapping="Wrap"
+							 IsReadOnly="True"/>
+				</Border>
+            </StackPanel>
+        </ScrollViewer>
+</UserControl>
