@@ -21,7 +21,6 @@ public partial class HomeViewModel : ObservableObject
     [ObservableProperty] private bool _commonDevicesList;
     [ObservableProperty] private AvaloniaList<string> _simpleContent = [];
 
-    // 添加缓存机制，避免频繁刷新同一设备
     private DeviceBase? _lastRefreshedDevice;
     private DateTime _lastRefreshTime = DateTime.MinValue;
     private readonly TimeSpan _refreshInterval = TimeSpan.FromSeconds(3); // 3秒内不重复刷新同一设备

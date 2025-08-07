@@ -244,10 +244,14 @@ public class AdbDevice : DeviceBase
             if (!string.IsNullOrEmpty(memResult))
             {
                 var memoryValues = ParseMemoryInfo(memResult);
-                if (memoryValues.Length >= 2 && long.TryParse(memoryValues[0], out var memTotal) && memTotal > 0)
+                // 确保有MemTotal值且能正确解析
+                if (memoryValues.Length >= 1 && !string.IsNullOrEmpty(memoryValues[0]) && 
+                    long.TryParse(memoryValues[0], out var memTotal) && memTotal > 0)
                 {
                     long memAvailable = 0;
-                    if (memoryValues.Length > 1 && long.TryParse(memoryValues[1], out var available))
+                    // 尝试获取MemAvailable，如果没有则设为0
+                    if (memoryValues.Length >= 2 && !string.IsNullOrEmpty(memoryValues[1]) && 
+                        long.TryParse(memoryValues[1], out var available))
                     {
                         memAvailable = available;
                     }
@@ -270,24 +274,37 @@ public class AdbDevice : DeviceBase
     /// 解析内存信息，提取MemTotal和MemAvailable的数值
     /// </summary>
     /// <param name="info">内存信息字符串</param>
-    /// <returns>包含内存数值的数组</returns>
+    /// <returns>包含内存数值的数组，[0]为MemTotal，[1]为MemAvailable</returns>
     private static string[] ParseMemoryInfo(string info)
     {
-        var infos = new string[20];
+        var memTotal = "";
+        var memAvailable = "";
         var lines = info.Split(['\n', '\r'], StringSplitOptions.RemoveEmptyEntries);
-        for (var i = 0; i < lines.Length && i < infos.Length; i++)
+        
+        foreach (var line in lines)
         {
-            if (lines[i].Contains("MemTotal") || lines[i].Contains("MemAvailable"))
+            if (line.Contains("MemTotal:"))
             {
-                var parts = lines[i].Split(' ', StringSplitOptions.RemoveEmptyEntries);
+                var parts = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
                 if (parts.Length >= 2)
                 {
                     // 获取倒数第二个元素（数值部分）
-                    infos[i] = parts[^2];
+                    memTotal = parts[^2];
+                }
+            }
+            else if (line.Contains("MemAvailable:"))
+            {
+                var parts = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+                if (parts.Length >= 2)
+                {
+                    // 获取倒数第二个元素（数值部分）
+                    memAvailable = parts[^2];
                 }
             }
         }
-        return [.. infos.Where(s => !string.IsNullOrEmpty(s))];
+        
+        // 确保返回的数组顺序固定：[0]为MemTotal，[1]为MemAvailable
+        return [memTotal, memAvailable];
     }
 
     /// <summary>
