@@ -68,6 +68,7 @@ public class SplashWindowModel
             AddLog("正在读取设置信息...", LogLevel.Info);
             SettingsModel.Load();
             SettingsModel.ChangeLaguage(SettingsModel.Load().SelectedLanguageList);
+            SettingsModel.ChangeTheme(SettingsModel.Load().IsLightTheme ? "LightColors" : "DarkColors");
         }
         catch (Exception ex)
         {
