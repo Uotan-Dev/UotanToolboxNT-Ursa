@@ -162,6 +162,7 @@ public class FastbootDevice : DeviceBase
     /// <returns></returns>
     public override async Task<bool> RebootToModeAsync(DeviceMode mode)
     {
+        return false;
         //等待重写具体逻辑
         /*
         try

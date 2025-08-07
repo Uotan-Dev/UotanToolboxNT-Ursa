@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Collections;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -17,13 +19,16 @@ public partial class HomeViewModel : ObservableObject
     _batteryLevel = "0", _batteryInfo = "--", _useMem = "--", _diskInfo = "--";
     [ObservableProperty] private bool _isConnecting;
     [ObservableProperty] private bool _commonDevicesList;
-    [ObservableProperty] private static AvaloniaList<string> _simpleContent = [];
+    [ObservableProperty] private AvaloniaList<string> _simpleContent = [];
 
     public HomeViewModel()
     {
         // 订阅设备管理器事件
         Global.DeviceManager.CurrentDeviceChanged += OnCurrentDeviceChanged;
         Global.DeviceManager.DeviceListChanged += OnDeviceListChanged;
+
+        // 初始化设备列表
+        UpdateDeviceList();
 
         // 如果有当前设备，立即更新显示
         if (Global.DeviceManager.CurrentDevice != null)
@@ -41,9 +46,14 @@ public partial class HomeViewModel : ObservableObject
     /// <summary>
     /// 设备列表变化事件处理
     /// </summary>
-    private void OnDeviceListChanged(object? sender, DeviceListChangedEventArgs e) =>
+    private void OnDeviceListChanged(object? sender, DeviceListChangedEventArgs e)
+    {
         // 更新设备列表显示
         CommonDevicesList = Global.DeviceManager.ConnectedDevices.Count > 0;
+
+        // 更新设备下拉列表
+        UpdateDeviceList();
+    }
 
     /// <summary>
     /// 更新设备显示信息
@@ -119,11 +129,80 @@ public partial class HomeViewModel : ObservableObject
         MemLevel = "0";
     }
 
+    /// <summary>
+    /// 更新设备列表
+    /// </summary>
+    private void UpdateDeviceList()
+    {
+        SimpleContent.Clear();
+
+        var devices = Global.DeviceManager.ConnectedDevices;
+        if (devices.Count == 0)
+        {
+            SimpleContent.Add("无设备连接");
+            SelectedSimpleContent = "无设备连接";
+        }
+        else
+        {
+            foreach (var device in devices)
+            {
+                var deviceDisplayName = $"{device.SerialNumber} ({device.Mode})";
+                SimpleContent.Add(deviceDisplayName);
+            }
+
+            // 如果当前有选中的设备，设置为选中状态
+            if (Global.DeviceManager.CurrentDevice != null)
+            {
+                var currentDeviceDisplay = $"{Global.DeviceManager.CurrentDevice.SerialNumber} ({Global.DeviceManager.CurrentDevice.Mode})";
+                if (SimpleContent.Contains(currentDeviceDisplay))
+                {
+                    SelectedSimpleContent = currentDeviceDisplay;
+                }
+            }
+            else if (SimpleContent.Count > 0)
+            {
+                // 如果没有当前设备但有可用设备，选择第一个
+                SelectedSimpleContent = SimpleContent[0];
+            }
+        }
+    }
+
+    /// <summary>
+    /// 处理设备选择变化
+    /// </summary>
+    partial void OnSelectedSimpleContentChanged(string value)
+    {
+        if (string.IsNullOrEmpty(value) || value == "无设备连接")
+        {
+            return;
+        }
+
+        // 解析设备显示名称，格式：SerialNumber (Mode)
+        var parts = value.Split(" (");
+        if (parts.Length == 2)
+        {
+            var serialNumber = parts[0];
+            var modeStr = parts[1].TrimEnd(')');
+
+            if (Enum.TryParse<DeviceMode>(modeStr, out var mode))
+            {
+                var device = Global.DeviceManager.ConnectedDevices
+                    .FirstOrDefault(d => d.SerialNumber == serialNumber && d.Mode == mode);
+
+                if (device != null && device != Global.DeviceManager.CurrentDevice)
+                {
+                    Global.DeviceManager.SetCurrentDevice(device);
+                }
+            }
+        }
+    }
+
     [RelayCommand]
     public async Task FreshDeviceList()
     {
         IsConnecting = true;
         await Global.DeviceManager.ScanDevicesAsync();
+        UpdateDeviceList();
         await UpdateDeviceDisplayAsync();
         IsConnecting = false;
     }
