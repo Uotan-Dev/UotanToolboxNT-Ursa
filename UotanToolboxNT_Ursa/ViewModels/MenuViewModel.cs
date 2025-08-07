@@ -29,6 +29,10 @@ public class MenuViewModel : ViewModelBase
                 Key = MenuKeys.MenuKeyCustomizedflash // 必须设置Key
             },
             new(){
+                MenuHeader = "Scrcpy",
+                Key = MenuKeys.MenuKeyScrcpy // 必须设置Key
+            },
+            new(){
                 MenuHeader = "GlobalLog",
                 Key = MenuKeys.MenuKeyGlobalLog // 必须设置Key
             },
@@ -51,4 +55,5 @@ public static class MenuKeys
     public const string MenuKeyAppmgr = "Appmgr";
     public const string MenuKeyWiredflash = "Wiredflash";
     public const string MenuKeyCustomizedflash = "Customizedflash";
+    public const string MenuKeyScrcpy = "Scrcpy";
 }

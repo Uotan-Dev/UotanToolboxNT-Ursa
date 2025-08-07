@@ -54,6 +54,9 @@
       <Compile Update="Pages\Customizedflash.axaml.cs">
         <DependentUpon>Customizedflash.axaml</DependentUpon>
       </Compile>
+      <Compile Update="Pages\Scrcpy.axaml.cs">
+        <DependentUpon>Scrcpy.axaml</DependentUpon>
+      </Compile>
       <Compile Update="Pages\Wiredflash.axaml.cs">
         <DependentUpon>Wiredflash.axaml</DependentUpon>
       </Compile>
