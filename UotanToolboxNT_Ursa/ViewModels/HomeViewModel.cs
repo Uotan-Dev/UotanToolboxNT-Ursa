@@ -81,6 +81,8 @@ public partial class HomeViewModel : ObservableObject
         CommonDevicesList = Global.DeviceManager.ConnectedDevices.Count > 0;
 
         UpdateDeviceList();
+
+        CommonDevicesList = false;
     }
 
     /// <summary>
@@ -175,6 +177,7 @@ public partial class HomeViewModel : ObservableObject
     /// </summary>
     private void UpdateDeviceList()
     {
+        IsConnecting = true;
         SimpleContent.Clear();
 
         var devices = Global.DeviceManager.ConnectedDevices;
@@ -204,6 +207,7 @@ public partial class HomeViewModel : ObservableObject
                 SelectedSimpleContent = SimpleContent[0];
             }
         }
+        IsConnecting = false;
     }
 
     /// <summary>

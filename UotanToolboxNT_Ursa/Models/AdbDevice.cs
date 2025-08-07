@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AdvancedSharpAdbClient;
+using AdvancedSharpAdbClient.DeviceCommands;
 using AdvancedSharpAdbClient.Models;
 using static UotanToolboxNT_Ursa.Models.GlobalLogModel;
 
@@ -25,6 +26,14 @@ public class AdbDevice : DeviceBase
     }
 
     /// <summary>
+    /// 清理字符串，移除换行符和回车符
+    /// </summary>
+    /// <param name="input">输入字符串</param>
+    /// <returns>清理后的字符串</returns>
+    private static string CleanString(string? input) =>
+        string.IsNullOrEmpty(input) ? "--" : input.Replace("\r", "").Replace("\n", "").Trim();
+
+    /// <summary>
     /// 刷新完整设备信息（所有属性）
     /// </summary>
     protected override async Task<bool> RefreshFullDeviceInfoAsync()
@@ -37,38 +46,52 @@ public class AdbDevice : DeviceBase
             }
 
             AddLog($"正在完整刷新设备 {SerialNumber} 的信息...", LogLevel.Info);
-
+            //foreach (var i in Global.AdbClient.GetDevices())
+            //{
+            //    foreach (var item in Global.AdbClient.GetProperties(i))
+            //   {
+            //       AddLog(item.Key + ":" + item.Value);
+            //   }
+            //
+            //}
             // 使用shell命令获取设备属性（静态信息）
-            Brand = await ExecuteShellCommand("getprop ro.product.brand") ?? "--";
-            Model = await ExecuteShellCommand("getprop ro.product.model") ?? "--";
-            CodeName = await ExecuteShellCommand("getprop ro.product.device") ?? "--";
-            SystemSDK = await ExecuteShellCommand("getprop ro.build.version.sdk") ?? "--";
-            CPUABI = await ExecuteShellCommand("getprop ro.product.cpu.abi") ?? "--";
-            Platform = await ExecuteShellCommand("getprop ro.board.platform") ?? "--";
+            Brand = CleanString(await Global.AdbClient.GetPropertyAsync(_deviceData, "ro.product.brand"));
+            Model = CleanString(await Global.AdbClient.GetPropertyAsync(_deviceData, "ro.product.model"));
+            CodeName = CleanString(await Global.AdbClient.GetPropertyAsync(_deviceData, "ro.product.device"));
+            SystemSDK = CleanString(await Global.AdbClient.GetPropertyAsync(_deviceData, "ro.build.version.sdk"));
+            CPUABI = CleanString(await Global.AdbClient.GetPropertyAsync(_deviceData, "ro.product.cpu.abi"));
+            Platform = CleanString(await Global.AdbClient.GetPropertyAsync(_deviceData, "ro.board.platform"));
+            Compile = CleanString(await Global.AdbClient.GetPropertyAsync(_deviceData, "ro.system.build.version.incremental")) ??
+                     CleanString(await Global.AdbClient.GetPropertyAsync(_deviceData, "ro.build.display.id"));
 
-            // 根据MD文档改进编译信息获取
-            Compile = await ExecuteShellCommand("getprop ro.system.build.version.incremental") ??
-                     await ExecuteShellCommand("getprop ro.build.display.id") ?? "--";
-
-            // 改进Bootloader状态获取
+            // Bootloader状态获取
             BootloaderStatus = await GetBootloaderStatusAsync();
 
             // Android版本获取
-            NDKVersion = await ExecuteShellCommand("getprop ro.build.version.release") ?? "--";
+            var androidVersion = CleanString(await Global.AdbClient.GetPropertyAsync(_deviceData, "ro.build.version.release"));
+            var apiLevel = CleanString(await Global.AdbClient.GetPropertyAsync(_deviceData, "ro.build.version.sdk"));
+            if (apiLevel != "--" && int.TryParse(apiLevel, out var api))
+            {
+                var versionName = GetAndroidVersionName(api);
+                SystemSDK = $"Android {androidVersion}{versionName}";
+            }
+            else
+            {
+                SystemSDK = $"Android {androidVersion}";
+            }
 
-            // 获取其他相对静态的信息
-            CPUCode = await ExecuteShellCommand("getprop ro.product.cpu.abilist") ??
-                     await ExecuteShellCommand("getprop ro.product.cpu.abi") ?? "--";
-            DisplayHW = await ExecuteShellCommand("getprop ro.hardware") ?? "--";
+            CPUCode = await GetCpuModelNameAsync();
+            // 获取屏幕分辨率
+            DisplayHW = await GetScreenResolutionAsync();
 
-            // 获取屏幕密度 - 支持多种获取方式
+            // 获取屏幕密度
             Density = await GetScreenDensityAsync();
 
-            // 获取主板ID - 支持多种获取方式  
+            // 获取主板ID  
             BoardID = await GetBoardIdAsync();
 
             // 内核版本
-            Kernel = await ExecuteShellCommand("uname -r") ?? "--";
+            Kernel = CleanString(await ExecuteShellCommand("uname -r"));
 
             // 获取VAB状态和启动槽位信息
             await RefreshVABAndSlotInfoAsync();
@@ -77,12 +100,7 @@ public class AdbDevice : DeviceBase
             DiskType = await GetDiskTypeAsync();
 
             // 获取VNDK版本
-            var vndkVersion = await ExecuteShellCommand("getprop ro.vndk.version");
-            if (!string.IsNullOrEmpty(vndkVersion) && vndkVersion != "--")
-            {
-                // 可以将VNDK版本添加到Compile信息中
-                Compile = $"{Compile} (VNDK: {vndkVersion})";
-            }
+            NDKVersion = CleanString(await Global.AdbClient.GetPropertyAsync(_deviceData, "ro.vndk.version"));
 
             // 获取动态信息
             await RefreshDynamicInfoAsync();
@@ -153,7 +171,8 @@ public class AdbDevice : DeviceBase
         {
             var receiver = new AdvancedSharpAdbClient.Receivers.ConsoleOutputReceiver();
             await Task.Run(() => Global.AdbClient.ExecuteRemoteCommand(command, _deviceData, receiver));
-            return receiver.ToString().Trim();
+            var result = receiver.ToString().Trim();
+            return CleanString(result);
         }
         catch (Exception ex)
         {
@@ -205,7 +224,6 @@ public class AdbDevice : DeviceBase
 
                 BatteryLevel = level;
                 BatteryInfo = $"状态: {status}" + Environment.NewLine +
-                             $"健康度: {health}" + Environment.NewLine +
                              $"温度: {temp}";
             }
         }
@@ -225,33 +243,19 @@ public class AdbDevice : DeviceBase
             var memResult = await ExecuteShellCommand("cat /proc/meminfo");
             if (!string.IsNullOrEmpty(memResult))
             {
-                AddLog(memResult);
-                var lines = memResult.Split('\n');
-                long memTotal = 0, memAvailable = 0, memFree = 0;
-
-                foreach (var line in lines)
+                var memoryValues = ParseMemoryInfo(memResult);
+                if (memoryValues.Length >= 2 && long.TryParse(memoryValues[0], out var memTotal) && memTotal > 0)
                 {
-                    var trimmedLine = line.Trim();
-                    if (trimmedLine.StartsWith("MemTotal:"))
+                    long memAvailable = 0;
+                    if (memoryValues.Length > 1 && long.TryParse(memoryValues[1], out var available))
                     {
-                        memTotal = ExtractMemoryValue(trimmedLine);
+                        memAvailable = available;
                     }
-                    else if (trimmedLine.StartsWith("MemAvailable:"))
-                    {
-                        memAvailable = ExtractMemoryValue(trimmedLine);
-                    }
-                    else if (trimmedLine.StartsWith("MemFree:"))
-                    {
-                        memFree = ExtractMemoryValue(trimmedLine);
-                    }
-                }
 
-                if (memTotal > 0)
-                {
-                    var memUsed = memTotal - (memAvailable > 0 ? memAvailable : memFree);
+                    var memUsed = memTotal - memAvailable;
                     var usagePercent = (int)(memUsed * 100 / memTotal);
 
-                    MemoryUsage = $"已用: {memUsed / 1024} MB " + Environment.NewLine + $"总计: {memTotal / 1024} MB";
+                    MemoryUsage = $"{memUsed / 1024.0 / 1024.0:F1} GB/{memTotal / 1024.0 / 1024.0:F1} GB";
                     MemoryLevel = usagePercent.ToString();
                 }
             }
@@ -260,6 +264,30 @@ public class AdbDevice : DeviceBase
         {
             AddLog($"获取内存信息失败：{ex.Message}", LogLevel.Warning);
         }
+    }
+
+    /// <summary>
+    /// 解析内存信息，提取MemTotal和MemAvailable的数值
+    /// </summary>
+    /// <param name="info">内存信息字符串</param>
+    /// <returns>包含内存数值的数组</returns>
+    private static string[] ParseMemoryInfo(string info)
+    {
+        var infos = new string[20];
+        var lines = info.Split(['\n', '\r'], StringSplitOptions.RemoveEmptyEntries);
+        for (var i = 0; i < lines.Length && i < infos.Length; i++)
+        {
+            if (lines[i].Contains("MemTotal") || lines[i].Contains("MemAvailable"))
+            {
+                var parts = lines[i].Split(' ', StringSplitOptions.RemoveEmptyEntries);
+                if (parts.Length >= 2)
+                {
+                    // 获取倒数第二个元素（数值部分）
+                    infos[i] = parts[^2];
+                }
+            }
+        }
+        return [.. infos.Where(s => !string.IsNullOrEmpty(s))];
     }
 
     /// <summary>
@@ -305,8 +333,7 @@ public class AdbDevice : DeviceBase
                                 var (totalFormatted, totalUnit) = FormatStorageSize(total * 1024);
                                 var (usedFormatted, usedUnit) = FormatStorageSize(used * 1024);
 
-                                DiskInfo = $"已用: {usedFormatted:F1} {usedUnit}" + Environment.NewLine +
-                                          $"总计: {totalFormatted:F1} {totalUnit}";
+                                DiskInfo = $"{usedFormatted:F1} {usedUnit}/{totalFormatted:F1} {totalUnit}";
                                 DiskProgress = usePercent;
                                 break;
                             }
@@ -488,36 +515,6 @@ public class AdbDevice : DeviceBase
     }
 
     /// <summary>
-    /// 从/proc/meminfo行中提取内存值（单位：kB）
-    /// </summary>
-    /// <param name="line">内存信息行</param>
-    /// <returns>内存值（kB）</returns>
-    private static long ExtractMemoryValue(string line)
-    {
-        try
-        {
-            // 分割字符串，移除空白条目
-            var parts = line.Split([' ', '\t'], StringSplitOptions.RemoveEmptyEntries);
-
-            // 至少需要3个部分：标签（如MemTotal:）、数值、单位（如kB）
-            if (parts.Length >= 2)
-            {
-                // 第二个部分是数值
-                if (long.TryParse(parts[1], out var value))
-                {
-                    return value;
-                }
-            }
-
-            return 0;
-        }
-        catch
-        {
-            return 0;
-        }
-    }
-
-    /// <summary>
     /// 获取Bootloader状态（支持多种检测方式）
     /// </summary>
     private async Task<string> GetBootloaderStatusAsync()
@@ -525,22 +522,22 @@ public class AdbDevice : DeviceBase
         try
         {
             // 优先使用ro.secureboot.lockstate
-            var lockState = await ExecuteShellCommand("getprop ro.secureboot.lockstate");
+            var lockState = CleanString(await Global.AdbClient.GetPropertyAsync(_deviceData, "ro.secureboot.lockstate"));
             if (!string.IsNullOrEmpty(lockState) && lockState != "--")
             {
                 return lockState;
             }
 
             // 备用方式：检查vbmeta设备状态
-            var vbmetaState = await ExecuteShellCommand("getprop ro.boot.vbmeta.device_state");
+            var vbmetaState = CleanString(await Global.AdbClient.GetPropertyAsync(_deviceData, "ro.boot.vbmeta.device_state"));
             if (!string.IsNullOrEmpty(vbmetaState) && vbmetaState != "--")
             {
                 return vbmetaState;
             }
 
             // 传统方式：获取bootloader信息
-            var bootloader = await ExecuteShellCommand("getprop ro.bootloader");
-            return bootloader ?? "--";
+            var bootloader = CleanString(await Global.AdbClient.GetPropertyAsync(_deviceData, "ro.bootloader"));
+            return bootloader;
         }
         catch
         {
@@ -555,16 +552,51 @@ public class AdbDevice : DeviceBase
     {
         try
         {
-            // 方式1：通过wm density命令获取
             var wmDensity = await ExecuteShellCommand("wm density");
             if (!string.IsNullOrEmpty(wmDensity) && wmDensity.Contains("dpi"))
             {
                 return wmDensity.Replace("Physical density: ", "").Trim();
             }
 
-            // 方式2：通过系统属性获取
-            var densityProp = await ExecuteShellCommand("getprop ro.sf.lcd_density");
+            var densityProp = CleanString(await Global.AdbClient.GetPropertyAsync(_deviceData, "ro.sf.lcd_density"));
             return !string.IsNullOrEmpty(densityProp) && densityProp != "--" ? densityProp + " dpi" : "--";
+        }
+        catch
+        {
+            return "--";
+        }
+    }
+
+    /// <summary>
+    /// 获取CPU型号名称
+    /// </summary>
+    private async Task<string> GetCpuModelNameAsync()
+    {
+        try
+        {
+            var receiver = new AdvancedSharpAdbClient.Receivers.ConsoleOutputReceiver();
+            Global.AdbClient.ExecuteRemoteCommand("cat /proc/cpuinfo", _deviceData, receiver);
+            var cpuInfo = receiver.ToString().Trim();
+            AddLog(cpuInfo);
+            if (!string.IsNullOrEmpty(cpuInfo))
+            {
+                var lines = cpuInfo.Split('\n');
+                foreach (var line in lines)
+                {
+                    var trimmedLine = line.Trim();
+                    AddLog(trimmedLine);
+                    if (trimmedLine.StartsWith("model name"))
+                    {
+                        var parts = trimmedLine.Split(':', 2);
+                        AddLog(parts[1]);
+                        if (parts.Length == 2)
+                        {
+                            return parts[1].Trim();
+                        }
+                    }
+                }
+            }
+            return "--";
         }
         catch
         {
@@ -587,8 +619,8 @@ public class AdbDevice : DeviceBase
             }
 
             // 方式2：通过系统属性获取主板信息
-            var boardProp = await ExecuteShellCommand("getprop ro.product.board");
-            return boardProp ?? "--";
+            var boardProp = CleanString(await Global.AdbClient.GetPropertyAsync(_deviceData, "ro.product.board"));
+            return boardProp;
         }
         catch
         {
@@ -672,13 +704,13 @@ public class AdbDevice : DeviceBase
         try
         {
             // 获取VAB状态
-            var vabInfo = await ExecuteShellCommand("getprop ro.virtual_ab.enabled");
+            var vabInfo = CleanString(await Global.AdbClient.GetPropertyAsync(_deviceData, "ro.virtual_ab.enabled"));
             var isVAB = vabInfo == "true";
 
             // 获取当前启动槽位
-            var currentSlot = await ExecuteShellCommand("getprop ro.boot.slot_suffix");
+            var currentSlot = CleanString(await Global.AdbClient.GetPropertyAsync(_deviceData, "ro.boot.slot_suffix"));
 
-            VABStatus = isVAB && !string.IsNullOrEmpty(currentSlot) ? $"支持 (当前槽位: {currentSlot})" : isVAB ? "支持" : "不支持";
+            VABStatus = isVAB && !string.IsNullOrEmpty(currentSlot) && currentSlot != "--" ? $"支持 (当前槽位: {currentSlot})" : isVAB ? "支持" : "不支持";
         }
         catch
         {
@@ -693,21 +725,18 @@ public class AdbDevice : DeviceBase
     {
         try
         {
-            // 尝试多种方式获取存储类型
-            var emmcInfo = await ExecuteShellCommand("getprop ro.hardware.emmc");
+            var emmcInfo = CleanString(await Global.AdbClient.GetPropertyAsync(_deviceData, "ro.hardware.emmc"));
             if (!string.IsNullOrEmpty(emmcInfo) && emmcInfo != "--")
             {
                 return $"eMMC ({emmcInfo})";
             }
 
-            var ufsInfo = await ExecuteShellCommand("getprop ro.hardware.ufs");
+            var ufsInfo = CleanString(await Global.AdbClient.GetPropertyAsync(_deviceData, "ro.hardware.ufs"));
             if (!string.IsNullOrEmpty(ufsInfo) && ufsInfo != "--")
             {
                 return $"UFS ({ufsInfo})";
             }
-
-            // 通过其他方式检测存储类型
-            var storageInfo = await ExecuteShellCommand("getprop ro.boot.bootdevice");
+            var storageInfo = CleanString(await Global.AdbClient.GetPropertyAsync(_deviceData, "ro.boot.bootdevice"));
             if (!string.IsNullOrEmpty(storageInfo) && storageInfo != "--")
             {
                 if (storageInfo.Contains("ufs"))
@@ -754,7 +783,6 @@ public class AdbDevice : DeviceBase
             var ipResult = await ExecuteShellCommand("ip addr show to 0.0.0.0/0 scope global");
             if (!string.IsNullOrEmpty(ipResult))
             {
-                // 解析IP地址（简化版本）
                 var lines = ipResult.Split('\n');
                 foreach (var line in lines)
                 {
@@ -769,22 +797,6 @@ public class AdbDevice : DeviceBase
                 }
             }
             return "--";
-        }
-        catch
-        {
-            return "--";
-        }
-    }
-
-    /// <summary>
-    /// 获取CPU硬件信息
-    /// </summary>
-    public async Task<string> GetCpuHardwareInfoAsync()
-    {
-        try
-        {
-            var cpuInfo = await ExecuteShellCommand("cat /proc/cpuinfo | grep Hardware");
-            return !string.IsNullOrEmpty(cpuInfo) ? cpuInfo.Replace("Hardware", "").Replace(":", "").Trim() : "--";
         }
         catch
         {
@@ -808,5 +820,41 @@ public class AdbDevice : DeviceBase
             AddLog($"截图失败：{ex.Message}", LogLevel.Error);
             return false;
         }
+    }
+
+    /// <summary>
+    /// 根据API级别获取Android版本代号
+    /// </summary>
+    /// <param name="apiLevel">API级别</param>
+    /// <returns>Android版本代号</returns>
+    private static string GetAndroidVersionName(int apiLevel)
+    {
+        return apiLevel switch
+        {
+            1 => "(Alpha)",
+            2 => "(Beta)",
+            3 => "(Cupcake)",
+            4 => "(Donut)",
+            5 or 6 or 7 => "(Eclair)",
+            8 => "(Froyo)",
+            9 or 10 => "(Gingerbread)",
+            11 or 12 or 13 => "(Honeycomb)",
+            14 or 15 => "(Ice Cream Sandwich)",
+            16 or 17 or 18 => "(Jelly Bean)",
+            19 or 20 => "(KitKat)",
+            21 or 22 => "(Lollipop)",
+            23 => "(Marshmallow)",
+            24 or 25 => "(Nougat)",
+            26 or 27 => "(Oreo)",
+            28 => "(Pie)",
+            29 => "(10)",
+            30 => "(11)",
+            31 or 32 => "(12)",
+            33 => "(13)",
+            34 => "(14)",
+            35 => "(15)",
+            _ when apiLevel >= 36 => $"(API {apiLevel})",
+            _ => $"(API {apiLevel})"
+        };
     }
 }

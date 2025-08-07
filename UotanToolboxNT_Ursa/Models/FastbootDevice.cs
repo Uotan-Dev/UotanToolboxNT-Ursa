@@ -56,7 +56,6 @@ public class FastbootDevice : DeviceBase
                 Status = $"Fastboot (Slot: {currentSlot})";
             }
 
-            // Fastboot模式下这些信息通常不可用，设置为默认值
             BatteryLevel = "--";
             BatteryInfo = "--";
             MemoryUsage = "--";

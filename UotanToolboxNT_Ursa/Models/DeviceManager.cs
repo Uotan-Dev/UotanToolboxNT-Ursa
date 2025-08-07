@@ -52,7 +52,7 @@ public class DeviceManager
     /// </summary>
     public void Start()
     {
-        AddLog("设备管理器已启动", LogLevel.Info);
+        AddLog("设备管理器正在启动...", LogLevel.Info);
         _deviceScanTimer.Start();
         _ = Task.Run(ScanDevicesAsync); // 立即执行一次扫描
     }
