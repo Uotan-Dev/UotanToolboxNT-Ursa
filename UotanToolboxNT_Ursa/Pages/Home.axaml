@@ -39,11 +39,9 @@
 											<TextBlock HorizontalAlignment="Left"
 														FontSize="13"
 														FontWeight="DemiBold"
-														Foreground="{DynamicResource SukiLowText}"
 														Text="{DynamicResource Home_DeviceBrand}"/>
 											<StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
 												<Button Theme="{StaticResource InfoButton}"
-														Foreground="White"
 														FontSize="13"
 														Click="CopyButton_OnClick"
 														Content="{Binding DeviceBrand, Mode=TwoWay}"/>
@@ -53,11 +51,9 @@
 											<TextBlock HorizontalAlignment="Left"
 														FontSize="13"
 														FontWeight="DemiBold"
-														Foreground="{DynamicResource SukiLowText}"
 														Text="{DynamicResource Home_DeviceModel}" />
 											<StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
 												<Button Theme="{StaticResource InfoButton}"
-														Foreground="White"
 														FontSize="13"
 														Click="CopyButton_OnClick"
 														Content="{Binding DeviceModel, Mode=TwoWay}"/>
@@ -67,11 +63,9 @@
 											<TextBlock HorizontalAlignment="Left"
 														FontSize="13"
 														FontWeight="DemiBold"
-														Foreground="{DynamicResource SukiLowText}"
 														Text="{DynamicResource Home_CodeName}" />
 											<StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
 												<Button Theme="{StaticResource InfoButton}"
-														Foreground="White"
 														FontSize="13"
 														Click="CopyButton_OnClick"
 														Content="{Binding CodeName, Mode=TwoWay}"/>
@@ -81,11 +75,9 @@
 											<TextBlock HorizontalAlignment="Left"
 														FontSize="13"
 														FontWeight="DemiBold"
-														Foreground="{DynamicResource SukiLowText}"
 														Text="{DynamicResource Home_System}" />
 											<StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
 												<Button Theme="{StaticResource InfoButton}"
-														Foreground="White"
 														FontSize="13"
 														Click="CopyButton_OnClick"
 														Content="{Binding SystemSDK, Mode=TwoWay}"/>
@@ -95,11 +87,9 @@
 											<TextBlock HorizontalAlignment="Left"
 														FontSize="13"
 														FontWeight="DemiBold"
-														Foreground="{DynamicResource SukiLowText}"
 														Text="{DynamicResource Home_CPUABI}" />
 											<StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
 												<Button Theme="{StaticResource InfoButton}"
-														Foreground="White"
 														FontSize="13"
 														Click="CopyButton_OnClick"
 														Content="{Binding CPUABI, Mode=TwoWay}"/>
@@ -109,11 +99,9 @@
 											<TextBlock HorizontalAlignment="Left"
 														FontSize="13"
 														FontWeight="DemiBold"
-														Foreground="{DynamicResource SukiLowText}"
 														Text="{DynamicResource Home_Resolution}" />
 											<StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
 												<Button Theme="{StaticResource InfoButton}"
-														Foreground="White"
 														FontSize="13"
 														Click="CopyButton_OnClick"
 														Content="{Binding DisplayHW, Mode=TwoWay}"/>
@@ -123,11 +111,9 @@
 											<TextBlock HorizontalAlignment="Left"
 														FontSize="13"
 														FontWeight="DemiBold"
-														Foreground="{DynamicResource SukiLowText}"
 														Text="{DynamicResource Home_DisplayDensity}" />
 											<StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
 												<Button Theme="{StaticResource InfoButton}"
-														Foreground="White"
 														FontSize="13"
 														Click="CopyButton_OnClick"
 														Content="{Binding Density, Mode=TwoWay}"/>
@@ -139,11 +125,9 @@
 											<TextBlock HorizontalAlignment="Left"
 														FontSize="13"
 														FontWeight="DemiBold"
-														Foreground="{DynamicResource SukiLowText}"
 														Text="{DynamicResource Home_ConnectionStatus}"/>
 											<StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
 												<Button Theme="{StaticResource InfoButton}"
-														Foreground="White"
 														FontSize="13"
 														Click="CopyButton_OnClick"
 														Content="{Binding Status, Mode=TwoWay}"/>
@@ -153,11 +137,9 @@
 											<TextBlock HorizontalAlignment="Left"
 														FontSize="13"
 														FontWeight="DemiBold"
-														Foreground="{DynamicResource SukiLowText}"
 														Text="{DynamicResource Home_BootloaderLock}"/>
 											<StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
 												<Button Theme="{StaticResource InfoButton}"
-														Foreground="White"
 														FontSize="13"
 														Click="CopyButton_OnClick"
 														Content="{Binding BLStatus, Mode=TwoWay}"/>
@@ -167,11 +149,9 @@
 											<TextBlock HorizontalAlignment="Left"
 														FontSize="13"
 														FontWeight="DemiBold"
-														Foreground="{DynamicResource SukiLowText}"
 														Text="{DynamicResource Home_VabStadus}"/>
 											<StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
 												<Button Theme="{StaticResource InfoButton}"
-														Foreground="White"
 														FontSize="13"
 														Click="CopyButton_OnClick"
 														Content="{Binding VABStatus, Mode=TwoWay}"/>
@@ -181,11 +161,9 @@
 											<TextBlock HorizontalAlignment="Left"
 														FontSize="13"
 														FontWeight="DemiBold"
-														Foreground="{DynamicResource SukiLowText}"
 														Text="{DynamicResource Home_VNDKVersion}"/>
 											<StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
 												<Button Theme="{StaticResource InfoButton}"
-														Foreground="White"
 														FontSize="13"
 														Click="CopyButton_OnClick"
 														Content="{Binding VNDKVersion, Mode=TwoWay}"/>
@@ -195,11 +173,9 @@
 											<TextBlock HorizontalAlignment="Left"
 														FontSize="13"
 														FontWeight="DemiBold"
-														Foreground="{DynamicResource SukiLowText}"
 														Text="{DynamicResource Home_CPUCode}"/>
 											<StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
 												<Button Theme="{StaticResource InfoButton}"
-														Foreground="White"
 														FontSize="13"
 														Click="CopyButton_OnClick"
 														Content="{Binding CPUCode, Mode=TwoWay}"/>
@@ -209,11 +185,9 @@
 											<TextBlock HorizontalAlignment="Left"
 														FontSize="13"
 														FontWeight="DemiBold"
-														Foreground="{DynamicResource SukiLowText}"
 														Text="{DynamicResource Home_PowerOnTime}"/>
 											<StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
 												<Button Theme="{StaticResource InfoButton}"
-														Foreground="White"
 														FontSize="13"
 														Click="CopyButton_OnClick"
 														Content="{Binding PowerOnTime, Mode=TwoWay}"/>
@@ -223,11 +197,9 @@
 											<TextBlock HorizontalAlignment="Left"
 														FontSize="13"
 														FontWeight="DemiBold"
-														Foreground="{DynamicResource SukiLowText}"
 														Text="{DynamicResource Home_FlashType}"/>
 											<StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
 												<Button Theme="{StaticResource InfoButton}"
-														Foreground="White"
 														FontSize="13"
 														Click="CopyButton_OnClick"
 														Content="{Binding DiskType, Mode=TwoWay}"/>
@@ -240,11 +212,9 @@
 										<TextBlock HorizontalAlignment="Left"
 													FontSize="13"
 													FontWeight="DemiBold"
-													Foreground="{DynamicResource SukiLowText}"
 													Text="{DynamicResource Home_MotherboardID}" />
 										<StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
 											<Button Theme="{StaticResource InfoButton}"
-														Foreground="White"
 														FontSize="13"
 														Click="CopyButton_OnClick"
 													Content="{Binding BoardID, Mode=TwoWay}"/>
@@ -254,11 +224,9 @@
 										<TextBlock HorizontalAlignment="Left"
 													FontSize="13"
 													FontWeight="DemiBold"
-													Foreground="{DynamicResource SukiLowText}"
 													Text="{DynamicResource Home_Platform}" />
 										<StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
 											<Button Theme="{StaticResource InfoButton}"
-														Foreground="White"
 														FontSize="13"
 														Click="CopyButton_OnClick"
 													Content="{Binding Platform, Mode=TwoWay}"/>
@@ -268,11 +236,9 @@
 										<TextBlock HorizontalAlignment="Left"
 													FontSize="13"
 													FontWeight="DemiBold"
-													Foreground="{DynamicResource SukiLowText}"
 													Text="{DynamicResource Home_CompiledVersion}" />
 										<StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
 											<Button Theme="{StaticResource InfoButton}"
-													Foreground="White"
 													FontSize="13"
 													Click="CopyButton_OnClick"
 													Content="{Binding Compile, Mode=TwoWay}"/>
@@ -282,11 +248,9 @@
 										<TextBlock HorizontalAlignment="Left"
 													FontSize="13"
 													FontWeight="DemiBold"
-													Foreground="{DynamicResource SukiLowText}"
 													Text="{DynamicResource Home_KernalVersion}" />
 										<StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
 											<Button Theme="{StaticResource InfoButton}"
-													Foreground="White"
 													FontSize="13"
 													Click="CopyButton_OnClick"
 													Content="{Binding Kernel, Mode=TwoWay}"/>
