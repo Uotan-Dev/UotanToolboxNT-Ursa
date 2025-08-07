@@ -1,8 +1,8 @@
-using System;
 using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Avalonia.Markup.Xaml.Styling;
+using UotanToolboxNT_Ursa.Helper;
+using static UotanToolboxNT_Ursa.Models.GlobalLogModel;
 
 namespace UotanToolboxNT_Ursa.Models;
 
@@ -13,7 +13,7 @@ public class SettingsModel
     public bool IsLightTheme { get; set; }
 
     [JsonPropertyName("selectedLanguageList")]
-    public string SelectedLanguageList { get; set; }
+    public string SelectedLanguageList { get; set; } = "Settings_Default";
 
     private static readonly JsonSerializerOptions CachedJsonOptions = new() { WriteIndented = true };
 
@@ -39,15 +39,6 @@ public class SettingsModel
         var json = File.ReadAllText(Global.SettingsFile.FullName);
         return JsonSerializer.Deserialize<SettingsModel>(json, CachedJsonOptions) ?? new SettingsModel();
     }
-    private static void UpdateaAxaml(string language)
-    {
-        var file = $"avares://UotanToolboxNT_Ursa/Locale/{language}.axaml";
-        var data = new ResourceInclude(new Uri(file, UriKind.Absolute))
-        {
-            Source = new Uri(file, UriKind.Absolute)
-        };
-        Avalonia.Application.Current!.Resources.MergedDictionaries[0] = data;
-    }
     public static void ChangeLaguage(string value)
     {
         if (value == "Settings_Default")
@@ -55,31 +46,48 @@ public class SettingsModel
             var systemCulture = System.Globalization.CultureInfo.CurrentUICulture.Name;
             if (systemCulture.StartsWith("zh"))
             {
-                GlobalLogModel.AddLog($"检测到系统语言为中文，设置为中文", GlobalLogModel.LogLevel.Info);
-                UpdateaAxaml("zh-CN");
+                AddLog($"检测到系统语言为中文，设置为中文", LogLevel.Info);
+                ResourceManager.ApplyLanguage("zh-CN");
             }
             else if (systemCulture.StartsWith("en"))
             {
-                GlobalLogModel.AddLog($"检测到系统语言为英文，设置为英文", GlobalLogModel.LogLevel.Info);
-                UpdateaAxaml("en-US");
+                AddLog($"检测到系统语言为英文，设置为英文", LogLevel.Info);
+                ResourceManager.ApplyLanguage("en-US");
             }
             else
             {
-                GlobalLogModel.AddLog($"系统语言 {systemCulture} 不受支持，默认设置为中文", GlobalLogModel.LogLevel.Info);
-                UpdateaAxaml("zh-CN");
+                AddLog($"系统语言 {systemCulture} 不受支持，默认设置为中文", LogLevel.Info);
+                ResourceManager.ApplyLanguage("zh-CN");
             }
         }
         else if (value == "English")
         {
-            UpdateaAxaml("en-US");
+            ResourceManager.ApplyLanguage("en-US");
         }
         else if (value == "简体中文")
         {
-            UpdateaAxaml("zh-CN");
+            ResourceManager.ApplyLanguage("zh-CN");
         }
         else
         {
-            GlobalLogModel.AddLog($"未知语言 {value}，无法切换", GlobalLogModel.LogLevel.Warning);
+            AddLog($"未知语言 {value}，无法切换", LogLevel.Warning);
+            return;
+        }
+    }
+
+    internal static void ChangeTheme(string themeKey)
+    {
+        if (themeKey == "LightColors")
+        {
+            ResourceManager.ApplyTheme("LightColors");
+        }
+        else if (themeKey == "DarkColors")
+        {
+            ResourceManager.ApplyTheme("DarkColors");
+        }
+        else
+        {
+            AddLog($"未知主题 {themeKey}，无法切换", LogLevel.Warning);
             return;
         }
     }
