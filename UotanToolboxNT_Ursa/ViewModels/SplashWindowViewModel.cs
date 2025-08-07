@@ -60,7 +60,7 @@ public partial class SplashWindowViewModel : ObservableObject, IDialogContext
 
         UpdateProgress(50, "正在枚举设备...");
         AddLog("正在枚举设备...", LogLevel.Info);
-        await Task.Delay(100); // 让用户看到状态变化
+        await Task.Delay(100);
         await PerformHardwareCheckAsync();
 
         UpdateProgress(100, "初始化完成");
@@ -222,6 +222,9 @@ public partial class SplashWindowViewModel : ObservableObject, IDialogContext
         }
 
         AddLog("硬件信息获取完成", LogLevel.Info);
+
+        // 更新硬件信息卡片
+        UpdateHardwareInfoCards();
     }
     public void Close() => RequestClose?.Invoke(this, false);
 

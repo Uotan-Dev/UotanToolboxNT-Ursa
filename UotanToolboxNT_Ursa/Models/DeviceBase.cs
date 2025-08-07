@@ -150,40 +150,98 @@ public abstract class DeviceBase
     public DateTime LastUpdated { get; protected set; } = DateTime.MinValue;
 
     /// <summary>
-    /// 刷新设备信息
+    /// 是否已缓存完整设备信息
     /// </summary>
-    /// <returns></returns>
-    public abstract Task<bool> RefreshDeviceInfoAsync();
+    protected bool _isFullInfoCached = false;
+
+    /// <summary>
+    /// 缓存状态
+    /// </summary>
+    public bool IsFullInfoCached => _isFullInfoCached;
+
+    /// <summary>
+    /// 清除缓存状态（用于强制重新获取完整信息）
+    /// </summary>
+    public void ClearCache() => _isFullInfoCached = false;
+
+    /// <summary>
+    /// 刷新设备信息（智能缓存模式）
+    /// 首次调用时获取完整信息并缓存，后续调用仅刷新变化频繁的信息。
+    /// </summary>
+    /// <returns>是否刷新成功</returns>
+    public async Task<bool> RefreshDeviceInfoAsync()
+    {
+        if (!_isFullInfoCached)
+        {
+            var result = await RefreshFullDeviceInfoAsync();
+            if (result)
+            {
+                _isFullInfoCached = true;
+            }
+            return result;
+        }
+        else
+        {
+            return await RefreshDynamicDeviceInfoAsync();
+        }
+    }
+
+    /// <summary>
+    /// 强制完整刷新设备信息（忽略缓存）
+    /// </summary>
+
+    public async Task<bool> ForceRefreshFullDeviceInfoAsync()
+    {
+        _isFullInfoCached = false;
+        var result = await RefreshFullDeviceInfoAsync();
+        if (result)
+        {
+            _isFullInfoCached = true;
+        }
+        return result;
+    }
+
+    /// <summary>
+    /// 刷新完整设备信息（所有属性）
+    /// </summary>
+
+    protected abstract Task<bool> RefreshFullDeviceInfoAsync();
+
+    /// <summary>
+    /// 刷新动态设备信息（仅刷新变化频繁的属性）
+    /// </summary>
+
+    protected abstract Task<bool> RefreshDynamicDeviceInfoAsync();
 
     /// <summary>
     /// 获取应用列表
     /// </summary>
-    /// <returns></returns>
+
     public abstract Task<List<string>> GetApplicationListAsync();
 
     /// <summary>
     /// 重启到指定模式
     /// </summary>
     /// <param name="mode">目标模式</param>
-    /// <returns></returns>
+
     public abstract Task<bool> RebootToModeAsync(DeviceMode mode);
 
     /// <summary>
     /// 关机
     /// </summary>
-    /// <returns></returns>
+
     public abstract Task<bool> PowerOffAsync();
 
     /// <summary>
     /// 获取设备支持的操作
     /// </summary>
-    /// <returns></returns>
+
     public abstract List<string> GetSupportedOperations();
 
     /// <summary>
     /// 检查设备连接状态
     /// </summary>
-    /// <returns></returns>
+
     public abstract Task<bool> CheckConnectionAsync();
 
     /// <summary>

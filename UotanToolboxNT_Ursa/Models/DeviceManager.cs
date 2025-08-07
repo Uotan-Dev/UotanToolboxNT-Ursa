@@ -42,7 +42,6 @@ public class DeviceManager
 
     public DeviceManager()
     {
-        // 创建定时器，每2秒扫描一次设备
         _deviceScanTimer = new Timer(2000);
         _deviceScanTimer.Elapsed += OnDeviceScanTimer;
         _deviceScanTimer.AutoReset = true;
@@ -115,7 +114,7 @@ public class DeviceManager
     }
 
     /// <summary>
-    /// 刷新当前设备信息
+    /// 刷新当前设备信息（使用智能缓存）
     /// </summary>
     public async Task<bool> RefreshCurrentDeviceAsync()
     {
@@ -126,6 +125,20 @@ public class DeviceManager
         }
 
         return await CurrentDevice.RefreshDeviceInfoAsync();
+    }
+
+    /// <summary>
+    /// 强制完整刷新当前设备信息（忽略缓存）
+    /// </summary>
+    public async Task<bool> ForceRefreshCurrentDeviceAsync()
+    {
+        if (CurrentDevice == null)
+        {
+            AddLog("没有选中的设备", LogLevel.Warning);
+            return false;
+        }
+
+        return await CurrentDevice.ForceRefreshFullDeviceInfoAsync();
     }
 
     /// <summary>
@@ -151,13 +164,10 @@ public class DeviceManager
         {
             var newDevices = new List<DeviceBase>();
 
-            // 扫描ADB设备
             await ScanAdbDevicesAsync(newDevices);
 
-            // 扫描Fastboot设备
             await ScanFastbootDevicesAsync(newDevices);
 
-            // 更新设备列表
             UpdateDeviceList(newDevices);
         }
         catch (Exception ex)
@@ -258,29 +268,24 @@ public class DeviceManager
         {
             var oldDevices = ConnectedDevices.ToList();
 
-            // 检查移除的设备
             var removedDevices = oldDevices.Where(old =>
                 !newDevices.Any(n => n.SerialNumber == old.SerialNumber && n.Mode == old.Mode)).ToList();
 
-            // 检查新增的设备
             var addedDevices = newDevices.Where(newDev =>
                 !oldDevices.Any(old => old.SerialNumber == newDev.SerialNumber && old.Mode == newDev.Mode)).ToList();
 
-            // 移除已断开的设备
             foreach (var device in removedDevices)
             {
                 ConnectedDevices.Remove(device);
                 AddLog($"设备已断开：{device.SerialNumber} ({device.Mode})", LogLevel.Info);
             }
 
-            // 添加新连接的设备
             foreach (var device in addedDevices)
             {
                 ConnectedDevices.Add(device);
                 AddLog($"发现新设备：{device.SerialNumber} ({device.Mode})", LogLevel.Info);
             }
 
-            // 检查当前设备是否还连接
             if (CurrentDevice != null)
             {
                 var currentStillConnected = ConnectedDevices.Any(d =>
@@ -293,13 +298,11 @@ public class DeviceManager
                 }
             }
 
-            // 如果没有当前设备且有可用设备，自动选择第一个
             if (CurrentDevice == null && ConnectedDevices.Count > 0)
             {
                 SetCurrentDevice(ConnectedDevices[0]);
             }
 
-            // 触发设备列表变化事件
             if (addedDevices.Count > 0 || removedDevices.Count > 0)
             {
                 DeviceListChanged?.Invoke(this, new DeviceListChangedEventArgs(addedDevices, removedDevices));

@@ -24,14 +24,14 @@ public class FastbootDevice : DeviceBase
     }
 
     /// <summary>
-    /// 刷新设备信息
+    /// 刷新完整设备信息（所有属性）
     /// </summary>
     /// <returns></returns>
-    public override async Task<bool> RefreshDeviceInfoAsync()
+    protected override async Task<bool> RefreshFullDeviceInfoAsync()
     {
         try
         {
-            AddLog($"正在刷新Fastboot设备 {SerialNumber} 的信息...", LogLevel.Info);
+            AddLog($"正在完整刷新Fastboot设备 {SerialNumber} 的信息...", LogLevel.Info);
 
             // 获取设备变量
             var variables = await GetFastbootVariables();
@@ -46,6 +46,8 @@ public class FastbootDevice : DeviceBase
             // Fastboot模式下的特殊信息
             VABStatus = variables.GetValueOrDefault("slot-count", "--");
             BoardID = variables.GetValueOrDefault("hw-revision", "--");
+            SystemSDK = variables.GetValueOrDefault("version-baseband", "--");
+            Compile = variables.GetValueOrDefault("version-bootloader", "--");
 
             // 获取当前槽位信息
             var currentSlot = variables.GetValueOrDefault("current-slot", "--");
@@ -54,13 +56,51 @@ public class FastbootDevice : DeviceBase
                 Status = $"Fastboot (Slot: {currentSlot})";
             }
 
+            // Fastboot模式下这些信息通常不可用，设置为默认值
+            BatteryLevel = "--";
+            BatteryInfo = "--";
+            MemoryUsage = "--";
+            MemoryLevel = "--";
+            DiskInfo = "--";
+            DiskProgress = "--";
+            PowerOnTime = "--";
+
             LastUpdated = DateTime.Now;
-            AddLog($"Fastboot设备 {SerialNumber} 信息刷新完成", LogLevel.Info);
+            AddLog($"Fastboot设备 {SerialNumber} 完整信息刷新完成", LogLevel.Info);
             return true;
         }
         catch (Exception ex)
         {
-            AddLog($"刷新Fastboot设备 {SerialNumber} 信息时出错：{ex.Message}", LogLevel.Error);
+            AddLog($"完整刷新Fastboot设备 {SerialNumber} 信息时出错：{ex.Message}", LogLevel.Error);
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// 刷新动态设备信息（Fastboot模式下大部分动态信息不可用）
+    /// </summary>
+    /// <returns></returns>
+    protected override async Task<bool> RefreshDynamicDeviceInfoAsync()
+    {
+        try
+        {
+            AddLog($"正在增量刷新Fastboot设备 {SerialNumber} 的动态信息...", LogLevel.Debug);
+
+            // Fastboot模式下动态信息有限，主要是槽位状态可能会变化
+            var variables = await GetFastbootVariables();
+            var currentSlot = variables.GetValueOrDefault("current-slot", "--");
+            if (currentSlot != "--")
+            {
+                Status = $"Fastboot (Slot: {currentSlot})";
+            }
+
+            LastUpdated = DateTime.Now;
+            AddLog($"Fastboot设备 {SerialNumber} 动态信息刷新完成", LogLevel.Debug);
+            return true;
+        }
+        catch (Exception ex)
+        {
+            AddLog($"增量刷新Fastboot设备 {SerialNumber} 信息时出错：{ex.Message}", LogLevel.Error);
             return false;
         }
     }
@@ -160,34 +200,8 @@ public class FastbootDevice : DeviceBase
     /// </summary>
     /// <param name="mode">目标模式</param>
     /// <returns></returns>
-    public override async Task<bool> RebootToModeAsync(DeviceMode mode)
-    {
-        return false;
-        //等待重写具体逻辑
-        /*
-        try
-        {
-            var command = mode switch
-            {
-                DeviceMode.Adb => "reboot",
-                DeviceMode.Recovery => "reboot recovery",
-                DeviceMode.Fastboot => "reboot bootloader",
-                DeviceMode.EDL => "reboot edl",
-                DeviceMode.Unknown => throw new ArgumentException($"不支持的重启模式: {mode}"),
-                DeviceMode.Sideload => throw new ArgumentException($"不支持的重启模式: {mode}"),
-                _ => throw new ArgumentException($"不支持的重启模式: {mode}")
-            };
-
-            var result = await ExecuteFastbootCommand(command);
-            AddLog($"Fastboot设备 {SerialNumber} 正在重启到 {mode} 模式", LogLevel.Info);
-            return true;
-        }
-        catch (Exception ex)
-        {
-            AddLog($"Fastboot重启到 {mode} 模式失败：{ex.Message}", LogLevel.Error);
-            return false;
-        }*/
-    }
+    public override Task<bool> RebootToModeAsync(DeviceMode mode) => Task.FromResult(false);
+    // 等待重写具体逻辑
 
     /// <summary>
     /// 关机（Fastboot模式下重启到系统）

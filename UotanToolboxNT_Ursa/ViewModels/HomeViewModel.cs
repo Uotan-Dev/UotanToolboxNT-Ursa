@@ -21,55 +21,96 @@ public partial class HomeViewModel : ObservableObject
     [ObservableProperty] private bool _commonDevicesList;
     [ObservableProperty] private AvaloniaList<string> _simpleContent = [];
 
+    // 添加缓存机制，避免频繁刷新同一设备
+    private DeviceBase? _lastRefreshedDevice;
+    private DateTime _lastRefreshTime = DateTime.MinValue;
+    private readonly TimeSpan _refreshInterval = TimeSpan.FromSeconds(3); // 3秒内不重复刷新同一设备
+
     public HomeViewModel()
     {
-        // 订阅设备管理器事件
         Global.DeviceManager.CurrentDeviceChanged += OnCurrentDeviceChanged;
         Global.DeviceManager.DeviceListChanged += OnDeviceListChanged;
 
-        // 初始化设备列表
         UpdateDeviceList();
 
-        // 如果有当前设备，立即更新显示
         if (Global.DeviceManager.CurrentDevice != null)
         {
-            _ = UpdateDeviceDisplayAsync();
+            _ = UpdateDeviceDisplayAsync(refreshDeviceInfo: false);
+
+            _ = Task.Run(async () =>
+            {
+                try
+                {
+                    await UpdateDeviceDisplayAsync(refreshDeviceInfo: true);
+                }
+                catch (Exception ex)
+                {
+                    GlobalLogModel.AddLog($"初始化设备信息失败: {ex.Message}", GlobalLogModel.LogLevel.Warning);
+                }
+            });
         }
+
+        GlobalLogModel.UpdateHardwareInfoCards();
     }
 
     /// <summary>
     /// 当前设备变化事件处理
     /// </summary>
-    private async void OnCurrentDeviceChanged(object? sender, DeviceChangedEventArgs e) =>
-        await UpdateDeviceDisplayAsync();
+    private async void OnCurrentDeviceChanged(object? sender, DeviceChangedEventArgs e)
+    {
+        await UpdateDeviceDisplayAsync(refreshDeviceInfo: false);
+
+        _ = Task.Run(async () =>
+        {
+            try
+            {
+                await UpdateDeviceDisplayAsync(refreshDeviceInfo: true);
+            }
+            catch (Exception ex)
+            {
+                GlobalLogModel.AddLog($"刷新设备信息失败: {ex.Message}", GlobalLogModel.LogLevel.Warning);
+            }
+        });
+    }
 
     /// <summary>
     /// 设备列表变化事件处理
     /// </summary>
     private void OnDeviceListChanged(object? sender, DeviceListChangedEventArgs e)
     {
-        // 更新设备列表显示
         CommonDevicesList = Global.DeviceManager.ConnectedDevices.Count > 0;
 
-        // 更新设备下拉列表
         UpdateDeviceList();
     }
 
     /// <summary>
     /// 更新设备显示信息
     /// </summary>
-    private async Task UpdateDeviceDisplayAsync()
+    /// <param name="refreshDeviceInfo">是否刷新设备详细信息</param>
+    private async Task UpdateDeviceDisplayAsync(bool refreshDeviceInfo = true)
     {
         var device = Global.DeviceManager.CurrentDevice;
         if (device == null)
         {
             // 清空显示
             ResetDeviceDisplay();
+            _lastRefreshedDevice = null;
             return;
         }
 
-        // 刷新设备信息
-        await device.RefreshDeviceInfoAsync();
+        if (refreshDeviceInfo)
+        {
+            var now = DateTime.Now;
+            var shouldRefresh = _lastRefreshedDevice != device ||
+                                (now - _lastRefreshTime) > _refreshInterval;
+
+            if (shouldRefresh)
+            {
+                await device.RefreshDeviceInfoAsync();
+                _lastRefreshedDevice = device;
+                _lastRefreshTime = now;
+            }
+        }
 
         // 更新显示属性
         DeviceBrand = device.Brand;
@@ -150,7 +191,6 @@ public partial class HomeViewModel : ObservableObject
                 SimpleContent.Add(deviceDisplayName);
             }
 
-            // 如果当前有选中的设备，设置为选中状态
             if (Global.DeviceManager.CurrentDevice != null)
             {
                 var currentDeviceDisplay = $"{Global.DeviceManager.CurrentDevice.SerialNumber} ({Global.DeviceManager.CurrentDevice.Mode})";
@@ -161,7 +201,6 @@ public partial class HomeViewModel : ObservableObject
             }
             else if (SimpleContent.Count > 0)
             {
-                // 如果没有当前设备但有可用设备，选择第一个
                 SelectedSimpleContent = SimpleContent[0];
             }
         }
@@ -177,34 +216,70 @@ public partial class HomeViewModel : ObservableObject
             return;
         }
 
-        // 解析设备显示名称，格式：SerialNumber (Mode)
-        var parts = value.Split(" (");
-        if (parts.Length == 2)
+        _ = Task.Run(() =>
         {
-            var serialNumber = parts[0];
-            var modeStr = parts[1].TrimEnd(')');
-
-            if (Enum.TryParse<DeviceMode>(modeStr, out var mode))
+            try
             {
-                var device = Global.DeviceManager.ConnectedDevices
-                    .FirstOrDefault(d => d.SerialNumber == serialNumber && d.Mode == mode);
-
-                if (device != null && device != Global.DeviceManager.CurrentDevice)
+                //格式：SerialNumber (Mode)
+                var parts = value.Split(" (");
+                if (parts.Length == 2)
                 {
-                    Global.DeviceManager.SetCurrentDevice(device);
+                    var serialNumber = parts[0];
+                    var modeStr = parts[1].TrimEnd(')');
+
+                    if (Enum.TryParse<DeviceMode>(modeStr, out var mode))
+                    {
+                        var device = Global.DeviceManager.ConnectedDevices
+                            .FirstOrDefault(d => d.SerialNumber == serialNumber && d.Mode == mode);
+
+                        if (device != null && device != Global.DeviceManager.CurrentDevice)
+                        {
+                            Global.DeviceManager.SetCurrentDevice(device);
+                        }
+                    }
                 }
             }
-        }
+            catch (Exception ex)
+            {
+                GlobalLogModel.AddLog($"切换设备失败: {ex.Message}", GlobalLogModel.LogLevel.Error);
+            }
+        });
     }
 
     [RelayCommand]
     public async Task FreshDeviceList()
     {
         IsConnecting = true;
-        await Global.DeviceManager.ScanDevicesAsync();
-        UpdateDeviceList();
-        await UpdateDeviceDisplayAsync();
-        IsConnecting = false;
+
+        try
+        {
+            await Global.DeviceManager.ScanDevicesAsync();
+            UpdateDeviceList();
+
+            await UpdateDeviceDisplayAsync(refreshDeviceInfo: false);
+
+            _ = Task.Run(async () =>
+            {
+                try
+                {
+                    await UpdateDeviceDisplayAsync(refreshDeviceInfo: true);
+                }
+                catch (Exception ex)
+                {
+                    GlobalLogModel.AddLog($"刷新设备详细信息失败: {ex.Message}", GlobalLogModel.LogLevel.Warning);
+                }
+            });
+
+            GlobalLogModel.UpdateHardwareInfoCards();
+        }
+        catch (Exception ex)
+        {
+            GlobalLogModel.AddLog($"扫描设备失败: {ex.Message}", GlobalLogModel.LogLevel.Error);
+        }
+        finally
+        {
+            IsConnecting = false;
+        }
     }
 
     [RelayCommand]
@@ -224,9 +299,8 @@ public partial class HomeViewModel : ObservableObject
         Task.CompletedTask;
 
     [RelayCommand]
-    public Task OpenUSBP() =>
-        // TODO: 打开USB端口管理
-        Task.CompletedTask;
+    public Task OpenUSBP() => Task.CompletedTask;
+
 
     [RelayCommand]
     public Task OpenReUSBP() =>
