@@ -265,7 +265,6 @@ public class AdbDevice : DeviceBase
                 DeviceMode.Sideload => "reboot sideload",
                 DeviceMode.Adb => "reboot",
                 DeviceMode.Unknown => throw new ArgumentException($"不支持的重启模式: {mode}"),
-                DeviceMode.Mode9008 => throw new ArgumentException($"不支持的重启模式: {mode}"),
                 _ => throw new ArgumentException($"不支持的重启模式: {mode}")
             };
 

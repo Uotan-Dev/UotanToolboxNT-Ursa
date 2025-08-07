@@ -26,11 +26,6 @@ public enum DeviceMode
     EDL,
 
     /// <summary>
-    /// 9008ģʽ
-    /// </summary>
-    Mode9008,
-
-    /// <summary>
     /// Recoveryģʽ
     /// </summary>
     Recovery,

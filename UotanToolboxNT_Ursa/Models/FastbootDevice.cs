@@ -162,6 +162,8 @@ public class FastbootDevice : DeviceBase
     /// <returns></returns>
     public override async Task<bool> RebootToModeAsync(DeviceMode mode)
     {
+        //等待重写具体逻辑
+        /*
         try
         {
             var command = mode switch
@@ -171,7 +173,6 @@ public class FastbootDevice : DeviceBase
                 DeviceMode.Fastboot => "reboot bootloader",
                 DeviceMode.EDL => "reboot edl",
                 DeviceMode.Unknown => throw new ArgumentException($"不支持的重启模式: {mode}"),
-                DeviceMode.Mode9008 => throw new ArgumentException($"不支持的重启模式: {mode}"),
                 DeviceMode.Sideload => throw new ArgumentException($"不支持的重启模式: {mode}"),
                 _ => throw new ArgumentException($"不支持的重启模式: {mode}")
             };
@@ -184,7 +185,7 @@ public class FastbootDevice : DeviceBase
         {
             AddLog($"Fastboot重启到 {mode} 模式失败：{ex.Message}", LogLevel.Error);
             return false;
-        }
+        }*/
     }
 
     /// <summary>
