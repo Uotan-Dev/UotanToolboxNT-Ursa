@@ -250,7 +250,7 @@
 								Height="260"
 								CornerRadius="15"
 								Theme="{StaticResource CardBorder}">
-							<StackPanel Name="InstallZIP" Orientation="Vertical" Spacing="15">
+							<StackPanel Orientation="Vertical" Spacing="15">
 								<TextBlock HorizontalAlignment="Left"
 											FontSize="15"
 											FontWeight="DemiBold"

@@ -476,7 +476,7 @@
 											FontWeight="DemiBold"
 											Text="{DynamicResource Home_ChooseDevice}" />
 								<StackPanel Margin="20 15 0 50">
-									<ComboBox Width="200" CornerRadius="8" ItemsSource="{Binding SimpleContent}" SelectedItem="{Binding SelectedSimpleContent}" />
+									<ComboBox Width="200" CornerRadius="8" Classes="Bordered" ItemsSource="{Binding SimpleContent}" SelectedItem="{Binding SelectedSimpleContent}" />
 								</StackPanel>
 								<StackPanel Spacing="20">
 									<Button Width="200" CornerRadius="8" Theme="{DynamicResource OutlineButton}" Command="{Binding FreshDeviceListCommand}">

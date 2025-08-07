@@ -1,0 +1,223 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:assets="clr-namespace:UotanToolboxNT_Ursa.Assets"
+			 xmlns:vm="using:UotanToolboxNT_Ursa.ViewModels"
+             xmlns:collections="clr-namespace:Avalonia.Collections;assembly=Avalonia.Base"
+			 xmlns:controls="clr-namespace:UotanToolboxNT_Ursa.Controls"
+             xmlns:iri="https://irihi.tech/shared"
+			 xmlns:u="https://irihi.tech/ursa"
+             mc:Ignorable="d" d:DesignWidth="980" d:DesignHeight="830"
+             Background="{DynamicResource PageBackground}"
+             x:Class="UotanToolboxNT_Ursa.Pages.Appmgr"
+			 x:DataType="vm:AppmgrViewModel">
+
+     <ScrollViewer VerticalScrollBarVisibility="Hidden">
+            <StackPanel>
+				<StackPanel Orientation="Horizontal">
+					<Border Height="205" Width="465"
+                            CornerRadius="15"
+                            Margin="10"
+							Theme="{StaticResource CardBorder}">
+						<StackPanel Spacing="10">
+							<TextBlock HorizontalAlignment="Left"
+									   FontSize="15"
+									   FontWeight="DemiBold"
+									   Text="{DynamicResource Appmgr_AppManager}" />
+							<StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="10">
+								<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="5">
+									<Button Width="125"
+											Theme="{DynamicResource OutlineButton}"
+											HorizontalAlignment="Left"
+											Padding="8"
+											Command="">
+										<TextBlock>
+											<avalonia:MaterialIcon Kind="PlayOutline" />
+											<TextBlock Text="{DynamicResource Appmgr_Run}" />
+										</TextBlock>
+									</Button>
+									<Button Width="125"
+											Theme="{DynamicResource OutlineButton}"
+											HorizontalAlignment="Left"
+											Padding="8"
+											Command="">
+										<TextBlock>
+											<avalonia:MaterialIcon Kind="StopCircleOutline" />
+											<TextBlock Text="{DynamicResource Appmgr_ForceStop}" />
+										</TextBlock>
+									</Button>
+									<Button Width="125"
+											Theme="{DynamicResource OutlineButton}"
+											HorizontalAlignment="Left"
+											Padding="8"
+											Command="">
+										<TextBlock>
+											<avalonia:MaterialIcon Kind="StarFourPointsCircleOutline" />
+											<TextBlock Text="{DynamicResource Appmgr_ActivateSwitch}" />
+										</TextBlock>
+									</Button>
+								</StackPanel>
+								<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="5">
+									<Button Width="125"
+											Theme="{DynamicResource OutlineButton}"
+											HorizontalAlignment="Left"
+											Padding="8"
+											Command="">
+										<TextBlock>
+											<avalonia:MaterialIcon Kind="Ban" />
+											<TextBlock Text="{DynamicResource Appmgr_Disable}" />
+										</TextBlock>
+									</Button>
+									<Button Width="125"
+											Theme="{DynamicResource OutlineButton}"
+											HorizontalAlignment="Left"
+											Padding="8"
+											Command="">
+										<TextBlock>
+											<avalonia:MaterialIcon Kind="Check" />
+											<TextBlock Text="{DynamicResource Appmgr_Enable}" />
+										</TextBlock>
+									</Button>
+									<Button Width="125"
+											Theme="{DynamicResource OutlineButton}"
+											HorizontalAlignment="Left"
+											Padding="8"
+											Command="">
+										<TextBlock>
+											<avalonia:MaterialIcon Kind="ProgressDownload" />
+											<TextBlock Text="{DynamicResource Appmgr_ExtractApk}" />
+										</TextBlock>
+									</Button>
+								</StackPanel>
+								<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="5">
+									<Button Width="125"
+											Theme="{DynamicResource OutlineButton}"
+											HorizontalAlignment="Left"
+											Padding="8"
+											Command="">
+										<TextBlock>
+											<avalonia:MaterialIcon Kind="DeleteOutline" />
+											<TextBlock Text="{DynamicResource Appmgr_Uninstall}" />
+										</TextBlock>
+									</Button>
+									<Button Width="125"
+											Theme="{DynamicResource OutlineButton}"
+											HorizontalAlignment="Left"
+											Padding="8"
+											Command="">
+										<TextBlock>
+											<avalonia:MaterialIcon Kind="TrashCircleOutline" />
+											<TextBlock Text="{DynamicResource Appmgr_KeepDataUninstall}" />
+										</TextBlock>
+									</Button>
+									<Button Width="125"
+											Theme="{DynamicResource OutlineButton}"
+											HorizontalAlignment="Left"
+											Padding="8"
+											Command="">
+										<TextBlock>
+											<avalonia:MaterialIcon Kind="TrashCanOutline" />
+											<TextBlock Text="{DynamicResource Appmgr_ClearData}" />
+										</TextBlock>
+									</Button>
+								</StackPanel>
+							</StackPanel>
+						</StackPanel>
+					</Border>
+
+					<u:LoadingContainer Margin="5"
+										IsLoading=""
+										LoadingMessage="{DynamicResource Home_Fetching}">
+						<Border Height="205" Width="473"
+								CornerRadius="15"
+								Theme="{StaticResource CardBorder}">
+							<StackPanel>
+								<TextBlock HorizontalAlignment="Left"
+									   FontSize="15"
+									   FontWeight="DemiBold"
+									   Text="{DynamicResource Appmgr_InstallApp}" />
+								<StackPanel Margin="0,15,0,0" Orientation="Horizontal" Spacing="5">
+									<TextBlock Width="65"
+											   Margin="8,0,0,0"
+											   VerticalAlignment="Center"
+											   FontSize="13"
+											   Text="{DynamicResource Appmgr_ApkFile}" />
+									<TextBox Width="250" Classes="Bordered" Text=""/>
+									<Button Height="35"
+											Padding="10,0,10,0"
+											Theme="{DynamicResource OutlineButton}"
+											Command=""
+											Content="{DynamicResource Common_ChooseFile}">
+									</Button>
+								</StackPanel>
+								<Button Width="150"
+										Height="40"
+										Margin="0,35,0,0"
+										Theme="{DynamicResource OutlineButton}"
+										HorizontalAlignment="Center"
+										VerticalAlignment="Bottom"
+										Classes="Flat Rounded"
+										Command=""
+										FontWeight="DemiBold"
+										Content="{DynamicResource Appmgr_StartInstalling}" />
+							</StackPanel>
+						</Border>
+					</u:LoadingContainer>
+				</StackPanel>
+
+				<u:LoadingContainer Margin="5"
+										IsLoading=""
+										LoadingMessage="{DynamicResource Home_Fetching}">
+					<Border Height="590" Width="957"
+							CornerRadius="15"
+							Theme="{StaticResource CardBorder}">
+						<ScrollViewer>
+							<WrapPanel Orientation="Vertical">
+								<DockPanel Width="900">
+									<Button Width="135"
+											Height="40"
+										Theme="{DynamicResource OutlineButton}"
+											Command=""
+											FontWeight="DemiBold"
+											DockPanel.Dock="Left"
+											Content="{DynamicResource Appmgr_FetchApplicationList}">
+									</Button>
+									<TextBox Height="40" Width="300" Margin="145 0 0 0" Classes="Bordered" Watermark="" Text="" IsEnabled=""></TextBox>
+									<StackPanel DockPanel.Dock="Right" HorizontalAlignment="Right" VerticalAlignment="Center" Orientation="Horizontal" Spacing="20">
+										<TextBlock Classes="h4" Text="{DynamicResource Appmgr_DisplaySystemApp}"></TextBlock>
+										<ToggleSwitch IsChecked=""/>
+									</StackPanel>
+								</DockPanel>
+								<TextBlock Text="{DynamicResource Appmgr_ApplicationListHasntBeenFetched}" Classes="h4" Margin="15,15,15,15"
+										   IsVisible="" HorizontalAlignment="Left"/>
+								<ItemsControl ItemsSource="">
+									<ItemsControl.ItemsPanel>
+										<ItemsPanelTemplate>
+											<VirtualizingStackPanel Orientation="Vertical" />
+										</ItemsPanelTemplate>
+									</ItemsControl.ItemsPanel>
+									<ItemsControl.ItemTemplate>
+										<DataTemplate>
+											<Border Width="890" Margin="0,10,10,0" CornerRadius="15" Theme="{StaticResource CardBorder}">
+												<StackPanel Orientation="Vertical" Spacing="5">
+													<StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Margin="0">
+														<RadioButton GroupName="ApplicationSelection" HorizontalAlignment="Right" IsChecked="" />
+														<TextBlock FontSize="15" FontWeight="DemiBold" Text="" HorizontalAlignment="Left" />
+													</StackPanel>
+													<Button Theme="{StaticResource ToolboxButtonFile}" FontSize="15" FontWeight="DemiBold" Content="" HorizontalAlignment="Left"/>
+													<TextBlock FontSize="12" Text="" />
+													<Button Classes="Hyperlink" Foreground="White" FontSize="12" Content="{DynamicResource Appmgr_Uninstall}" HorizontalAlignment="Right"/>
+												</StackPanel>
+											</Border>
+										</DataTemplate>
+									</ItemsControl.ItemTemplate>
+								</ItemsControl>
+							</WrapPanel>
+						</ScrollViewer>
+					</Border>
+				</u:LoadingContainer>
+            </StackPanel>
+     </ScrollViewer>
+</UserControl>
