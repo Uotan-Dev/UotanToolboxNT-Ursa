@@ -45,6 +45,9 @@
   </ItemGroup>
 
     <ItemGroup>
+      <Compile Update="Pages\Basicflash.axaml.cs">
+        <DependentUpon>Basicflash.axaml</DependentUpon>
+      </Compile>
       <Compile Update="Pages\Settings.axaml.cs">
         <DependentUpon>Settings.axaml</DependentUpon>
       </Compile>

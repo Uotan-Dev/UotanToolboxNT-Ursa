@@ -13,6 +13,10 @@ public class MenuViewModel : ViewModelBase
                 Key = MenuKeys.MenuKeyHome // 必须设置Key
             },
             new(){
+                MenuHeader = "Basicflash",
+                Key = MenuKeys.MenuKeyBasicflash // 必须设置Key
+            },
+            new(){
                 MenuHeader = "GlobalLog",
                 Key = MenuKeys.MenuKeyGlobalLog // 必须设置Key
             },
@@ -31,4 +35,5 @@ public static class MenuKeys
     public const string MenuKeyHome = "Home";
     public const string MenuKeyGlobalLog = "GlobalLog";
     public const string MenuKeySettings = "Settings";
+    public const string MenuKeyBasicflash = "Basicflash";
 }

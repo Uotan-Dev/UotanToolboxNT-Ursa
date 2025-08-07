@@ -31,6 +31,7 @@ public partial class MainViewViewModel : ViewModelBase
         Content = s switch
         {
             MenuKeys.MenuKeyHome => new HomeViewModel(),
+            MenuKeys.MenuKeyBasicflash => new BasicflashViewModel(),
             MenuKeys.MenuKeyGlobalLog => new GlobalLogViewModel(),
             MenuKeys.MenuKeySettings => new SettingsViewModel(),
             _ => throw new ArgumentOutOfRangeException(nameof(s), s, null)

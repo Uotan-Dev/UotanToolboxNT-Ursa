@@ -1,0 +1,273 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:assets="clr-namespace:UotanToolboxNT_Ursa.Assets"
+			 xmlns:vm="using:UotanToolboxNT_Ursa.ViewModels"
+             xmlns:collections="clr-namespace:Avalonia.Collections;assembly=Avalonia.Base"
+			 xmlns:controls="clr-namespace:UotanToolboxNT_Ursa.Controls"
+             xmlns:iri="https://irihi.tech/shared"
+			 xmlns:u="https://irihi.tech/ursa"
+             mc:Ignorable="d" d:DesignWidth="980" d:DesignHeight="830"
+             Background="{DynamicResource PageBackground}"
+             x:Class="UotanToolboxNT_Ursa.Pages.Basicflash"
+			 x:DataType="vm:BasicflashViewModel">
+
+     <ScrollViewer VerticalScrollBarVisibility="Hidden">
+            <StackPanel>
+				<StackPanel Orientation="Horizontal">
+					
+					<u:LoadingContainer
+							Margin="5"
+							IsLoading=""
+							LoadingMessage="{DynamicResource Basicflash_Executing}">
+						<Border Width="630"
+								Height="180"
+								CornerRadius="15"
+								Theme="{StaticResource CardBorder}">
+							<StackPanel>
+								<TextBlock HorizontalAlignment="Left"
+											FontSize="15"
+											FontWeight="DemiBold"
+											Text="{DynamicResource Basicflash_NormalUnlock}" />
+								<StackPanel Orientation="Vertical" Margin="10 10 0 0">
+									<StackPanel Orientation="Horizontal" Spacing="5">
+										<TextBlock Width="90" VerticalAlignment="Center" Text="{DynamicResource Basicflash_UnlockFileUnlock}"></TextBlock>
+										<TextBox Width="353" Classes="Bordered"/>
+										<Button Width="115"
+												Height="35"
+												
+												Theme="{DynamicResource OutlineButton}"
+												Content="{DynamicResource Common_ChooseFile}">
+										</Button>
+									</StackPanel>
+									<StackPanel Orientation="Vertical" Spacing="10">
+										<StackPanel Orientation="Horizontal" Spacing="5">
+											<TextBlock Width="90" VerticalAlignment="Center" Text="{DynamicResource Basicflash_CodeUnlock}"></TextBlock>
+											<ComboBox Width="130" Classes="Bordered"/>
+											<TextBox Margin="-5 0 0 0" Classes="Bordered" Width="348"/>
+										</StackPanel>
+										<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="120">
+											<Button Theme="{DynamicResource OutlineButton}" Content="{DynamicResource Basicflash_UnlockNow}"></Button>
+											<Button Theme="{DynamicResource OutlineButton}" Content="{DynamicResource Basicflash_RelockBL}"></Button>
+										</StackPanel>
+									</StackPanel>
+								</StackPanel>
+							</StackPanel>
+					</Border>
+					</u:LoadingContainer>
+
+					<u:LoadingContainer
+							Margin="5"
+							IsLoading=""
+							LoadingMessage="{DynamicResource Basicflash_Executing}">
+						<Border Width="310"
+								Height="180"
+								CornerRadius="15"
+							Theme="{StaticResource CardBorder}">
+							<StackPanel Orientation="Vertical" Spacing="10">
+								<TextBlock HorizontalAlignment="Left"
+											FontSize="15"
+											FontWeight="DemiBold"
+											Text="{DynamicResource Basicflash_BasicCommandUnlock}" />
+								<ComboBox Classes="Bordered" Width="220" Margin="25 10"/>
+								<Button Width="210" Theme="{DynamicResource OutlineButton}">
+									<TextBlock>
+										<avalonia:MaterialIcon Kind="Reload" />
+										<TextBlock Text="{DynamicResource Basicflash_ExecuteUnlockCommand}" />
+									</TextBlock>
+								</Button>
+							</StackPanel>
+						</Border>
+					</u:LoadingContainer>
+				</StackPanel>
+				
+				<StackPanel Orientation="Horizontal">
+					<u:LoadingContainer
+							Margin="5"
+							IsLoading=""
+							LoadingMessage="{DynamicResource Basicflash_Executing}">
+						<Border Width="630"
+								Height="210"
+								CornerRadius="15"
+								Theme="{StaticResource CardBorder}">
+							<StackPanel>
+								<TextBlock HorizontalAlignment="Left"
+											FontSize="15"
+											FontWeight="DemiBold"
+											Text="{DynamicResource Basicflash_FlashRecovery}" />
+								<StackPanel Orientation="Horizontal" Spacing="5" Margin="15 10 0 0">
+									<TextBlock VerticalAlignment="Center" Text="{DynamicResource Basicflash_ChooseRecovery}"></TextBlock>
+									<TextBox Width="355" Classes="Bordered"/>
+									<Button Height="35" Theme="{DynamicResource OutlineButton}" Content="{DynamicResource Common_ChooseFile}"></Button>
+								</StackPanel>
+								<StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="15" Margin="0 10 0 0">
+									<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="25">
+										<Button Width="166"
+												Theme="{DynamicResource OutlineButton}"
+												HorizontalAlignment="Left"
+												Padding="8"
+												>
+											<TextBlock>
+												<avalonia:MaterialIcon Kind="Android" />
+												<TextBlock Text="{DynamicResource Basicflash_ToRecovery}" />
+											</TextBlock>
+										</Button>
+										<Button Width="166"
+												Theme="{DynamicResource OutlineButton}"
+												HorizontalAlignment="Left"
+												Padding="8"
+												>
+											<TextBlock>
+												<avalonia:MaterialIcon Kind="NetworkOutline" />
+												<TextBlock Text="{DynamicResource Basicflash_ToRecoveryAPart}" />
+											</TextBlock>
+										</Button>
+										<Button Width="166"
+												Theme="{DynamicResource OutlineButton}"
+												HorizontalAlignment="Left"
+												Padding="8"
+												>
+											<TextBlock>
+												<avalonia:MaterialIcon Kind="NetworkPos" />
+												<TextBlock Text="{DynamicResource Basicflash_ToRecoveryBPart}" />
+											</TextBlock>
+										</Button>
+									</StackPanel>
+									<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="25">
+										<Button Width="166"
+												Theme="{DynamicResource OutlineButton}"
+												HorizontalAlignment="Left"
+												Padding="8"
+												>
+											<TextBlock>
+												<avalonia:MaterialIcon Kind="ProgressDownload" />
+												<TextBlock Text="{DynamicResource Basicflash_TempBoot}" />
+											</TextBlock>
+										</Button>
+										<Button Width="166"
+												Theme="{DynamicResource OutlineButton}"
+												HorizontalAlignment="Left"
+												Padding="8"
+												>
+											<TextBlock>
+												<avalonia:MaterialIcon Kind="ProgressDownload" />
+												<TextBlock Text="{DynamicResource Basicflash_ToBootAPart}" />
+											</TextBlock>
+										</Button>
+										<Button Width="166"
+												Theme="{DynamicResource OutlineButton}"
+												HorizontalAlignment="Left"
+												Padding="8"
+												>
+											<TextBlock>
+												<avalonia:MaterialIcon Kind="ProgressDownload" />
+												<TextBlock Text="{DynamicResource Basicflash_ToBootBPart}" />
+											</TextBlock>
+										</Button>
+									</StackPanel>
+								</StackPanel>
+							</StackPanel>
+						</Border>
+					</u:LoadingContainer>
+
+					<u:LoadingContainer
+							Margin="5"
+							IsLoading=""
+							LoadingMessage="{DynamicResource Basicflash_Executing}">
+						<Border Width="310"
+								Height="210"
+								CornerRadius="15"
+								Theme="{StaticResource CardBorder}">
+							<StackPanel Orientation="Vertical" Spacing="15">
+								<TextBlock HorizontalAlignment="Left"
+											FontSize="15"
+											FontWeight="DemiBold"
+											Text="{DynamicResource Basicflash_MoreReboot}" />
+								<ComboBox Classes="Bordered" Width="220" Margin="25 10"/>
+								<Button Width="210" Theme="{DynamicResource OutlineButton}">
+									<TextBlock>
+										<avalonia:MaterialIcon Kind="Reload" />
+										<TextBlock Text="{DynamicResource Basicflash_ExecuteReboot}" />
+									</TextBlock>
+								</Button>
+							</StackPanel> 
+						</Border>
+					</u:LoadingContainer>
+				</StackPanel>
+				<StackPanel Orientation="Horizontal">
+					<u:LoadingContainer
+							Margin="5"
+							IsLoading=""
+							LoadingMessage="{DynamicResource Basicflash_Executing}">
+						<Border Width="630"
+								Height="260"
+								CornerRadius="15"
+								Theme="{StaticResource CardBorder}">
+							<StackPanel>
+								<TextBlock HorizontalAlignment="Left"
+											FontSize="15"
+											FontWeight="DemiBold"
+											Text="{DynamicResource Basicflash_RepairBoot}" />
+								<TextBlock HorizontalAlignment="Center" FontSize="12" Text="{DynamicResource Basicflash_MagiskOrKSU}"/>
+								<StackPanel Orientation="Horizontal" Spacing="5" Margin="15 0 0 0">
+									<TextBlock Width="60" VerticalAlignment="Center" Text="{DynamicResource Basicflash_ChooseMagisk}"></TextBlock>
+									<TextBox Width="385" Classes="Bordered"/>
+									<Button Height="35" Theme="{DynamicResource OutlineButton}" Content="{DynamicResource Common_ChooseFile}"></Button>
+								</StackPanel>
+								<StackPanel Orientation="Horizontal" Spacing="5" Margin="15 5 0 0">
+									<TextBlock Width="60" VerticalAlignment="Center" Text="{DynamicResource Basicflash_ChooseBoot}"></TextBlock>
+									<TextBox Width="385" Classes="Bordered"/>
+									<Button Height="35" Theme="{DynamicResource OutlineButton}" Content="{DynamicResource Common_ChooseFile}"></Button>
+								</StackPanel>
+								<StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="15,10,0,0" Spacing="5">
+									<StackPanel Orientation="Horizontal" Spacing="0">
+										<CheckBox Width="230" FontSize="13" Content="{DynamicResource Basicflash_KeepAVBOrDM}" IsChecked="True"/>
+										<CheckBox Width="180" FontSize="13" Content="{DynamicResource Basicflash_KeepStrongEncryption}" IsChecked="True"/>
+										<CheckBox Width="160" FontSize="13" Content="{DynamicResource Basicflash_RepairVbmeta}"/>
+									</StackPanel>
+									<StackPanel Orientation="Horizontal" Spacing="0" Margin="0,0,0,0">
+										<CheckBox Width="230" FontSize="13" Content="{DynamicResource Basicflash_InstallToRecovery}"/>
+										<CheckBox Width="180" FontSize="13" Content="{DynamicResource Basicflash_ForceRootfs}" IsChecked="True"/>
+										<ComboBox Width="160" Classes="Bordered" Margin="-5 0 0 0"/>
+									</StackPanel>
+								</StackPanel>
+								<StackPanel>
+									<Button Width="210" Margin="0,10,0,0" Theme="{DynamicResource OutlineButton}">
+										<TextBlock Text="{DynamicResource Basicflash_Start}"/>
+									</Button>
+								</StackPanel>
+							</StackPanel>
+						</Border>
+					</u:LoadingContainer>
+
+					<u:LoadingContainer
+							Margin="5"
+							IsLoading=""
+							LoadingMessage="{DynamicResource Basicflash_Executing}">
+						<Border Width="310"
+								Height="260"
+								CornerRadius="15"
+								Theme="{StaticResource CardBorder}">
+							<StackPanel Name="InstallZIP" Orientation="Vertical" Spacing="15">
+								<TextBlock HorizontalAlignment="Left"
+											FontSize="15"
+											FontWeight="DemiBold"
+											Text="{DynamicResource Basicflash_EasyFlash}" />
+								<StackPanel Spacing="20">
+									<Button Width="220" Theme="{DynamicResource OutlineButton}" Content="{DynamicResource Basicflash_FlashChosenMagisk}" />
+									<Button Width="220" Theme="{DynamicResource OutlineButton}" Content="{DynamicResource Basicflash_PreventRecoverOfficialRecovery}" />
+									<Button Width="220" Theme="{DynamicResource OutlineButton}" Content="{DynamicResource Basicflash_SyncABPart}" />
+								</StackPanel>
+								<StackPanel Orientation="Horizontal" Spacing="10" Margin="20,5,0,0">
+									<RadioButton FontSize="13" Content="TWRP Install" GroupName="FormatContent" IsChecked="True"/>
+									<RadioButton FontSize="13" Content="ADB Sideload" GroupName="FormatContent"/>
+								</StackPanel>
+							</StackPanel>
+						</Border>
+					</u:LoadingContainer>
+				</StackPanel>
+            </StackPanel>
+        </ScrollViewer>
+</UserControl>
