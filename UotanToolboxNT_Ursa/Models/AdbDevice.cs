@@ -80,7 +80,7 @@ public class AdbDevice : DeviceBase
                 SystemSDK = $"Android {androidVersion}";
             }
 
-            CPUCode = await GetCpuModelNameAsync();
+            CPUCode = GetCpuModelName();
             // 获取屏幕分辨率
             DisplayHW = await GetScreenResolutionAsync();
 
@@ -570,7 +570,7 @@ public class AdbDevice : DeviceBase
     /// <summary>
     /// 获取CPU型号名称
     /// </summary>
-    private async Task<string> GetCpuModelNameAsync()
+    private string GetCpuModelName()
     {
         try
         {
