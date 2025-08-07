@@ -65,6 +65,11 @@ public partial class SplashWindowViewModel : ObservableObject, IDialogContext
 
         UpdateProgress(100, "初始化完成");
         AddLog("初始化完成", LogLevel.Info);
+
+        // 启动设备管理器
+        Global.DeviceManager.Start();
+        AddLog("设备管理器已启动", LogLevel.Info);
+
         RequestClose?.Invoke(this, true);
     }
 

@@ -1,0 +1,210 @@
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+namespace UotanToolboxNT_Ursa.Models;
+
+/// <summary>
+/// 设备信息基类
+/// </summary>
+public abstract class DeviceBase
+{
+    /// <summary>
+    /// 设备序列号
+    /// </summary>
+    public string SerialNumber { get; protected set; } = string.Empty;
+
+    /// <summary>
+    /// 设备模式
+    /// </summary>
+    public DeviceMode Mode { get; protected set; } = DeviceMode.Unknown;
+
+    /// <summary>
+    /// 设备是否连接
+    /// </summary>
+    public bool IsConnected { get; protected set; }
+
+    /// <summary>
+    /// 设备状态
+    /// </summary>
+    public string Status { get; protected set; } = "--";
+
+    /// <summary>
+    /// 设备品牌
+    /// </summary>
+    public string Brand { get; protected set; } = "--";
+
+    /// <summary>
+    /// 设备型号
+    /// </summary>
+    public string Model { get; protected set; } = "--";
+
+    /// <summary>
+    /// 设备代号
+    /// </summary>
+    public string CodeName { get; protected set; } = "--";
+
+    /// <summary>
+    /// 系统SDK版本
+    /// </summary>
+    public string SystemSDK { get; protected set; } = "--";
+
+    /// <summary>
+    /// CPU架构
+    /// </summary>
+    public string CPUABI { get; protected set; } = "--";
+
+    /// <summary>
+    /// CPU代码
+    /// </summary>
+    public string CPUCode { get; protected set; } = "--";
+
+    /// <summary>
+    /// 显示硬件信息
+    /// </summary>
+    public string DisplayHW { get; protected set; } = "--";
+
+    /// <summary>
+    /// 屏幕密度
+    /// </summary>
+    public string Density { get; protected set; } = "--";
+
+    /// <summary>
+    /// 主板ID
+    /// </summary>
+    public string BoardID { get; protected set; } = "--";
+
+    /// <summary>
+    /// 平台信息
+    /// </summary>
+    public string Platform { get; protected set; } = "--";
+
+    /// <summary>
+    /// 编译信息
+    /// </summary>
+    public string Compile { get; protected set; } = "--";
+
+    /// <summary>
+    /// 内核版本
+    /// </summary>
+    public string Kernel { get; protected set; } = "--";
+
+    /// <summary>
+    /// NDK版本
+    /// </summary>
+    public string NDKVersion { get; protected set; } = "--";
+
+    /// <summary>
+    /// Bootloader状态
+    /// </summary>
+    public string BootloaderStatus { get; protected set; } = "--";
+
+    /// <summary>
+    /// VAB状态
+    /// </summary>
+    public string VABStatus { get; protected set; } = "--";
+
+    /// <summary>
+    /// 电池电量百分比
+    /// </summary>
+    public string BatteryLevel { get; protected set; } = "0";
+
+    /// <summary>
+    /// 电池信息
+    /// </summary>
+    public string BatteryInfo { get; protected set; } = "--";
+
+    /// <summary>
+    /// 内存使用情况
+    /// </summary>
+    public string MemoryUsage { get; protected set; } = "--";
+
+    /// <summary>
+    /// 内存级别
+    /// </summary>
+    public string MemoryLevel { get; protected set; } = "0";
+
+    /// <summary>
+    /// 磁盘信息
+    /// </summary>
+    public string DiskInfo { get; protected set; } = "--";
+
+    /// <summary>
+    /// 磁盘类型
+    /// </summary>
+    public string DiskType { get; protected set; } = "--";
+
+    /// <summary>
+    /// 磁盘使用进度
+    /// </summary>
+    public string DiskProgress { get; protected set; } = "0";
+
+    /// <summary>
+    /// 开机时间
+    /// </summary>
+    public string PowerOnTime { get; protected set; } = "--";
+
+    /// <summary>
+    /// 最后更新时间
+    /// </summary>
+    public DateTime LastUpdated { get; protected set; } = DateTime.MinValue;
+
+    /// <summary>
+    /// 刷新设备信息
+    /// </summary>
+    /// <returns></returns>
+    public abstract Task<bool> RefreshDeviceInfoAsync();
+
+    /// <summary>
+    /// 获取应用列表
+    /// </summary>
+    /// <returns></returns>
+    public abstract Task<List<string>> GetApplicationListAsync();
+
+    /// <summary>
+    /// 重启到指定模式
+    /// </summary>
+    /// <param name="mode">目标模式</param>
+    /// <returns></returns>
+    public abstract Task<bool> RebootToModeAsync(DeviceMode mode);
+
+    /// <summary>
+    /// 关机
+    /// </summary>
+    /// <returns></returns>
+    public abstract Task<bool> PowerOffAsync();
+
+    /// <summary>
+    /// 获取设备支持的操作
+    /// </summary>
+    /// <returns></returns>
+    public abstract List<string> GetSupportedOperations();
+
+    /// <summary>
+    /// 检查设备连接状态
+    /// </summary>
+    /// <returns></returns>
+    public abstract Task<bool> CheckConnectionAsync();
+
+    /// <summary>
+    /// 设备状态变化事件
+    /// </summary>
+    public event EventHandler<DeviceStatusChangedEventArgs>? StatusChanged;
+
+    /// <summary>
+    /// 触发设备状态变化事件
+    /// </summary>
+    /// <param name="oldStatus"></param>
+    /// <param name="newStatus"></param>
+    protected virtual void OnStatusChanged(string oldStatus, string newStatus) =>
+        StatusChanged?.Invoke(this, new DeviceStatusChangedEventArgs(oldStatus, newStatus));
+}
+
+/// <summary>
+/// 设备状态变化事件参数
+/// </summary>
+public class DeviceStatusChangedEventArgs(string oldStatus, string newStatus) : EventArgs
+{
+    public string OldStatus { get; } = oldStatus;
+    public string NewStatus { get; } = newStatus;
+}

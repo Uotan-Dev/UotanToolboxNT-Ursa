@@ -11,10 +11,7 @@ public partial class WaveProgress : UserControl
         InitializeComponent();
     }
 
-    private void InitializeComponent()
-    {
-        AvaloniaXamlLoader.Load(this);
-    }
+    private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
 
     public static readonly StyledProperty<double> ValueProperty =
         AvaloniaProperty.Register<WaveProgress, double>(nameof(Value), defaultValue: 50);

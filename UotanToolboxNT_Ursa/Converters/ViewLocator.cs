@@ -18,8 +18,5 @@ public class ViewLocator : IDataTemplate
         return type != null ? (Control)Activator.CreateInstance(type)! : new TextBlock { Text = "Not Found: " + name };
     }
 
-    public bool Match(object? data)
-    {
-        return true;
-    }
+    public bool Match(object? data) => true;
 }
