@@ -33,6 +33,10 @@ public class MenuViewModel : ViewModelBase
                 Key = MenuKeys.MenuKeyScrcpy // 必须设置Key
             },
             new(){
+                MenuHeader = "FormatExtract",
+                Key = MenuKeys.MenuKeyFormatExtract // 必须设置Key
+            },
+            new(){
                 MenuHeader = "GlobalLog",
                 Key = MenuKeys.MenuKeyGlobalLog // 必须设置Key
             },
@@ -56,4 +60,5 @@ public static class MenuKeys
     public const string MenuKeyWiredflash = "Wiredflash";
     public const string MenuKeyCustomizedflash = "Customizedflash";
     public const string MenuKeyScrcpy = "Scrcpy";
+    public const string MenuKeyFormatExtract = "FormatExtract";
 }

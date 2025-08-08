@@ -1,0 +1,336 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:assets="clr-namespace:UotanToolboxNT_Ursa.Assets"
+			 xmlns:vm="using:UotanToolboxNT_Ursa.ViewModels"
+             xmlns:collections="clr-namespace:Avalonia.Collections;assembly=Avalonia.Base"
+			 xmlns:controls="clr-namespace:UotanToolboxNT_Ursa.Controls"
+             xmlns:iri="https://irihi.tech/shared"
+			 xmlns:u="https://irihi.tech/ursa"
+             mc:Ignorable="d" d:DesignWidth="980" d:DesignHeight="830"
+             Background="{DynamicResource PageBackground}"
+             x:Class="UotanToolboxNT_Ursa.Pages.FormatExtract"
+			 x:DataType="vm:FormatExtractViewModel">
+
+     <ScrollViewer VerticalScrollBarVisibility="Hidden">
+            <StackPanel>
+				<StackPanel Orientation="Horizontal">
+					<u:LoadingContainer
+							Margin="5"
+							IsLoading=""
+							LoadingMessage="{DynamicResource FormatExtract_Executing}">
+						<Border Width="470"
+								Height="210"
+								CornerRadius="15"
+								Theme="{StaticResource CardBorder}">
+							<StackPanel Spacing="10">
+								<StackPanel>
+									<TextBlock HorizontalAlignment="Left"
+											   VerticalAlignment="Top"
+											   FontWeight="DemiBold"
+											   Text="QCN" />
+									<StackPanel Margin="0,5,0,0" Orientation="Horizontal">
+										<TextBlock Width="60"
+												   Margin="8,0,0,0"
+												   VerticalAlignment="Center"
+												   FontSize="13"
+												   Text="{DynamicResource FormatExtract_QCNFile}" />
+										<TextBox Width="250" Classes="Bordered"/>
+										<Button Width="105"
+												Height="35"
+												Padding="10,0,10,0"
+												Theme="{DynamicResource OutlineButton}"
+												
+												Content="{DynamicResource Common_ChooseFile}" />
+									</StackPanel>
+								</StackPanel>
+								<StackPanel Spacing="30">
+									<StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="10">
+										<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="10">
+											<Button Width="125"
+													HorizontalAlignment="Left"
+													Theme="{DynamicResource OutlineButton}"
+													Padding="8"
+													>
+												<TextBlock>
+													<avalonia:MaterialIcon Kind="PencilAddOutline" />
+													<TextBlock Text="{DynamicResource FormatExtract_WriteQCN}"/>
+												</TextBlock>
+											</Button>
+											<Button Width="125"
+													HorizontalAlignment="Left"
+													Theme="{DynamicResource OutlineButton}"
+													Padding="8"
+													>
+												<TextBlock>
+													<avalonia:MaterialIcon Kind="ContentSaveAllOutline" />
+													<TextBlock Text="{DynamicResource FormatExtract_BackupQCN}"/>
+												</TextBlock>
+											</Button>
+											<Button Width="125"
+													HorizontalAlignment="Left"
+													Theme="{DynamicResource OutlineButton}"
+													Padding="8"
+													>
+												<TextBlock>
+													<avalonia:MaterialIcon Kind="FolderOpenOutline" />
+													<TextBlock Text="{DynamicResource FormatExtract_OpenBackup}"/>
+												</TextBlock>
+											</Button>
+										</StackPanel>
+										<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="10">
+											<Button Width="125"
+													HorizontalAlignment="Left"
+													Theme="{DynamicResource OutlineButton}"
+													Padding="8"
+													>
+												<TextBlock>
+													<avalonia:MaterialIcon Kind="AndroidStudio" />
+													<TextBlock Text="{DynamicResource FormatExtract_Enable901D}"/>
+												</TextBlock>
+											</Button>
+											<Button Width="125"
+													HorizontalAlignment="Left"
+													Theme="{DynamicResource OutlineButton}"
+													Padding="8"
+													>
+												<TextBlock>
+													<avalonia:MaterialIcon Kind="AndroidStudio" />
+													<TextBlock Text="{DynamicResource FormatExtract_Enable9091}"/>
+												</TextBlock>
+											</Button>
+										</StackPanel>
+									</StackPanel>
+								</StackPanel>
+							</StackPanel>
+						</Border>
+					</u:LoadingContainer>
+
+					<u:LoadingContainer
+							Margin="5"
+							IsLoading=""
+							LoadingMessage="{DynamicResource FormatExtract_Executing}">
+						<Border Width="470"
+								Height="210"
+								CornerRadius="15"
+								Theme="{StaticResource CardBorder}">
+							<StackPanel Spacing="30">
+								<StackPanel>
+									<TextBlock HorizontalAlignment="Left"
+											   VerticalAlignment="Top"
+											   FontWeight="DemiBold"
+											   Text="SuperEmpty" />
+									<StackPanel Margin="0,20,0,0" Orientation="Horizontal">
+										<TextBlock Width="80"
+												   Margin="8,0,0,0"
+												   VerticalAlignment="Center"
+												   FontSize="13"
+												   Text="SuperEmpty" />
+										<TextBox Width="240"
+												 Classes="Bordered"/>
+										<Button Height="35"
+												Width="95"
+												Padding="10,0,10,0"
+												Theme="{DynamicResource OutlineButton}"
+												
+												Content="{DynamicResource Common_ChooseFile}" />
+									</StackPanel>
+								</StackPanel>
+								<StackPanel Spacing="30">
+									<StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="10">
+										<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="10">
+											<Button Width="125"
+													HorizontalAlignment="Left"
+													Theme="{DynamicResource OutlineButton}"
+													Padding="8"
+													>
+												<TextBlock>
+													<avalonia:MaterialIcon Kind="PencilAddOutline" />
+													<TextBlock Text="{DynamicResource FormatExtract_FlashFile}"/>
+												</TextBlock>
+											</Button>
+										</StackPanel>
+									</StackPanel>
+								</StackPanel>
+							</StackPanel>
+						</Border>
+					</u:LoadingContainer>
+				</StackPanel>
+
+				<StackPanel Orientation="Horizontal">
+					<u:LoadingContainer
+							Margin="5"
+							IsLoading=""
+							LoadingMessage="{DynamicResource FormatExtract_Executing}">
+						<Border Width="470"
+								Height="250"
+								CornerRadius="15"
+								Theme="{StaticResource CardBorder}">
+							<StackPanel Spacing="10">
+								<StackPanel>
+									<TextBlock HorizontalAlignment="Left"
+											   VerticalAlignment="Top"
+											   FontWeight="DemiBold"
+											   Text="{DynamicResource FormatExtract_Format}" />
+									<StackPanel Margin="0,5,0,0" Orientation="Horizontal">
+										<TextBlock Width="65"
+												   Margin="5,0,0,0"
+												   VerticalAlignment="Center"
+												   FontSize="13"
+												   Text="{DynamicResource FormatExtract_PartName}" />
+										<TextBox Width="355" Watermark="{DynamicResource FormatExtract_OnlyADBFotmatSupport}"
+												 Classes="Bordered"/>
+									</StackPanel>
+								</StackPanel>
+								<StackPanel>
+									<StackPanel Margin="0,5,0,5" Orientation="Horizontal">
+										<TextBlock Width="65"
+												   Margin="8,0,0,0"
+												   VerticalAlignment="Center"
+												   FontSize="13"
+												   Text="{DynamicResource FormatExtract_FormatTo}" />
+										<StackPanel Orientation="Vertical" VerticalAlignment="Center" Spacing="0">
+											<StackPanel Orientation="Horizontal" Spacing="10">
+												<RadioButton FontSize="12" Content="EXT4" GroupName="FormatContent" IsChecked="True" />
+												<RadioButton FontSize="12" Content="F2FS" GroupName="FormatContent" />
+												<RadioButton FontSize="12" Content="FAT32" GroupName="FormatContent" />
+												<RadioButton FontSize="12" Content="exFAT" GroupName="FormatContent" />
+												<RadioButton FontSize="12" Content="NTFS" GroupName="FormatContent" />
+											</StackPanel>
+										</StackPanel>
+									</StackPanel>
+								</StackPanel>
+								<StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="10">
+									<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="50">
+										<Button Width="155"
+												HorizontalAlignment="Left"
+												Theme="{DynamicResource OutlineButton}"
+												Padding="8"
+												>
+											<TextBlock>
+												<avalonia:MaterialIcon Kind="PencilAddOutline" />
+												<TextBlock Text="{DynamicResource FormatExtract_ADBFormat}"/>
+											</TextBlock>
+										</Button>
+										<Button Width="160"
+												HorizontalAlignment="Left"
+												Theme="{DynamicResource OutlineButton}"
+												Padding="8"
+												>
+											<TextBlock>
+												<avalonia:MaterialIcon Kind="ContentSaveAllOutline" />
+												<TextBlock Text="{DynamicResource FormatExtract_FastbootFormat}"/>
+											</TextBlock>
+										</Button>
+									</StackPanel>
+									<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="50">
+										<Button Width="155"
+												HorizontalAlignment="Left"
+												Theme="{DynamicResource OutlineButton}"
+												Padding="8"
+												>
+											<TextBlock>
+												<avalonia:MaterialIcon Kind="AndroidStudio" />
+												<TextBlock Text="{DynamicResource FormatExtract_FormatDataPart}"/>
+											</TextBlock>
+										</Button>
+										<Button Width="160"
+												HorizontalAlignment="Left"
+												Theme="{DynamicResource OutlineButton}"
+												Padding="8"
+												>
+											<TextBlock>
+												<avalonia:MaterialIcon Kind="AndroidStudio" />
+												<TextBlock Text="{DynamicResource FormatExtract_TWRPFormatData}"/>
+											</TextBlock>
+										</Button>
+									</StackPanel>
+								</StackPanel>
+							</StackPanel>
+						</Border>
+					</u:LoadingContainer>
+
+					<u:LoadingContainer
+							Margin="5"
+							IsLoading=""
+							LoadingMessage="{DynamicResource FormatExtract_Executing}">
+						<Border Width="470"
+								Height="250"
+								CornerRadius="15"
+								Theme="{StaticResource CardBorder}">
+							<StackPanel Spacing="20">
+								<StackPanel Spacing="15">
+									<TextBlock HorizontalAlignment="Left"
+											   VerticalAlignment="Top"
+											   FontWeight="DemiBold"
+											   Text="{DynamicResource FormatExtract_Extract}" />
+									<StackPanel Margin="0,5,0,0" Orientation="Horizontal">
+										<TextBlock Width="65"
+												   Margin="5,0,0,0"
+												   VerticalAlignment="Center"
+												   FontSize="13"
+												   Text="{DynamicResource FormatExtract_PartName}" />
+										<TextBox Width="350" Watermark="{DynamicResource FormatExtract_AddPostfix}"
+												 Classes="Bordered"/>
+									</StackPanel>
+								</StackPanel>
+								<StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="20">
+									<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="60">
+										<Button Width="125"
+												HorizontalAlignment="Left"
+												Theme="{DynamicResource OutlineButton}"
+												Padding="8"
+												>
+											<TextBlock>
+												<avalonia:MaterialIcon Kind="PencilAddOutline" />
+												<TextBlock Text="{DynamicResource FormatExtract_PhysicalPart}"/>
+											</TextBlock>
+										</Button>
+										<Button Width="125"
+												HorizontalAlignment="Left"
+												Theme="{DynamicResource OutlineButton}"
+												Padding="8"
+												>
+											<TextBlock>
+												<avalonia:MaterialIcon Kind="ContentSaveAllOutline" />
+												<TextBlock Text="{DynamicResource FormatExtract_VirtualPart}"/>
+											</TextBlock>
+										</Button>
+									</StackPanel>
+									<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="50">
+										<Button Width="170"
+												HorizontalAlignment="Left"
+												Theme="{DynamicResource OutlineButton}"
+												Padding="8"
+												>
+											<TextBlock>
+												<avalonia:MaterialIcon Kind="AndroidStudio" />
+												<TextBlock Text="{DynamicResource FormatExtract_OpenExtractFolder}"/>
+											</TextBlock>
+										</Button>
+									</StackPanel>
+								</StackPanel>
+							</StackPanel>
+						</Border>
+					</u:LoadingContainer>
+				</StackPanel>
+
+				<Border Width="960"
+						Height="320"
+						Margin="10"
+						CornerRadius="15"
+						Theme="{StaticResource CardBorder}">
+					<TextBox Margin="0 0 0 0"
+							 CornerRadius="15"
+							 Width="930" Height="290"
+							 Watermark="{DynamicResource Common_Log}"
+							 Classes="TextArea"
+							 Text=""
+							 TextWrapping="Wrap"
+							 IsReadOnly="True"/>
+				</Border>
+            </StackPanel>
+        </ScrollViewer>
+</UserControl>
