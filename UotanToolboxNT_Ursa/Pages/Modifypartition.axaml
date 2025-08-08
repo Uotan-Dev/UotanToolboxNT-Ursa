@@ -1,0 +1,203 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:assets="clr-namespace:UotanToolboxNT_Ursa.Assets"
+			 xmlns:vm="using:UotanToolboxNT_Ursa.ViewModels"
+             xmlns:collections="clr-namespace:Avalonia.Collections;assembly=Avalonia.Base"
+			 xmlns:controls="clr-namespace:UotanToolboxNT_Ursa.Controls"
+             xmlns:iri="https://irihi.tech/shared"
+			 xmlns:u="https://irihi.tech/ursa"
+             mc:Ignorable="d" d:DesignWidth="980" d:DesignHeight="830"
+             Background="{DynamicResource PageBackground}"
+             x:Class="UotanToolboxNT_Ursa.Pages.Modifypartition"
+			 x:DataType="vm:ModifypartitionViewModel">
+
+     <ScrollViewer VerticalScrollBarVisibility="Hidden">
+            <StackPanel>
+				<StackPanel Orientation="Horizontal">
+					<Border Width="668"
+							Height="635"
+							Margin="10"
+							CornerRadius="15"
+							Theme="{StaticResource CardBorder}">
+						<StackPanel>
+							<StackPanel Margin="200 0 0 0" Orientation="Horizontal" VerticalAlignment="Top">
+								<TextBox Classes="Bordered"
+										 Width="200"
+										 Height="30"
+										 FontSize="15"
+										 Watermark="{DynamicResource Modifypartition_SearchPart}"/>
+								<TextBlock Margin="80 6 0 0" Text="{DynamicResource Modifypartition_ShowAllPart}"/>
+								<ToggleSwitch IsEnabled="False" />
+							</StackPanel>
+
+							<u:LoadingContainer IsLoading=""
+												LoadingMessage="{DynamicResource FormatExtract_Executing}">
+								<DataGrid Width="625"
+							              Height="565"
+							              FontSize="15"
+							              IsReadOnly="True"
+							              AutoGenerateColumns="True"
+							              CanUserResizeColumns="True">
+								</DataGrid>
+							</u:LoadingContainer>
+						</StackPanel>
+					</Border>
+
+					<StackPanel>
+						<Border Width="260"
+								Height="210"
+								Margin="10"
+								CornerRadius="15"
+								Theme="{StaticResource CardBorder}">
+							<StackPanel Orientation="Vertical" Spacing="5">
+								<TextBlock HorizontalAlignment="Left"
+										   VerticalAlignment="Top"
+										   FontWeight="DemiBold"
+										   Text="{DynamicResource Modifypartition_DeletOrESP}" />
+								<TextBlock TextAlignment="Center"
+										   FontSize="13"
+										   Margin="5,5,0,0"
+										   Height="35"
+										   Text="{DynamicResource Modifypartition_OnlyOenPart}" />
+								<StackPanel Margin="0,0,0,0" Orientation="Horizontal" VerticalAlignment="Center">
+									<TextBlock Width="70"
+											   VerticalAlignment="Center"
+											   FontSize="15"
+											   Text="{DynamicResource Modifypartition_IdColon}" />
+									<TextBox Width="155" FontSize="15" Classes="Bordered" />
+								</StackPanel>
+								<StackPanel Margin="0 5 0 0" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="10">
+									<Button Width="90"
+											Theme="{DynamicResource OutlineButton}"
+											
+											HorizontalAlignment="Left"
+											Padding="8">
+										<TextBlock FontSize="15" Text="{DynamicResource Modifypartition_Delete}"/>
+									</Button>
+									<Button Width="90"
+											Theme="{DynamicResource OutlineButton}"
+											
+											HorizontalAlignment="Left"
+											Padding="8">
+										<TextBlock FontSize="15" Text="{DynamicResource Modifypartition_Mark}"/>
+									</Button>
+								</StackPanel>
+							</StackPanel>
+						</Border>
+
+						<Border Width="260"
+								Height="400"
+								Margin="10"
+								CornerRadius="15"
+								Theme="{StaticResource CardBorder}">
+							<StackPanel Orientation="Vertical" Spacing="20">
+								<TextBlock HorizontalAlignment="Left"
+										   VerticalAlignment="Top"
+										   FontWeight="DemiBold"
+										   Text="{DynamicResource Modifypartition_CreatePartTitle}" />
+								<StackPanel Margin="8,0,0,0" Orientation="Horizontal" VerticalAlignment="Center">
+									<TextBlock VerticalAlignment="Center"
+											   Width="65"
+											   FontSize="15"
+											   Text="{DynamicResource Modifypartition_PartName}" />
+									<TextBox Width="145" FontSize="15" Classes="Bordered"/>
+								</StackPanel>
+								<StackPanel Margin="8,0,0,0" Orientation="Horizontal" VerticalAlignment="Center">
+									<TextBlock VerticalAlignment="Center"
+											   Width="65"
+											   FontSize="15"
+											   Text="{DynamicResource Modifypartition_PartFormat}" />
+									<TextBox Width="145" FontSize="15" Classes="Bordered"/>
+								</StackPanel>
+								<StackPanel Margin="8,0,0,0" Orientation="Horizontal" VerticalAlignment="Center">
+									<TextBlock VerticalAlignment="Center"
+											   Width="65"
+											   FontSize="15"
+											   Text="{DynamicResource Modifypartition_StartpointColon}" />
+									<TextBox Width="145" FontSize="15" Watermark="{DynamicResource Modifypartition_AddUnit}" Classes="Bordered"/>
+								</StackPanel>
+								<StackPanel Margin="8,0,0,0" Orientation="Horizontal" VerticalAlignment="Center">
+									<TextBlock VerticalAlignment="Center"
+											   Width="65"
+											   FontSize="15"
+											   Text="{DynamicResource Modifypartition_EndpointColon}" />
+									<TextBox Width="145" FontSize="15" Watermark="{DynamicResource Modifypartition_AddUnit}" Classes="Bordered"/>
+								</StackPanel>
+								<StackPanel Margin="0,10,0,0" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="10">
+									<Button Width="200"
+											Theme="{DynamicResource OutlineButton}"
+											
+											HorizontalAlignment="Left"
+											Padding="8">
+										<TextBlock FontSize="15" Text="{DynamicResource Modifypartition_CreatePart}" />
+									</Button>
+								</StackPanel>
+							</StackPanel>
+						</Border>
+					</StackPanel>
+				</StackPanel>
+
+				<StackPanel Orientation="Horizontal">
+					<Border Width="668"
+							Height="100"
+							Margin="10"
+							CornerRadius="15"
+							Theme="{StaticResource CardBorder}">
+						<StackPanel Orientation="Horizontal" Spacing="0">
+							<StackPanel Orientation="Vertical" VerticalAlignment="Center" Spacing="10">
+								<StackPanel Orientation="Horizontal" Spacing="20">
+									<RadioButton Width="60" FontSize="15" Content="sda" GroupName="FormatContent" />
+									<RadioButton Width="60" FontSize="15" Content="sdb" GroupName="FormatContent" />
+									<RadioButton Width="60" FontSize="15" Content="sdc" GroupName="FormatContent" />
+									<RadioButton FontSize="15" Content="EMMC" GroupName="FormatContent" />
+								</StackPanel>
+								<StackPanel Orientation="Horizontal" Spacing="20">
+									<RadioButton Width="60" FontSize="15" Content="sdd" GroupName="FormatContent" />
+									<RadioButton Width="60" FontSize="15" Content="sde" GroupName="FormatContent" />
+									<RadioButton Width="60" FontSize="15" Content="sdf" GroupName="FormatContent" />
+									<RadioButton FontSize="15" Content="FASTBOOT" GroupName="FormatContent" IsCheckedChanged=""/>
+								</StackPanel>
+							</StackPanel>
+							<TextBlock Margin="20 0 0 0"
+									   VerticalAlignment="Center"
+									   FontSize="15"
+									   Width="80"
+									   Text="{DynamicResource Modifypartition_TotalSize}" />
+							<TextBlock Name="PartSize"
+									   VerticalAlignment="Center"
+									   FontSize="15"
+									   Width="90"></TextBlock>
+							<Button Width="100"
+									Margin="-15,0,0,0"
+									Theme="{DynamicResource OutlineButton}"
+									
+									HorizontalAlignment="Left"
+									Padding="8">
+								<TextBlock Text="{DynamicResource Modifypartition_ReadPart}" />
+							</Button>
+						</StackPanel>
+					</Border>
+
+					<Border Width="265"
+							Height="100"
+							Margin="10"
+							CornerRadius="15"
+							Theme="{StaticResource CardBorder}">
+						<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="10">
+							<Button Width="200"
+									Height="40"
+									Theme="{DynamicResource OutlineButton}"
+									
+									HorizontalAlignment="Left"
+									Padding="8">
+								<TextBlock Text="{DynamicResource Modifypartition_RemoveLimit}" />
+							</Button>
+						</StackPanel>
+					</Border>
+				</StackPanel>
+            </StackPanel>
+        </ScrollViewer>
+</UserControl>
