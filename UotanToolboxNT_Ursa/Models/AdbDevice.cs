@@ -245,12 +245,12 @@ public class AdbDevice : DeviceBase
             {
                 var memoryValues = ParseMemoryInfo(memResult);
                 // 确保有MemTotal值且能正确解析
-                if (memoryValues.Length >= 1 && !string.IsNullOrEmpty(memoryValues[0]) && 
+                if (memoryValues.Length >= 1 && !string.IsNullOrEmpty(memoryValues[0]) &&
                     long.TryParse(memoryValues[0], out var memTotal) && memTotal > 0)
                 {
                     long memAvailable = 0;
                     // 尝试获取MemAvailable，如果没有则设为0
-                    if (memoryValues.Length >= 2 && !string.IsNullOrEmpty(memoryValues[1]) && 
+                    if (memoryValues.Length >= 2 && !string.IsNullOrEmpty(memoryValues[1]) &&
                         long.TryParse(memoryValues[1], out var available))
                     {
                         memAvailable = available;
@@ -280,7 +280,7 @@ public class AdbDevice : DeviceBase
         var memTotal = "";
         var memAvailable = "";
         var lines = info.Split(['\n', '\r'], StringSplitOptions.RemoveEmptyEntries);
-        
+
         foreach (var line in lines)
         {
             if (line.Contains("MemTotal:"))
@@ -302,7 +302,7 @@ public class AdbDevice : DeviceBase
                 }
             }
         }
-        
+
         // 确保返回的数组顺序固定：[0]为MemTotal，[1]为MemAvailable
         return [memTotal, memAvailable];
     }

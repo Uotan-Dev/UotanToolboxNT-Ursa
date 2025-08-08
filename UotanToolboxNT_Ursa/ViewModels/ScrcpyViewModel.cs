@@ -1,5 +1,4 @@
 using CommunityToolkit.Mvvm.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 
 namespace UotanToolboxNT_Ursa.ViewModels;
 
