@@ -27,6 +27,7 @@
   <ItemGroup>
     <PackageReference Include="AdvancedSharpAdbClient" Version="3.4.14" />
     <PackageReference Include="Avalonia" Version="11.3.3" />
+    <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.3.3" />
     <PackageReference Include="Avalonia.Desktop" Version="11.3.3" />
     <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.3" />
     <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.3" />
@@ -53,6 +54,15 @@
       </Compile>
       <Compile Update="Pages\Customizedflash.axaml.cs">
         <DependentUpon>Customizedflash.axaml</DependentUpon>
+      </Compile>
+      <Compile Update="Pages\FormatExtract.axaml.cs">
+        <DependentUpon>FormatExtract.axaml</DependentUpon>
+      </Compile>
+      <Compile Update="Pages\Modifypartition.axaml.cs">
+        <DependentUpon>Modifypartition.axaml</DependentUpon>
+      </Compile>
+      <Compile Update="Pages\Scrcpy.axaml.cs">
+        <DependentUpon>Scrcpy.axaml</DependentUpon>
       </Compile>
       <Compile Update="Pages\Wiredflash.axaml.cs">
         <DependentUpon>Wiredflash.axaml</DependentUpon>

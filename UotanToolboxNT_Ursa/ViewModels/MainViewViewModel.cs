@@ -35,6 +35,9 @@ public partial class MainViewViewModel : ViewModelBase
             MenuKeys.MenuKeyAppmgr => new AppmgrViewModel(),
             MenuKeys.MenuKeyWiredflash => new WiredflashViewModel(),
             MenuKeys.MenuKeyCustomizedflash => new CustomizedflashViewModel(),
+            MenuKeys.MenuKeyScrcpy => new ScrcpyViewModel(),
+            MenuKeys.MenuKeyFormatExtract => new FormatExtractViewModel(),
+            MenuKeys.MenuKeyModifypartition => new ModifypartitionViewModel(),
             MenuKeys.MenuKeyGlobalLog => new GlobalLogViewModel(),
             MenuKeys.MenuKeySettings => new SettingsViewModel(),
             _ => throw new ArgumentOutOfRangeException(nameof(s), s, null)

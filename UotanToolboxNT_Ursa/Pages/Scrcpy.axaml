@@ -1,0 +1,428 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:assets="clr-namespace:UotanToolboxNT_Ursa.Assets"
+			 xmlns:vm="using:UotanToolboxNT_Ursa.ViewModels"
+             xmlns:collections="clr-namespace:Avalonia.Collections;assembly=Avalonia.Base"
+			 xmlns:controls="clr-namespace:UotanToolboxNT_Ursa.Controls"
+             xmlns:iri="https://irihi.tech/shared"
+			 xmlns:u="https://irihi.tech/ursa"
+             mc:Ignorable="d" d:DesignWidth="980" d:DesignHeight="830"
+             Background="{DynamicResource PageBackground}"
+             x:Class="UotanToolboxNT_Ursa.Pages.Scrcpy"
+			 x:DataType="vm:ScrcpyViewModel">
+
+     <ScrollViewer VerticalScrollBarVisibility="Hidden">
+            <StackPanel>
+				<u:LoadingContainer
+							Margin="5"
+							IsLoading=""
+							LoadingMessage="{DynamicResource Scrcpy_Casting}">
+					<Border Width="960"
+							CornerRadius="15"
+							Theme="{StaticResource CardBorder}">
+						<StackPanel>
+							<avalonia:MaterialIcon Width="30"
+                                                   Height="30"
+                                                   Margin="10"
+                                                   HorizontalAlignment="Center"
+                                                   Foreground="{DynamicResource SukiPrimaryColor}"
+                                                   Kind="CellphoneLink" />
+							<TextBlock Margin="0,5,0,27"
+                                       HorizontalAlignment="Center"
+                                       FontSize="18"
+                                       FontWeight="DemiBold"
+                                       Text="{DynamicResource Scrcpy_ScrcpyCastingTool}" />
+							<TextBlock Margin="6,0,0,3"
+                                       FontWeight="DemiBold"
+                                       Text="{DynamicResource Scrcpy_WindowTitle}" />
+							<TextBox Margin="0,0,0,25"
+									 Classes="Bordered"
+                                     Text=""
+                                     Watermark="{DynamicResource Scrcpy_FillInWantedTitle}" />
+							<Button MinWidth="150"
+                                    Height="40"
+                                    Margin="0,0,0,7"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Bottom"
+								    Theme="{DynamicResource OutlineButton}"
+                                    Classes="Flat Rounded"
+                                    Command=""
+                                    FontWeight="DemiBold"
+                                    Content="{DynamicResource Scrcpy_StartCasting}">
+							</Button>
+						</StackPanel>
+					</Border>
+				</u:LoadingContainer>
+
+				<StackPanel Orientation="Horizontal">
+					<Border Width="480"
+							Margin="10"
+							CornerRadius="15"
+							Theme="{StaticResource CardBorder}">
+						<StackPanel>
+							<TextBlock HorizontalAlignment="Left"
+									   VerticalAlignment="Top"
+									   FontWeight="DemiBold"
+									   Text="{DynamicResource Scrcpy_TransmitAndRecord}" />
+							<StackPanel Margin="0,15,0,0" Orientation="Horizontal">
+								<TextBlock Width="90"
+										   Margin="8,0,0,0"
+										   VerticalAlignment="Center"
+										   FontSize="13"
+										   Foreground="{DynamicResource SukiLowText}"
+										   Text="{DynamicResource Scrcpy_RecordScreen}" />
+								<ToggleSwitch Margin="255,0,0,0" IsChecked="" />
+							</StackPanel>
+							<StackPanel Margin="0,5,0,0" Orientation="Horizontal">
+								<TextBlock Width="60"
+										   Margin="8,0,0,0"
+										   VerticalAlignment="Center"
+										   FontSize="13"
+										   Foreground="{DynamicResource SukiLowText}"
+										   Text="{DynamicResource Scrcpy_Folder}" />
+								<TextBox Width="250" Classes="Bordered"
+										 Watermark="{DynamicResource Scrcpy_RecordDictionary}"
+										 Text=""
+										 />
+								<Button Height="35"
+										Margin="5 0 0 0"
+										Padding="10,0,10,0"
+										
+										Content="{DynamicResource Common_ChooseFolder}">
+								</Button>
+							</StackPanel>
+							<StackPanel Orientation="Horizontal">
+								<TextBlock Width="60"
+										   Margin="8,0,0,0"
+										   VerticalAlignment="Center"
+										   FontSize="13"
+										   Foreground="{DynamicResource SukiLowText}"
+										   Text="{DynamicResource Scrcpy_Bitrate}" />
+								<Slider Width="300" IsSnapToTickEnabled="True" Maximum="50" Minimum="0" TickFrequency="1"
+										Value="" VerticalAlignment="Center">
+								</Slider>
+								<TextBox Width="60"
+										 Classes="Bordered"
+										 TextAlignment="Center"
+										 VerticalAlignment="Center"
+										 FontWeight="DemiBold"
+										 Text="" />
+							</StackPanel>
+							<StackPanel Orientation="Horizontal">
+								<TextBlock Width="60"
+										   Margin="8,0,0,0"
+										   VerticalAlignment="Center"
+										   FontSize="13"
+										   Foreground="{DynamicResource SukiLowText}"
+										   Text="{DynamicResource Scrcpy_MaxFps}" />
+								<Slider Width="300" IsSnapToTickEnabled="True" Maximum="144" Minimum="0" TickFrequency="1"
+										Value="" VerticalAlignment="Center">
+								</Slider>
+								<TextBox Width="60"
+										 Classes="Bordered"
+										 TextAlignment="Center"
+										 VerticalAlignment="Center"
+										 FontWeight="DemiBold"
+										 Text="" />
+							</StackPanel>
+							<StackPanel Orientation="Horizontal">
+								<TextBlock Width="60"
+										   Margin="8,0,0,0"
+										   VerticalAlignment="Center"
+										   FontSize="13"
+										   Foreground="{DynamicResource SukiLowText}"
+										   Text="{DynamicResource Scrcpy_ProportionalScaling}" />
+								<Slider Width="300" IsSnapToTickEnabled="True" Maximum="2048" Minimum="0" TickFrequency="1"
+										Value="" VerticalAlignment="Center">
+								</Slider>
+								<TextBox Width="60"
+										 Classes="Bordered"
+										 TextAlignment="Center"
+										 VerticalAlignment="Center"
+										 FontWeight="DemiBold"
+										 Text="" />
+							</StackPanel>
+						</StackPanel>
+					</Border>
+
+					<Border Width="460"
+							Margin="10"
+							CornerRadius="15"
+							Theme="{StaticResource CardBorder}">
+						<StackPanel>
+							<TextBlock HorizontalAlignment="Left"
+									   VerticalAlignment="Top"
+									   FontWeight="DemiBold"
+									   Text="{DynamicResource Scrcpy_MoreSettings}" />
+							<StackPanel Margin="0,8,0,0" Orientation="Horizontal">
+								<StackPanel Margin="40,0,0,0">
+									<StackPanel Margin="0,5,0,0" Orientation="Horizontal">
+										<CheckBox IsChecked="{Binding WindowFixed}" />
+										<TextBlock Margin="8,0,0,0"
+												   VerticalAlignment="Center"
+												   FontSize="13"
+												   Foreground="{DynamicResource SukiLowText}"
+												   Text="{DynamicResource Scrcpy_WindowTopping}" />
+									</StackPanel>
+									<StackPanel Margin="0,5,0,0" Orientation="Horizontal">
+										<CheckBox IsChecked="{Binding ComputerControl}" />
+										<TextBlock Margin="8,0,0,0"
+												   VerticalAlignment="Center"
+												   FontSize="13"
+												   Foreground="{DynamicResource SukiLowText}"
+												   Text="{DynamicResource Scrcpy_ComputerControl}" />
+									</StackPanel>
+									<StackPanel Margin="0,5,0,0" Orientation="Horizontal">
+										<CheckBox IsChecked="{Binding FullScreen}" />
+										<TextBlock Margin="8,0,0,0"
+												   VerticalAlignment="Center"
+												   FontSize="13"
+												   Foreground="{DynamicResource SukiLowText}"
+												   Text="{DynamicResource Scrcpy_Fullscreen}" />
+									</StackPanel>
+									<StackPanel Margin="0,5,0,0" Orientation="Horizontal">
+										<CheckBox IsChecked="{Binding ShowBorder}" />
+										<TextBlock Margin="8,0,0,0"
+												   VerticalAlignment="Center"
+												   FontSize="13"
+												   Foreground="{DynamicResource SukiLowText}"
+												   Text="{DynamicResource Scrcpy_ShowBorder}" />
+									</StackPanel>
+									<StackPanel Margin="0,5,0,0" Orientation="Horizontal">
+										<CheckBox IsChecked="{Binding ShowTouch}" />
+										<TextBlock Margin="8,0,0,0"
+												   VerticalAlignment="Center"
+												   FontSize="13"
+												   Foreground="{DynamicResource SukiLowText}"
+												   Text="{DynamicResource Scrcpy_ShowTouch}" />
+									</StackPanel>
+									<StackPanel Margin="0,5,0,0" Orientation="Horizontal">
+										<CheckBox IsChecked="{Binding CloseScreen}" />
+										<TextBlock Margin="8,0,0,0"
+												   VerticalAlignment="Center"
+												   FontSize="13"
+												   Foreground="{DynamicResource SukiLowText}"
+												   Text="{DynamicResource Scrcpy_CloseScreenWhenCasting}" />
+									</StackPanel>
+									<StackPanel Margin="0,5,0,0" Orientation="Horizontal">
+										<CheckBox IsChecked="{Binding ScreenAwake}" IsEnabled="{Binding ScreenAwakeStatus}" />
+										<TextBlock Margin="8,0,0,0"
+												   VerticalAlignment="Center"
+												   FontSize="13"
+												   Foreground="{DynamicResource SukiLowText}"
+												   Text="{DynamicResource Scrcpy_CloseScreenlock}" />
+									</StackPanel>
+									<StackPanel Margin="0,5,0,0" Orientation="Horizontal">
+										<CheckBox IsChecked="{Binding ClipboardSync}" />
+										<TextBlock Margin="8,0,0,0"
+												   VerticalAlignment="Center"
+												   FontSize="13"
+												   Foreground="{DynamicResource SukiLowText}"
+												   Text="{DynamicResource Scrcpy_ClipboardSync}" />
+									</StackPanel>
+									<StackPanel Margin="0,5,0,0" Orientation="Horizontal">
+										<CheckBox IsChecked="{Binding CameraMirror}" />
+										<TextBlock Margin="8,0,0,0"
+												   VerticalAlignment="Center"
+												   FontSize="13"
+												   Foreground="{DynamicResource SukiLowText}"
+												   Text="{DynamicResource Scrcpy_CameraMirror}" />
+									</StackPanel>
+								</StackPanel>
+								<StackPanel Margin="80,0,0,0">
+									<StackPanel Margin="0,5,0,0" Orientation="Horizontal">
+										<CheckBox IsChecked="{Binding ForwardAudio}" />
+										<TextBlock Margin="8,0,0,0"
+                                                   VerticalAlignment="Center"
+                                                   FontSize="13"
+                                                   Foreground="{DynamicResource SukiLowText}"
+                                                   Text="{DynamicResource Scrcpy_ForwardAudio}" />
+									</StackPanel>
+									<StackPanel Margin="0,5,0,0" Orientation="Horizontal">
+										<CheckBox IsChecked="{Binding MirrorRotation}" />
+										<TextBlock Margin="8,0,0,0"
+												   VerticalAlignment="Center"
+												   FontSize="13"
+												   Foreground="{DynamicResource SukiLowText}"
+												   Text="{DynamicResource Scrcpy_MirrorRotation}" />
+									</StackPanel>
+									<StackPanel Margin="0,5,0,0" Orientation="Horizontal">
+										<CheckBox IsChecked="{Binding LockAngle}" />
+										<TextBlock Margin="8,0,0,0"
+												   VerticalAlignment="Center"
+												   FontSize="13"
+												   Foreground="{DynamicResource SukiLowText}"
+												   Text="{DynamicResource Scrcpy_LockAngle}" />
+									</StackPanel>
+									<StackPanel Spacing="5" Margin="0,5,0,0">
+										<RadioButton FontSize="13"
+													 Content="{DynamicResource Scrcpy_NormalRotation}"
+													 GroupName="RotationContent"
+													 IsChecked="{Binding Rotation0}" />
+										<RadioButton FontSize="13" Content="90°" GroupName="RotationContent"
+													 IsChecked="{Binding Rotation1}" />
+										<RadioButton FontSize="13" Content="180°" GroupName="RotationContent"
+													 IsChecked="{Binding Rotation2}" />
+										<RadioButton FontSize="13" Content="270°" GroupName="RotationContent"
+													 IsChecked="{Binding Rotation3}" />
+										<StackPanel Margin="0,0,0,0" Orientation="Horizontal">
+											<RadioButton FontSize="13" GroupName="RotationContent"
+														 IsChecked="{Binding Rotation4}" />
+											<NumericUpDown Value="{Binding Angle}" />
+										</StackPanel>
+									</StackPanel>
+								</StackPanel>
+							</StackPanel>
+						</StackPanel>
+					</Border>
+				</StackPanel>
+
+				<StackPanel Orientation="Horizontal">
+					<Border Width="480"
+							Margin="10"
+							CornerRadius="15"
+							Theme="{StaticResource CardBorder}">
+						<StackPanel>
+							<TextBlock HorizontalAlignment="Left"
+									   VerticalAlignment="Top"
+									   FontWeight="DemiBold"
+									   Text="{DynamicResource Scrcpy_VirtualDisplay}" />
+							<StackPanel Margin="0,15,0,0" Orientation="Horizontal">
+								<TextBlock Width="150"
+										   Margin="8,0,0,0"
+										   VerticalAlignment="Center"
+										   FontSize="13"
+										   Foreground="{DynamicResource SukiLowText}"
+										   Text="{DynamicResource Scrcpy_Enable_Virtual_Screen}" />
+								<ToggleSwitch Margin="215,0,0,0" IsChecked="{Binding EnableVirtualScreen}" />
+							</StackPanel>
+							<StackPanel Margin="0,5,0,0" Orientation="Horizontal">
+								<TextBlock Width="90"
+										   Margin="8,0,0,0"
+										   VerticalAlignment="Center"
+										   FontSize="13"
+										   Foreground="{DynamicResource SukiLowText}"
+										   Text="{DynamicResource Scrcpy_Virtual_Screen_Package}" />
+								<TextBox Width="330" Classes="Bordered"
+										 Text="{Binding VirtualScreenPackage, Mode=TwoWay}"
+										 />
+							</StackPanel>
+							<StackPanel Margin="0,5,0,0" Orientation="Horizontal">
+								<TextBlock Width="90"
+										   Margin="8,0,0,0"
+										   VerticalAlignment="Center"
+										   FontSize="13"
+										   Foreground="{DynamicResource SukiLowText}"
+										   Text="{DynamicResource Scrcpy_VS_DisplaySize}" />
+								<TextBox Width="330" Classes="Bordered"
+										 Watermark="{DynamicResource Scrcpy_VS_DisplaySizeExample}"
+										 Text="{Binding VirtualScreenDisplaySize, Mode=TwoWay}"
+										 />
+							</StackPanel>
+						</StackPanel>
+					</Border>
+
+					<Border Width="460"
+							Margin="10"
+							CornerRadius="15"
+							Theme="{StaticResource CardBorder}">
+						<StackPanel>
+							<TextBlock HorizontalAlignment="Left"
+									   FontWeight="DemiBold"
+									   Text="{DynamicResource Home_ButtonAnalog}" />
+							<StackPanel Margin="0 30" Orientation="Vertical" HorizontalAlignment="Center"
+										VerticalAlignment="Center" Spacing="20">
+								<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="5">
+									<Button Width="100"
+											HorizontalAlignment="Left"
+											Padding="8"
+											Theme="{DynamicResource OutlineButton}"
+											Command="">
+										<TextBlock>
+											<avalonia:MaterialIcon Kind="ArrowBack" />
+											<TextBlock FontSize="13" Text="{DynamicResource Home_BackButton}" />
+										</TextBlock>
+									</Button>
+									<Button Width="100"
+											HorizontalAlignment="Left"
+											Padding="8"
+											Theme="{DynamicResource OutlineButton}"
+											Command="">
+										<TextBlock>
+											<avalonia:MaterialIcon Kind="CircleOutline" />
+											<TextBlock Text="{DynamicResource Home_HomeButton}" />
+										</TextBlock>
+									</Button>
+									<Button Width="100"
+											HorizontalAlignment="Left"
+											Padding="8"
+											Theme="{DynamicResource OutlineButton}"
+											Command="">
+										<TextBlock>
+											<avalonia:MaterialIcon Kind="CardMultipleOutline" />
+											<TextBlock FontSize="13" Text="{DynamicResource Home_MultiTask}" />
+										</TextBlock>
+									</Button>
+									<Button Width="100"
+											HorizontalAlignment="Left"
+											Padding="8"
+											Theme="{DynamicResource OutlineButton}"
+											Command="">
+										<TextBlock>
+											<avalonia:MaterialIcon Kind="LockOpenOutline" />
+											<TextBlock FontSize="13" Text="{DynamicResource Home_LockScreen}" />
+										</TextBlock>
+									</Button>
+								</StackPanel>
+								<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="5">
+									<Button Width="100"
+											HorizontalAlignment="Left"
+											Padding="8"
+											Theme="{DynamicResource OutlineButton}"
+											Command="">
+										<TextBlock>
+											<avalonia:MaterialIcon Kind="VolumePlus" />
+											<TextBlock FontSize="13" Text="{DynamicResource Home_VolumeUp}" />
+										</TextBlock>
+									</Button>
+									<Button Width="100"
+											HorizontalAlignment="Left"
+											Padding="8"
+											Theme="{DynamicResource OutlineButton}"
+											Command="">
+										<TextBlock>
+											<avalonia:MaterialIcon Kind="VolumeDecrease" />
+											<TextBlock FontSize="13" Text="{DynamicResource Home_VolumeDown}" />
+										</TextBlock>
+									</Button>
+									<Button Width="100"
+											HorizontalAlignment="Left"
+											Padding="8"
+											Theme="{DynamicResource OutlineButton}"
+											Command="">
+										<TextBlock>
+											<avalonia:MaterialIcon Kind="VolumeOff" />
+											<TextBlock FontSize="13" Text="{DynamicResource Home_VolumeMute}" />
+										</TextBlock>
+									</Button>
+									<Button Width="100"
+											HorizontalAlignment="Left"
+											Padding="8"
+											Theme="{DynamicResource OutlineButton}"
+											Command="">
+										<TextBlock>
+											<avalonia:MaterialIcon Kind="CameraOutline" />
+											<TextBlock FontSize="13" Text="{DynamicResource Home_Screenshot}" />
+										</TextBlock>
+									</Button>
+								</StackPanel>
+							</StackPanel>
+						</StackPanel>
+					</Border>
+				</StackPanel>
+            </StackPanel>
+        </ScrollViewer>
+</UserControl>
