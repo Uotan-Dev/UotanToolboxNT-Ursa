@@ -542,18 +542,15 @@ public class AdbDevice : DeviceBase
             var receiver = new AdvancedSharpAdbClient.Receivers.ConsoleOutputReceiver();
             Global.AdbClient.ExecuteRemoteCommand("cat /proc/cpuinfo", _deviceData, receiver);
             var cpuInfo = receiver.ToString().Trim();
-            AddLog(cpuInfo);
             if (!string.IsNullOrEmpty(cpuInfo))
             {
                 var lines = cpuInfo.Split('\n');
                 foreach (var line in lines)
                 {
                     var trimmedLine = line.Trim();
-                    AddLog(trimmedLine);
                     if (trimmedLine.StartsWith("model name"))
                     {
                         var parts = trimmedLine.Split(':', 2);
-                        AddLog(parts[1]);
                         if (parts.Length == 2)
                         {
                             return parts[1].Trim();

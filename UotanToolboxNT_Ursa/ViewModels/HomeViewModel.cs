@@ -5,6 +5,7 @@ using Avalonia.Collections;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using UotanToolboxNT_Ursa.Models;
+using static UotanToolboxNT_Ursa.Models.GlobalLogModel;
 
 namespace UotanToolboxNT_Ursa.ViewModels;
 
@@ -44,12 +45,12 @@ public partial class HomeViewModel : ObservableObject
                 }
                 catch (Exception ex)
                 {
-                    GlobalLogModel.AddLog($"初始化设备信息失败: {ex.Message}", GlobalLogModel.LogLevel.Warning);
+                    AddLog($"初始化设备信息失败: {ex.Message}", LogLevel.Warning);
                 }
             });
         }
 
-        GlobalLogModel.UpdateHardwareInfoCards();
+        UpdateHardwareInfoCards();
     }
 
     /// <summary>
@@ -67,7 +68,7 @@ public partial class HomeViewModel : ObservableObject
             }
             catch (Exception ex)
             {
-                GlobalLogModel.AddLog($"刷新设备信息失败: {ex.Message}", GlobalLogModel.LogLevel.Warning);
+                AddLog($"刷新设备信息失败: {ex.Message}", LogLevel.Warning);
             }
         });
     }
@@ -244,7 +245,7 @@ public partial class HomeViewModel : ObservableObject
             }
             catch (Exception ex)
             {
-                GlobalLogModel.AddLog($"切换设备失败: {ex.Message}", GlobalLogModel.LogLevel.Error);
+                AddLog($"切换设备失败: {ex.Message}", LogLevel.Error);
             }
         });
     }
@@ -269,15 +270,15 @@ public partial class HomeViewModel : ObservableObject
                 }
                 catch (Exception ex)
                 {
-                    GlobalLogModel.AddLog($"刷新设备详细信息失败: {ex.Message}", GlobalLogModel.LogLevel.Warning);
+                    AddLog($"刷新设备详细信息失败: {ex.Message}", LogLevel.Warning);
                 }
             });
 
-            GlobalLogModel.UpdateHardwareInfoCards();
+            UpdateHardwareInfoCards();
         }
         catch (Exception ex)
         {
-            GlobalLogModel.AddLog($"扫描设备失败: {ex.Message}", GlobalLogModel.LogLevel.Error);
+            AddLog($"扫描设备失败: {ex.Message}", LogLevel.Error);
         }
         finally
         {
