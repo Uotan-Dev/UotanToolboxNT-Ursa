@@ -1,6 +1,7 @@
 ﻿using Avalonia.Controls;
 
 namespace UotanToolboxNT_Ursa.Helper;
+
 internal class LanguageResourceHelper
 {
     public static T GetLanguageResource<T>(string name)

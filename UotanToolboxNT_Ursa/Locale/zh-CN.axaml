@@ -28,6 +28,8 @@
 <x:String x:Key="Home_FlashType">闪存类型</x:String>
 <x:String x:Key="Home_HomeButton">主页</x:String>
 <x:String x:Key="Sidebar_HomePage">主页</x:String>
+<x:String x:Key="Sidebar_Scrcpy">投屏工具</x:String>
+<x:String x:Key="Sidebar_GlobalLog">全局日志</x:String>
 <x:String x:Key="Home_KernalVersion">内核版本</x:String>
 <x:String x:Key="Home_LockScreen">锁屏</x:String>
 <x:String x:Key="Home_MotherboardID">主板 ID</x:String>

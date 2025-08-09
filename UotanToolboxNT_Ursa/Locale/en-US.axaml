@@ -27,6 +27,8 @@
 <x:String x:Key="Home_FlashType">Flash Type</x:String>
 <x:String x:Key="Home_HomeButton">Home</x:String>
 <x:String x:Key="Sidebar_HomePage">Home</x:String>
+<x:String x:Key="Sidebar_Scrcpy">Screen Cast</x:String>
+<x:String x:Key="Sidebar_GlobalLog">Global Log</x:String>
 <x:String x:Key="Home_KernalVersion">Kernel Version</x:String>
 <x:String x:Key="Home_LockScreen">Lock</x:String>
 <x:String x:Key="Home_MotherboardID">MotherboardID</x:String>

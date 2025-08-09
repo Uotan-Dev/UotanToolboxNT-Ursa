@@ -7,6 +7,7 @@ using UotanToolboxNT_Ursa.ViewModels;
 using UotanToolboxNT_Ursa.Views;
 
 namespace UotanToolboxNT_Ursa;
+
 public partial class App : Application
 {
     public override void Initialize() => AvaloniaXamlLoader.Load(this);

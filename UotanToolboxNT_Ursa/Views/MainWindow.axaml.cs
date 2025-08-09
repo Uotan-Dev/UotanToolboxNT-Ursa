@@ -5,6 +5,7 @@ using Irihi.Avalonia.Shared.Helpers;
 using Ursa.Controls;
 
 namespace UotanToolboxNT_Ursa.Views;
+
 public partial class MainWindow : UrsaWindow
 {
     public MainWindow()

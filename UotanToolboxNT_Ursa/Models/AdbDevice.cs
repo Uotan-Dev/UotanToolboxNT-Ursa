@@ -16,6 +16,7 @@ public class AdbDevice : DeviceBase
 {
     private readonly DeviceData _deviceData;
 
+    internal static readonly char[] Separator = ['\r', '\n'];
     public AdbDevice(DeviceData deviceData)
     {
         _deviceData = deviceData;
@@ -189,43 +190,27 @@ public class AdbDevice : DeviceBase
         try
         {
             var batteryResult = await ExecuteShellCommand("dumpsys battery");
-
             if (!string.IsNullOrEmpty(batteryResult))
             {
-                var lines = batteryResult.Split('\n');
-                string level = "0", status = "--", health = "--", temp = "--";
-
-                foreach (var line in lines)
+                var infos = new string[100];
+                var lines = batteryResult.Split(Separator, StringSplitOptions.RemoveEmptyEntries);
+                for (var i = 0; i < lines.Length; i++)
                 {
-                    var trimmedLine = line.Trim();
-                    if (trimmedLine.StartsWith("level:"))
+                    if (!lines[i].Contains("Max charging voltage") && !lines[i].Contains("Charger voltage"))
                     {
-                        level = trimmedLine.Split(':')[1].Trim();
-                    }
-                    else if (trimmedLine.StartsWith("status:"))
-                    {
-                        var statusCode = trimmedLine.Split(':')[1].Trim();
-                        status = ConvertBatteryStatus(statusCode);
-                    }
-                    else if (trimmedLine.StartsWith("health:"))
-                    {
-                        var healthCode = trimmedLine.Split(':')[1].Trim();
-                        health = ConvertBatteryHealth(healthCode);
-                    }
-                    else if (trimmedLine.StartsWith("temperature:"))
-                    {
-                        var tempValue = trimmedLine.Split(':')[1].Trim();
-                        if (int.TryParse(tempValue, out var tempInt))
+                        if (lines[i].Contains("level") || lines[i].Contains("voltage") || lines[i].Contains("temperature"))
                         {
-                            temp = $"{tempInt / 10.0:F1}°C";
+                            var device = lines[i].Split(' ', StringSplitOptions.RemoveEmptyEntries);
+                            infos[i] = device[^1];
                         }
                     }
                 }
+                infos = [.. infos.Where(s => !string.IsNullOrEmpty(s))];
 
-                BatteryLevel = level;
-                BatteryInfo = $"状态: {status}" + Environment.NewLine +
-                             $"温度: {temp}";
+                BatteryLevel = infos[0];
+                BatteryInfo = string.Format($"{double.Parse(infos[1]) / 1000.0}V {double.Parse(infos[2]) / 10.0}℃");
             }
+
         }
         catch (Exception ex)
         {
@@ -240,28 +225,23 @@ public class AdbDevice : DeviceBase
     {
         try
         {
-            var memResult = await ExecuteShellCommand("cat /proc/meminfo");
+            var memResult = await ExecuteShellCommand("cat /proc/meminfo | grep Mem");
             if (!string.IsNullOrEmpty(memResult))
             {
-                var memoryValues = ParseMemoryInfo(memResult);
-                // 确保有MemTotal值且能正确解析
-                if (memoryValues.Length >= 1 && !string.IsNullOrEmpty(memoryValues[0]) && 
-                    long.TryParse(memoryValues[0], out var memTotal) && memTotal > 0)
+                var infos = new string[20];
+                var lines = memResult.Split(Separator, StringSplitOptions.RemoveEmptyEntries);
+                for (var i = 0; i < lines.Length; i++)
                 {
-                    long memAvailable = 0;
-                    // 尝试获取MemAvailable，如果没有则设为0
-                    if (memoryValues.Length >= 2 && !string.IsNullOrEmpty(memoryValues[1]) && 
-                        long.TryParse(memoryValues[1], out var available))
+                    if (lines[i].Contains("MemTotal") || lines[i].Contains("MemAvailable"))
                     {
-                        memAvailable = available;
+                        var device = lines[i].Split(' ', StringSplitOptions.RemoveEmptyEntries);
+                        infos[i] = device[^2];
                     }
-
-                    var memUsed = memTotal - memAvailable;
-                    var usagePercent = (int)(memUsed * 100 / memTotal);
-
-                    MemoryUsage = $"{memUsed / 1024.0 / 1024.0:F1} GB/{memTotal / 1024.0 / 1024.0:F1} GB";
-                    MemoryLevel = usagePercent.ToString();
                 }
+                infos = [.. infos.Where(s => !string.IsNullOrEmpty(s))];
+                var use = double.Parse(infos[0]) - double.Parse(infos[1]);
+                MemoryLevel = Math.Round(Math.Round(use * 1.024 / 1000000, 1) / Math.Round(double.Parse(infos[0]) * 1.024 / 1000000) * 100).ToString();
+                MemoryUsage = string.Format($"{Math.Round(use * 1.024 / 1000000, 1)}GB/{Math.Round(double.Parse(infos[0]) * 1.024 / 1000000)}GB");
             }
         }
         catch (Exception ex)
@@ -271,95 +251,44 @@ public class AdbDevice : DeviceBase
     }
 
     /// <summary>
-    /// 解析内存信息，提取MemTotal和MemAvailable的数值
-    /// </summary>
-    /// <param name="info">内存信息字符串</param>
-    /// <returns>包含内存数值的数组，[0]为MemTotal，[1]为MemAvailable</returns>
-    private static string[] ParseMemoryInfo(string info)
-    {
-        var memTotal = "";
-        var memAvailable = "";
-        var lines = info.Split(['\n', '\r'], StringSplitOptions.RemoveEmptyEntries);
-        
-        foreach (var line in lines)
-        {
-            if (line.Contains("MemTotal:"))
-            {
-                var parts = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-                if (parts.Length >= 2)
-                {
-                    // 获取倒数第二个元素（数值部分）
-                    memTotal = parts[^2];
-                }
-            }
-            else if (line.Contains("MemAvailable:"))
-            {
-                var parts = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-                if (parts.Length >= 2)
-                {
-                    // 获取倒数第二个元素（数值部分）
-                    memAvailable = parts[^2];
-                }
-            }
-        }
-        
-        // 确保返回的数组顺序固定：[0]为MemTotal，[1]为MemAvailable
-        return [memTotal, memAvailable];
-    }
-
-    /// <summary>
     /// 刷新存储信息
     /// </summary>
     private async Task RefreshStorageInfoAsync()
     {
         try
         {
-            var dfResult = await ExecuteShellCommand("df /data");
+            var diskinfos1 = await ExecuteShellCommand("df /storage/emulated");
+            var diskinfos2 = await ExecuteShellCommand("df /data");
 
-            if (string.IsNullOrEmpty(dfResult) || !dfResult.Contains("/data"))
+            string[]? columns = null;
+
+            if (!string.IsNullOrEmpty(diskinfos1) && diskinfos1.Contains("/storage/emulated"))
             {
-                dfResult = await ExecuteShellCommand("df /storage/emulated");
-                if (string.IsNullOrEmpty(dfResult) || !dfResult.Contains("/storage"))
-                {
-                    dfResult = await ExecuteShellCommand("df /sdcard");
-                }
+                columns = ParseDiskInfo(diskinfos1, "/storage/emulated");
+            }
+            else if (!string.IsNullOrEmpty(diskinfos2) && diskinfos2.Contains("/sdcard"))
+            {
+                columns = ParseDiskInfo(diskinfos2, "/sdcard");
+            }
+            else if (!string.IsNullOrEmpty(diskinfos2) && diskinfos2.Contains("/data"))
+            {
+                columns = ParseDiskInfo(diskinfos2, "/data");
             }
 
-            if (!string.IsNullOrEmpty(dfResult))
+            if (columns != null && columns.Length >= 5)
             {
-                var lines = dfResult.Split('\n');
-                if (lines.Length > 1)
+                try
                 {
-                    for (var i = 1; i < lines.Length; i++)
-                    {
-                        var dataLine = lines[i].Trim();
-                        if (string.IsNullOrEmpty(dataLine))
-                        {
-                            continue;
-                        }
+                    var used = double.Parse(columns[2]);
+                    var total = double.Parse(columns[1]);
+                    var progressPercent = columns[4].TrimEnd('%');
 
-                        var parts = dataLine.Split([' ', '\t'], StringSplitOptions.RemoveEmptyEntries);
-                        if (parts.Length >= 5)
-                        {
-                            try
-                            {
-                                var total = long.Parse(parts[1]);
-                                var used = long.Parse(parts[2]);
-                                var usePercent = parts[4].Replace("%", "");
-
-                                var (totalFormatted, totalUnit) = FormatStorageSize(total * 1024);
-                                var (usedFormatted, usedUnit) = FormatStorageSize(used * 1024);
-
-                                DiskInfo = $"{usedFormatted:F1} {usedUnit}/{totalFormatted:F1} {totalUnit}";
-                                DiskProgress = usePercent;
-                                break;
-                            }
-                            catch
-                            {
-                                continue;
-                            }
-                        }
-                    }
+                    DiskInfo = $"{used / 1024 / 1024:0.00}GB/{total / 1024 / 1024:0.00}GB";
+                    DiskProgress = progressPercent;
+                }
+                catch (Exception ex)
+                {
+                    AddLog($"解析存储信息失败：{ex.Message}", LogLevel.Warning);
                 }
             }
         }
@@ -367,6 +296,25 @@ public class AdbDevice : DeviceBase
         {
             AddLog($"获取存储信息失败：{ex.Message}", LogLevel.Warning);
         }
+    }
+
+    /// <summary>
+    /// 解析磁盘信息
+    /// </summary>
+    /// <param name="info">df命令输出</param>
+    /// <param name="find">要查找的挂载点</param>
+    /// <returns>解析后的列数组</returns>
+    private static string[] ParseDiskInfo(string info, string find)
+    {
+        var lines = info.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries);
+        var targetLine = lines.FirstOrDefault(line => line.Contains(find));
+        if (targetLine != null)
+        {
+            var columns = targetLine.Split([' ', '\t'], StringSplitOptions.RemoveEmptyEntries);
+            return [.. columns.Where(s => !string.IsNullOrEmpty(s))];
+        }
+
+        return [];
     }
 
     /// <summary>
@@ -380,9 +328,9 @@ public class AdbDevice : DeviceBase
 
             if (!string.IsNullOrEmpty(uptimeResult))
             {
-                var uptimeSeconds = double.Parse(uptimeResult.Split(' ')[0]);
-                var uptime = TimeSpan.FromSeconds(uptimeSeconds);
-                PowerOnTime = $"{uptime.Days}天 {uptime.Hours}小时 {uptime.Minutes}分钟";
+                var intptime = int.Parse(uptimeResult.Split('.')[0].Trim());
+                var timeSpan = TimeSpan.FromSeconds(intptime);
+                PowerOnTime = $"{timeSpan.Days}d{timeSpan.Hours}h{timeSpan.Minutes}m{timeSpan.Seconds}s";
             }
         }
         catch (Exception ex)
@@ -642,74 +590,6 @@ public class AdbDevice : DeviceBase
         catch
         {
             return "--";
-        }
-    }
-
-    /// <summary>
-    /// 转换电池状态代码为可读文本
-    /// </summary>
-    private static string ConvertBatteryStatus(string statusCode)
-    {
-        return statusCode switch
-        {
-            "1" => "未知",
-            "2" => "充电中",
-            "3" => "放电中",
-            "4" => "未充电",
-            "5" => "已满",
-            _ => statusCode
-        };
-    }
-
-    /// <summary>
-    /// 转换电池健康状态代码为可读文本
-    /// </summary>
-    private static string ConvertBatteryHealth(string healthCode)
-    {
-        return healthCode switch
-        {
-            "1" => "未知",
-            "2" => "良好",
-            "3" => "过热",
-            "4" => "报废",
-            "5" => "过压",
-            "6" => "故障",
-            "7" => "低温",
-            _ => healthCode
-        };
-    }
-
-    /// <summary>
-    /// 格式化存储大小，自动选择合适的单位
-    /// </summary>
-    /// <param name="bytes">字节数</param>
-    /// <returns>格式化后的大小和单位</returns>
-    private static (double size, string unit) FormatStorageSize(long bytes)
-    {
-        const int kb = 1024;
-        const int mb = kb * 1024;
-        const int gb = mb * 1024;
-        const long tb = (long)gb * 1024;
-
-        if (bytes >= tb)
-        {
-            return ((double)bytes / tb, "TB");
-        }
-        else if (bytes >= gb)
-        {
-            return ((double)bytes / gb, "GB");
-        }
-        else if (bytes >= mb)
-        {
-            return ((double)bytes / mb, "MB");
-        }
-        else if (bytes >= kb)
-        {
-            return ((double)bytes / kb, "KB");
-        }
-        else
-        {
-            return (bytes, "B");
         }
     }
 

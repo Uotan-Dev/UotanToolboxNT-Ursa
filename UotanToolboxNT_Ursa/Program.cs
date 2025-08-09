@@ -2,6 +2,7 @@
 using Avalonia;
 
 namespace UotanToolboxNT_Ursa;
+
 internal sealed class Program
 {
     // Initialization code. Don't use any Avalonia, third-party APIs or any
