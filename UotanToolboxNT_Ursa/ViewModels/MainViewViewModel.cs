@@ -2,8 +2,8 @@
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
-using Ursa.Controls;
 using UotanToolboxNT_Ursa.Helper;
+using Ursa.Controls;
 
 namespace UotanToolboxNT_Ursa.ViewModels;
 
