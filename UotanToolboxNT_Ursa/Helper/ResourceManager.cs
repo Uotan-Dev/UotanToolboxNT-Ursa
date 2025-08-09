@@ -9,6 +9,16 @@ namespace UotanToolboxNT_Ursa.Helper;
 
 internal class ResourceManager
 {
+    /// <summary>
+    /// 语言变更事件
+    /// </summary>
+    public static event EventHandler<string>? LanguageChanged;
+
+    /// <summary>
+    /// 主题变更事件
+    /// </summary>
+    public static event EventHandler<string>? ThemeChanged;
+
     public static void ApplyLanguage(string language)
     {
         try
@@ -45,6 +55,8 @@ internal class ResourceManager
             app.Resources.MergedDictionaries.Add(tempDict);
             app.Resources.MergedDictionaries.Remove(tempDict);
 
+            // 触发语言变更事件
+            LanguageChanged?.Invoke(null, language);
         }
         catch (Exception ex)
         {
@@ -90,5 +102,8 @@ internal class ResourceManager
         {
             app.Resources.MergedDictionaries.Add(newTheme);
         }
+
+        // 触发主题变更事件
+        ThemeChanged?.Invoke(null, themeKey);
     }
 }
