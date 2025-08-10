@@ -45,10 +45,6 @@ internal class ResourceManager
             {
                 app.Resources.MergedDictionaries.Remove(existingLanguage);
             }
-            else
-            {
-                AddLog("ResourceManager.ApplyLanguage: No existing language resource found");
-            }
             app.Resources.MergedDictionaries.Add(newLanguage);
 
             var tempDict = new ResourceDictionary();
