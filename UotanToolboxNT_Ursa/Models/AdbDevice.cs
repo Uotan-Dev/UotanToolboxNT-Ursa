@@ -166,14 +166,14 @@ public class AdbDevice : DeviceBase
     /// <summary>
     /// 执行Shell命令
     /// </summary>
-    private async Task<string?> ExecuteShellCommand(string command)
+    private async Task<string?> ExecuteShellCommand(string command, bool cleanString = true)
     {
         try
         {
             var receiver = new AdvancedSharpAdbClient.Receivers.ConsoleOutputReceiver();
             await Task.Run(() => Global.AdbClient.ExecuteRemoteCommand(command, _deviceData, receiver));
             var result = receiver.ToString().Trim();
-            return CleanString(result);
+            return cleanString ? CleanString(result) : result;
         }
         catch (Exception ex)
         {
@@ -189,7 +189,7 @@ public class AdbDevice : DeviceBase
     {
         try
         {
-            var batteryResult = await ExecuteShellCommand("dumpsys battery");
+            var batteryResult = await ExecuteShellCommand("dumpsys battery", false);
             if (!string.IsNullOrEmpty(batteryResult))
             {
                 var infos = new string[100];
@@ -209,6 +209,7 @@ public class AdbDevice : DeviceBase
 
                 BatteryLevel = infos[0];
                 BatteryInfo = string.Format($"{double.Parse(infos[1]) / 1000.0}V {double.Parse(infos[2]) / 10.0}℃");
+                //AddLog($"电池信息：{BatteryInfo}，电量：{BatteryLevel}%", LogLevel.Info);
             }
 
         }
@@ -225,7 +226,7 @@ public class AdbDevice : DeviceBase
     {
         try
         {
-            var memResult = await ExecuteShellCommand("cat /proc/meminfo | grep Mem");
+            var memResult = await ExecuteShellCommand("cat /proc/meminfo | grep Mem", false);
             if (!string.IsNullOrEmpty(memResult))
             {
                 var infos = new string[20];
@@ -257,8 +258,8 @@ public class AdbDevice : DeviceBase
     {
         try
         {
-            var diskinfos1 = await ExecuteShellCommand("df /storage/emulated");
-            var diskinfos2 = await ExecuteShellCommand("df /data");
+            var diskinfos1 = await ExecuteShellCommand("df /storage/emulated", false);
+            var diskinfos2 = await ExecuteShellCommand("df /data", false);
 
             string[]? columns = null;
 
@@ -355,7 +356,6 @@ public class AdbDevice : DeviceBase
     {
         try
         {
-            // 根据MD文档，使用不同的命令获取不同类型的应用列表
             var command = thirdPartyOnly ? "pm list packages -3" : "pm list packages";
             var result = await ExecuteShellCommand(command);
 
@@ -567,20 +567,18 @@ public class AdbDevice : DeviceBase
     }
 
     /// <summary>
-    /// 获取主板ID（支持多种获取方式）
+    /// 获取主板ID
     /// </summary>
     private async Task<string> GetBoardIdAsync()
     {
         try
         {
-            // 方式1：获取设备序列号（Board ID）
             var serialNumber = await ExecuteShellCommand("cat /sys/devices/soc0/serial_number");
             if (!string.IsNullOrEmpty(serialNumber) && serialNumber != "--")
             {
                 return serialNumber;
             }
 
-            // 方式2：通过系统属性获取主板信息
             var boardProp = CleanString(await Global.AdbClient.GetPropertyAsync(_deviceData, "ro.product.board"));
             return boardProp;
         }
