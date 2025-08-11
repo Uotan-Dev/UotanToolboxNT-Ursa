@@ -32,11 +32,11 @@ internal class WaveProgressGradientOffsetConverter : IValueConverter
         {
             EndPoint = new RelativePoint(0.5, 1, RelativeUnit.Relative),
             StartPoint = new RelativePoint(0.5, 0, RelativeUnit.Relative),
-            GradientStops = new GradientStops()
-            {
+            GradientStops =
+            [
                 new() { Color = primaryColor, Offset = 0 },
                 new() { Color = Application.Current.RequestedThemeVariant == ThemeVariant.Light ? Colors.Transparent: accentColor, Offset = v }
-            }
+            ]
         };
     }
 

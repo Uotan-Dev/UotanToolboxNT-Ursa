@@ -20,7 +20,7 @@
 					
 					<u:LoadingContainer
 							Margin="5"
-							IsLoading=""
+							IsLoading="{Binding IsUnlockExecuting}"
 							LoadingMessage="{DynamicResource Basicflash_Executing}">
 						<Border Width="630"
 								Height="180"
@@ -34,10 +34,10 @@
 								<StackPanel Orientation="Vertical" Margin="10 10 0 0">
 									<StackPanel Orientation="Horizontal" Spacing="5">
 										<TextBlock Width="90" VerticalAlignment="Center" Text="{DynamicResource Basicflash_UnlockFileUnlock}"></TextBlock>
-										<TextBox Width="353" Classes="Bordered"/>
+										<TextBox Width="353" Classes="Bordered" Text="{Binding UnlockFilePath}"/>
 										<Button Width="115"
 												Height="35"
-												
+												Command="{Binding ChooseUnlockFileCommand}"
 												Theme="{DynamicResource OutlineButton}"
 												Content="{DynamicResource Common_ChooseFile}">
 										</Button>
@@ -45,12 +45,16 @@
 									<StackPanel Orientation="Vertical" Spacing="10">
 										<StackPanel Orientation="Horizontal" Spacing="5">
 											<TextBlock Width="90" VerticalAlignment="Center" Text="{DynamicResource Basicflash_CodeUnlock}"></TextBlock>
-											<ComboBox Width="130" Classes="Bordered"/>
-											<TextBox Margin="-5 0 0 0" Classes="Bordered" Width="348"/>
+											<ComboBox Width="130" Classes="Bordered" ItemsSource="{Binding UnlockCodeTypes}" SelectedItem="{Binding SelectedUnlockCodeType}"/>
+											<TextBox Margin="-5 0 0 0" Classes="Bordered" Width="348" Text="{Binding UnlockCode}"/>
 										</StackPanel>
 										<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="120">
-											<Button Theme="{DynamicResource OutlineButton}" Content="{DynamicResource Basicflash_UnlockNow}"></Button>
-											<Button Theme="{DynamicResource OutlineButton}" Content="{DynamicResource Basicflash_RelockBL}"></Button>
+											<Button Theme="{DynamicResource OutlineButton}" 
+													Content="{DynamicResource Basicflash_UnlockNow}"
+													Command="{Binding UnlockNowCommand}"></Button>
+											<Button Theme="{DynamicResource OutlineButton}" 
+													Content="{DynamicResource Basicflash_RelockBL}"
+													Command="{Binding RelockBootloaderCommand}"></Button>
 										</StackPanel>
 									</StackPanel>
 								</StackPanel>
@@ -60,7 +64,7 @@
 
 					<u:LoadingContainer
 							Margin="5"
-							IsLoading=""
+							IsLoading="{Binding IsBasicCommandExecuting}"
 							LoadingMessage="{DynamicResource Basicflash_Executing}">
 						<Border Width="310"
 								Height="180"
@@ -71,8 +75,11 @@
 											FontSize="15"
 											FontWeight="DemiBold"
 											Text="{DynamicResource Basicflash_BasicCommandUnlock}" />
-								<ComboBox Classes="Bordered" Width="220" Margin="25 10"/>
-								<Button Width="210" Theme="{DynamicResource OutlineButton}">
+								<ComboBox Classes="Bordered" Width="220" Margin="25 10" 
+										  ItemsSource="{Binding BasicCommands}" 
+										  SelectedItem="{Binding SelectedBasicCommand}"/>
+								<Button Width="210" Theme="{DynamicResource OutlineButton}"
+										Command="{Binding ExecuteUnlockCommandCommand}">
 									<TextBlock>
 										<avalonia:MaterialIcon Kind="Reload" />
 										<TextBlock Text="{DynamicResource Basicflash_ExecuteUnlockCommand}" />
@@ -86,7 +93,7 @@
 				<StackPanel Orientation="Horizontal">
 					<u:LoadingContainer
 							Margin="5"
-							IsLoading=""
+							IsLoading="{Binding IsRecoveryExecuting}"
 							LoadingMessage="{DynamicResource Basicflash_Executing}">
 						<Border Width="630"
 								Height="210"
@@ -99,8 +106,10 @@
 											Text="{DynamicResource Basicflash_FlashRecovery}" />
 								<StackPanel Orientation="Horizontal" Spacing="5" Margin="15 10 0 0">
 									<TextBlock VerticalAlignment="Center" Text="{DynamicResource Basicflash_ChooseRecovery}"></TextBlock>
-									<TextBox Width="355" Classes="Bordered"/>
-									<Button Height="35" Theme="{DynamicResource OutlineButton}" Content="{DynamicResource Common_ChooseFile}"></Button>
+									<TextBox Width="355" Classes="Bordered" Text="{Binding RecoveryFilePath}"/>
+									<Button Height="35" Theme="{DynamicResource OutlineButton}" 
+											Content="{DynamicResource Common_ChooseFile}"
+											Command="{Binding ChooseRecoveryFileCommand}"></Button>
 								</StackPanel>
 								<StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="15" Margin="0 10 0 0">
 									<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="25">
@@ -108,7 +117,7 @@
 												Theme="{DynamicResource OutlineButton}"
 												HorizontalAlignment="Left"
 												Padding="8"
-												>
+												Command="{Binding FlashRecoveryCommand}">
 											<TextBlock>
 												<avalonia:MaterialIcon Kind="Android" />
 												<TextBlock Text="{DynamicResource Basicflash_ToRecovery}" />
@@ -140,7 +149,7 @@
 												Theme="{DynamicResource OutlineButton}"
 												HorizontalAlignment="Left"
 												Padding="8"
-												>
+												Command="{Binding BootToBootAPartCommand}">
 											<TextBlock>
 												<avalonia:MaterialIcon Kind="ProgressDownload" />
 												<TextBlock Text="{DynamicResource Basicflash_TempBoot}" />
@@ -150,7 +159,7 @@
 												Theme="{DynamicResource OutlineButton}"
 												HorizontalAlignment="Left"
 												Padding="8"
-												>
+												Command="{Binding BootToBootAPartCommand}">
 											<TextBlock>
 												<avalonia:MaterialIcon Kind="ProgressDownload" />
 												<TextBlock Text="{DynamicResource Basicflash_ToBootAPart}" />
@@ -160,7 +169,7 @@
 												Theme="{DynamicResource OutlineButton}"
 												HorizontalAlignment="Left"
 												Padding="8"
-												>
+												Command="{Binding BootToBootBPartCommand}">
 											<TextBlock>
 												<avalonia:MaterialIcon Kind="ProgressDownload" />
 												<TextBlock Text="{DynamicResource Basicflash_ToBootBPart}" />
@@ -174,7 +183,7 @@
 
 					<u:LoadingContainer
 							Margin="5"
-							IsLoading=""
+							IsLoading="{Binding IsRebootExecuting}"
 							LoadingMessage="{DynamicResource Basicflash_Executing}">
 						<Border Width="310"
 								Height="210"
@@ -185,8 +194,11 @@
 											FontSize="15"
 											FontWeight="DemiBold"
 											Text="{DynamicResource Basicflash_MoreReboot}" />
-								<ComboBox Classes="Bordered" Width="220" Margin="25 10"/>
-								<Button Width="210" Theme="{DynamicResource OutlineButton}">
+								<ComboBox Classes="Bordered" Width="220" Margin="25 10"
+										  ItemsSource="{Binding RebootCommands}"
+										  SelectedItem="{Binding SelectedRebootCommand}"/>
+								<Button Width="210" Theme="{DynamicResource OutlineButton}"
+										Command="{Binding ExecuteRebootCommand}">
 									<TextBlock>
 										<avalonia:MaterialIcon Kind="Reload" />
 										<TextBlock Text="{DynamicResource Basicflash_ExecuteReboot}" />
@@ -199,7 +211,7 @@
 				<StackPanel Orientation="Horizontal">
 					<u:LoadingContainer
 							Margin="5"
-							IsLoading=""
+							IsLoading="{Binding IsBootRepairExecuting}"
 							LoadingMessage="{DynamicResource Basicflash_Executing}">
 						<Border Width="630"
 								Height="260"
@@ -213,28 +225,35 @@
 								<TextBlock HorizontalAlignment="Center" FontSize="12" Text="{DynamicResource Basicflash_MagiskOrKSU}"/>
 								<StackPanel Orientation="Horizontal" Spacing="5" Margin="15 0 0 0">
 									<TextBlock Width="60" VerticalAlignment="Center" Text="{DynamicResource Basicflash_ChooseMagisk}"></TextBlock>
-									<TextBox Width="385" Classes="Bordered"/>
-									<Button Height="35" Theme="{DynamicResource OutlineButton}" Content="{DynamicResource Common_ChooseFile}"></Button>
+									<TextBox Width="385" Classes="Bordered" Text="{Binding MagiskFilePath}"/>
+									<Button Height="35" Theme="{DynamicResource OutlineButton}" 
+											Content="{DynamicResource Common_ChooseFile}"
+											Command="{Binding ChooseMagiskFileCommand}"></Button>
 								</StackPanel>
 								<StackPanel Orientation="Horizontal" Spacing="5" Margin="15 5 0 0">
 									<TextBlock Width="60" VerticalAlignment="Center" Text="{DynamicResource Basicflash_ChooseBoot}"></TextBlock>
-									<TextBox Width="385" Classes="Bordered"/>
-									<Button Height="35" Theme="{DynamicResource OutlineButton}" Content="{DynamicResource Common_ChooseFile}"></Button>
+									<TextBox Width="385" Classes="Bordered" Text="{Binding BootFilePath}"/>
+									<Button Height="35" Theme="{DynamicResource OutlineButton}" 
+											Content="{DynamicResource Common_ChooseFile}"
+											Command="{Binding ChooseBootFileCommand}"></Button>
 								</StackPanel>
 								<StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="15,10,0,0" Spacing="5">
 									<StackPanel Orientation="Horizontal" Spacing="0">
-										<CheckBox Width="230" FontSize="13" Content="{DynamicResource Basicflash_KeepAVBOrDM}" IsChecked="True"/>
-										<CheckBox Width="180" FontSize="13" Content="{DynamicResource Basicflash_KeepStrongEncryption}" IsChecked="True"/>
-										<CheckBox Width="160" FontSize="13" Content="{DynamicResource Basicflash_RepairVbmeta}"/>
+										<CheckBox Width="230" FontSize="13" Content="{DynamicResource Basicflash_KeepAVBOrDM}" IsChecked="{Binding KeepAVBOrDM}"/>
+										<CheckBox Width="180" FontSize="13" Content="{DynamicResource Basicflash_KeepStrongEncryption}" IsChecked="{Binding KeepStrongEncryption}"/>
+										<CheckBox Width="160" FontSize="13" Content="{DynamicResource Basicflash_RepairVbmeta}" IsChecked="{Binding RepairVbmeta}"/>
 									</StackPanel>
 									<StackPanel Orientation="Horizontal" Spacing="0" Margin="0,0,0,0">
-										<CheckBox Width="230" FontSize="13" Content="{DynamicResource Basicflash_InstallToRecovery}"/>
-										<CheckBox Width="180" FontSize="13" Content="{DynamicResource Basicflash_ForceRootfs}" IsChecked="True"/>
-										<ComboBox Width="160" Classes="Bordered" Margin="-5 0 0 0"/>
+										<CheckBox Width="230" FontSize="13" Content="{DynamicResource Basicflash_InstallToRecovery}" IsChecked="{Binding InstallToRecovery}"/>
+										<CheckBox Width="180" FontSize="13" Content="{DynamicResource Basicflash_ForceRootfs}" IsChecked="{Binding ForceRootfs}"/>
+										<ComboBox Width="160" Classes="Bordered" Margin="-5 0 0 0" 
+												  ItemsSource="{Binding PatchMethods}"
+												  SelectedItem="{Binding SelectedPatchMethod}"/>
 									</StackPanel>
 								</StackPanel>
 								<StackPanel>
-									<Button Width="210" Margin="0,10,0,0" Theme="{DynamicResource OutlineButton}">
+									<Button Width="210" Margin="0,10,0,0" Theme="{DynamicResource OutlineButton}"
+											Command="{Binding StartBootRepairCommand}">
 										<TextBlock Text="{DynamicResource Basicflash_Start}"/>
 									</Button>
 								</StackPanel>
@@ -244,7 +263,7 @@
 
 					<u:LoadingContainer
 							Margin="5"
-							IsLoading=""
+							IsLoading="{Binding IsEasyFlashExecuting}"
 							LoadingMessage="{DynamicResource Basicflash_Executing}">
 						<Border Width="310"
 								Height="260"
@@ -256,13 +275,19 @@
 											FontWeight="DemiBold"
 											Text="{DynamicResource Basicflash_EasyFlash}" />
 								<StackPanel Spacing="20">
-									<Button Width="220" Theme="{DynamicResource OutlineButton}" Content="{DynamicResource Basicflash_FlashChosenMagisk}" />
-									<Button Width="220" Theme="{DynamicResource OutlineButton}" Content="{DynamicResource Basicflash_PreventRecoverOfficialRecovery}" />
-									<Button Width="220" Theme="{DynamicResource OutlineButton}" Content="{DynamicResource Basicflash_SyncABPart}" />
+									<Button Width="220" Theme="{DynamicResource OutlineButton}" 
+											Content="{DynamicResource Basicflash_FlashChosenMagisk}"
+											Command="{Binding FlashChosenMagiskCommand}" />
+									<Button Width="220" Theme="{DynamicResource OutlineButton}" 
+											Content="{DynamicResource Basicflash_PreventRecoverOfficialRecovery}"
+											Command="{Binding PreventRecoverOfficialRecoveryCommand}" />
+									<Button Width="220" Theme="{DynamicResource OutlineButton}" 
+											Content="{DynamicResource Basicflash_SyncABPart}"
+											Command="{Binding SyncABPartCommand}" />
 								</StackPanel>
 								<StackPanel Orientation="Horizontal" Spacing="10" Margin="20,5,0,0">
-									<RadioButton FontSize="13" Content="TWRP Install" GroupName="FormatContent" IsChecked="True"/>
-									<RadioButton FontSize="13" Content="ADB Sideload" GroupName="FormatContent"/>
+									<RadioButton FontSize="13" Content="TWRP Install" GroupName="FormatContent" IsChecked="{Binding IsTWRPInstall}"/>
+									<RadioButton FontSize="13" Content="ADB Sideload" GroupName="FormatContent" IsChecked="{Binding IsADBSideload}"/>
 								</StackPanel>
 							</StackPanel>
 						</Border>
