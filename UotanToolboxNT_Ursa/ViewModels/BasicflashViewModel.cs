@@ -74,9 +74,9 @@ public partial class BasicflashViewModel : ObservableObject
     private bool _forceRootfs = true;
 
     [ObservableProperty]
-    private string _selectedPatchMethod = string.Empty;
+    private string _selectedImageArchitecture = string.Empty;
 
-    public AvaloniaList<string> PatchMethods { get; } = [.. BasicflashModel.PatchMethods];
+    public AvaloniaList<string> ImageArchitectures { get; } = [.. BasicflashModel.ImageArchitectures];
 
     #endregion
 
@@ -130,9 +130,9 @@ public partial class BasicflashViewModel : ObservableObject
             SelectedRebootCommand = RebootCommands[0];
         }
 
-        if (PatchMethods.Count > 0)
+        if (ImageArchitectures.Count > 0)
         {
-            SelectedPatchMethod = PatchMethods[0];
+            SelectedImageArchitecture = ImageArchitectures[0];
         }
     }
 
@@ -528,7 +528,7 @@ public partial class BasicflashViewModel : ObservableObject
             AddLog($"修复Vbmeta: {RepairVbmeta}");
             AddLog($"安装到Recovery: {InstallToRecovery}");
             AddLog($"强制Rootfs: {ForceRootfs}");
-            AddLog($"补丁方法: {SelectedPatchMethod}");
+            AddLog($"镜像架构: {SelectedImageArchitecture}");
 
             // 这里添加实际的Boot修复逻辑
             await Task.Delay(5000); // 模拟执行时间

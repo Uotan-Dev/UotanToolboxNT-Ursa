@@ -57,9 +57,9 @@ public class BasicflashModel
     [JsonPropertyName("forceRootfs")]
     public bool ForceRootfs { get; set; } = true;
 
-    // 选择的补丁方法
-    [JsonPropertyName("selectedPatchMethod")]
-    public string SelectedPatchMethod { get; set; } = string.Empty;
+    // 选择的镜像架构
+    [JsonPropertyName("selectedImageArchitecture")]
+    public string SelectedImageArchitecture { get; set; } = string.Empty;
 
     // 是否选择TWRP安装
     [JsonPropertyName("isTWRPInstall")]
@@ -109,13 +109,13 @@ public class BasicflashModel
         "fastboot reboot emergency"
     ];
 
-    // 补丁方法列表
-    public static List<string> PatchMethods { get; } =
+    // 镜像架构列表
+    public static List<string> ImageArchitectures { get; } =
     [
-        "随机补丁",
-        "保持verity",
-        "保持加密",
-        "保持强制加密",
-        "保持调试"
+        "arm64-v8a",
+        "armeabi-v7a",
+        "x86_64",
+        "x86",
+        "自动检测"
     ];
 }

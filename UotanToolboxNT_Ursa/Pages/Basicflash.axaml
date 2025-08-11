@@ -247,8 +247,8 @@
 										<CheckBox Width="230" FontSize="13" Content="{DynamicResource Basicflash_InstallToRecovery}" IsChecked="{Binding InstallToRecovery}"/>
 										<CheckBox Width="180" FontSize="13" Content="{DynamicResource Basicflash_ForceRootfs}" IsChecked="{Binding ForceRootfs}"/>
 										<ComboBox Width="160" Classes="Bordered" Margin="-5 0 0 0" 
-												  ItemsSource="{Binding PatchMethods}"
-												  SelectedItem="{Binding SelectedPatchMethod}"/>
+												  ItemsSource="{Binding ImageArchitectures}"
+												  SelectedItem="{Binding SelectedImageArchitecture}"/>
 									</StackPanel>
 								</StackPanel>
 								<StackPanel>
