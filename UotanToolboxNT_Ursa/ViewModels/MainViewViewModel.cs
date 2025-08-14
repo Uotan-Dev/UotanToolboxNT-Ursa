@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
 using UotanToolboxNT_Ursa.Helper;
+using UotanToolboxNT_Ursa.Models;
 using Ursa.Controls;
 
 namespace UotanToolboxNT_Ursa.ViewModels;
 
 public partial class MainViewViewModel : ViewModelBase, IDisposable
 {
-    [ObservableProperty] private string _status = "--", _codeName = "--", _bLStatus = "--", _vABStatus = "--";
+    [ObservableProperty] private string _status = "--", _codeName = "--", _blStatus = "--", _vabStatus = "--";
     public WindowNotificationManager? NotificationManager { get; set; }
     public MenuViewModel Menus { get; set; } = new MenuViewModel();
 
@@ -28,6 +30,13 @@ public partial class MainViewViewModel : ViewModelBase, IDisposable
         // 订阅资源变更事件以刷新菜单项
         ResourceManager.LanguageChanged += OnLanguageChanged;
         ResourceManager.ThemeChanged += OnThemeChanged;
+
+        // 订阅设备变化事件以更新设备状态信息
+        Global.DeviceManager.CurrentDeviceChanged += OnCurrentDeviceChanged;
+
+        // 初始化设备状态信息
+        // 立即更新当前设备状态
+        _ = UpdateDeviceStatusInfoAsync();
     }
 
     /// <summary>
@@ -41,8 +50,39 @@ public partial class MainViewViewModel : ViewModelBase, IDisposable
     /// </summary>
     private void OnThemeChanged(object? sender, string theme) => Menus.RefreshMenuItems();
 
-    private void OnNavigation(MainViewViewModel vm, string s)
+    /// <summary>
+    /// 当前设备变化事件处理
+    /// </summary>
+    private async void OnCurrentDeviceChanged(object? sender, DeviceChangedEventArgs e) =>
+        await UpdateDeviceStatusInfoAsync();
+
+    /// <summary>
+    /// 更新设备状态信息
+    /// </summary>
+    private async Task UpdateDeviceStatusInfoAsync()
     {
+        var currentDevice = Global.DeviceManager.CurrentDevice;
+
+        if (currentDevice != null)
+        {
+            // 强制刷新设备信息以获取最新数据
+            await currentDevice.RefreshDeviceInfoAsync();
+
+            Status = currentDevice.Status;
+            CodeName = currentDevice.CodeName;
+            BlStatus = currentDevice.BootloaderStatus;
+            VabStatus = currentDevice.VABStatus;
+        }
+        else
+        {
+            Status = "--";
+            CodeName = "--";
+            BlStatus = "--";
+            VabStatus = "--";
+        }
+    }
+
+    private void OnNavigation(MainViewViewModel vm, string s) =>
         Content = s switch
         {
             MenuKeys.MenuKeyHome => new HomeViewModel(),
@@ -57,7 +97,6 @@ public partial class MainViewViewModel : ViewModelBase, IDisposable
             MenuKeys.MenuKeySettings => new SettingsViewModel(),
             _ => throw new ArgumentOutOfRangeException(nameof(s), s, null)
         };
-    }
 
     public ObservableCollection<MenuItemViewModel> MenuItems { get; set; } = [];
 
@@ -68,6 +107,7 @@ public partial class MainViewViewModel : ViewModelBase, IDisposable
     {
         ResourceManager.LanguageChanged -= OnLanguageChanged;
         ResourceManager.ThemeChanged -= OnThemeChanged;
+        Global.DeviceManager.CurrentDeviceChanged -= OnCurrentDeviceChanged;
         GC.SuppressFinalize(this);
     }
 }

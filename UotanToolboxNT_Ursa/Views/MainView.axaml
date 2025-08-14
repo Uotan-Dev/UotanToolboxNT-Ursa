@@ -84,7 +84,7 @@
                                                     Classes="Underline"
                                                     Foreground="Red"
                                                     FontSize="13"
-                                                    Content="{Binding BLStatus, Mode=TwoWay}"/>
+                                                    Content="{Binding BlStatus, Mode=TwoWay}"/>
                                         </StackPanel>
                                     </Grid>
                                     <Grid>
@@ -96,7 +96,7 @@
                                                     Classes="Underline"
                                                     Foreground="Red"
                                                     FontSize="13"
-                                                    Content="{Binding VABStatus, Mode=TwoWay}"/>
+                                                    Content="{Binding VabStatus, Mode=TwoWay}"/>
                                         </StackPanel>
                                     </Grid>
                                 </StackPanel>
