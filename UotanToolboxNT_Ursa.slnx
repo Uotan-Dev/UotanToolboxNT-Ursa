@@ -1,3 +1,6 @@
 <Solution>
-  <Project Path="UotanToolboxNT_Ursa/UotanToolboxNT_Ursa.csproj" />
+  <Project Path="SpraseImg/SpraseImg.csproj" />
+  <Project Path="UotanToolboxNT_Ursa/UotanToolboxNT_Ursa.csproj">
+    <BuildDependency Project="SpraseImg/SpraseImg.csproj" />
+  </Project>
 </Solution>

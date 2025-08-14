@@ -20,6 +20,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <AvaloniaXaml Remove="Services\**" />
+    <Compile Remove="Services\**" />
+    <EmbeddedResource Remove="Services\**" />
+    <None Remove="Services\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <AvaloniaXaml Remove="Assets\en-US.axaml" />
     <AvaloniaXaml Remove="Assets\zh-CN.axaml" />
   </ItemGroup>
@@ -90,9 +97,5 @@
 		</AvaloniaResource>
 		<AvaloniaResource Include="Themes\DarkColors.axaml" />
 		<AvaloniaResource Include="Themes\LightColors.axaml" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Services\" />
 	</ItemGroup>
 </Project>
