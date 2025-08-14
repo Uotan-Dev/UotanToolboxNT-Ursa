@@ -58,6 +58,23 @@ public partial class HomeViewModel : ObservableObject
     /// </summary>
     private async void OnCurrentDeviceChanged(object? sender, DeviceChangedEventArgs e)
     {
+        // 更新下拉框选中项
+        if (e.NewDevice != null)
+        {
+            var currentDeviceDisplay = $"{e.NewDevice.SerialNumber} ({e.NewDevice.Mode})";
+            if (SimpleContent.Contains(currentDeviceDisplay))
+            {
+                SelectedSimpleContent = currentDeviceDisplay;
+            }
+        }
+        else
+        {
+            if (SimpleContent.Count > 0 && SimpleContent[0] == "无设备连接")
+            {
+                SelectedSimpleContent = "无设备连接";
+            }
+        }
+
         await UpdateDeviceDisplayAsync(refreshDeviceInfo: false);
 
         _ = Task.Run(async () =>
@@ -194,6 +211,7 @@ public partial class HomeViewModel : ObservableObject
                 SimpleContent.Add(deviceDisplayName);
             }
 
+            // 先检查是否有当前设备，如果有则选中它
             if (Global.DeviceManager.CurrentDevice != null)
             {
                 var currentDeviceDisplay = $"{Global.DeviceManager.CurrentDevice.SerialNumber} ({Global.DeviceManager.CurrentDevice.Mode})";
@@ -201,10 +219,34 @@ public partial class HomeViewModel : ObservableObject
                 {
                     SelectedSimpleContent = currentDeviceDisplay;
                 }
+                else
+                {
+                    // 当前设备不在列表中，选择第一个设备
+                    SelectedSimpleContent = SimpleContent[0];
+                }
             }
             else if (SimpleContent.Count > 0)
             {
+                // 没有当前设备，自动选择第一个设备并设置为当前设备
                 SelectedSimpleContent = SimpleContent[0];
+                
+                // 解析第一个设备信息并设置为当前设备
+                var firstDeviceDisplay = SimpleContent[0];
+                var parts = firstDeviceDisplay.Split(" (");
+                if (parts.Length == 2)
+                {
+                    var serialNumber = parts[0];
+                    var modeStr = parts[1].TrimEnd(')');
+
+                    if (Enum.TryParse<DeviceMode>(modeStr, out var mode))
+                    {
+                        var firstDevice = devices.FirstOrDefault(d => d.SerialNumber == serialNumber && d.Mode == mode);
+                        if (firstDevice != null)
+                        {
+                            Global.DeviceManager.SetCurrentDevice(firstDevice);
+                        }
+                    }
+                }
             }
         }
         IsConnecting = false;
