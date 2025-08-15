@@ -21,6 +21,11 @@ public enum DeviceMode
     Fastboot,
 
     /// <summary>
+    /// Fastbootd模式
+    /// </summary>
+    Fastbootd,
+
+    /// <summary>
     /// EDL模式（Emergency Download）
     /// </summary>
     EDL,

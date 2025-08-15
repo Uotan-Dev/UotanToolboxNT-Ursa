@@ -33,23 +33,22 @@ public class FastbootDevice : DeviceBase
         {
             AddLog($"正在完整刷新Fastboot设备 {SerialNumber} 的信息...", LogLevel.Info);
 
-            // 获取设备变量
             var variables = await GetFastbootVariables();
-
-            // 更新设备信息
+            var isUserspace = variables.GetValueOrDefault("is-userspace", "no");
+            if (string.Equals(isUserspace, "yes", StringComparison.OrdinalIgnoreCase))
+            {
+                Mode = DeviceMode.Fastbootd;
+                Status = "Fastbootd";
+            }
             Brand = variables.GetValueOrDefault("product", "--");
             Model = variables.GetValueOrDefault("product", "--");
             CodeName = variables.GetValueOrDefault("product", "--");
             BootloaderStatus = variables.GetValueOrDefault("unlocked", "--");
             Platform = variables.GetValueOrDefault("platform", "--");
-
-            // Fastboot模式下的特殊信息
             VABStatus = variables.GetValueOrDefault("slot-count", "--");
             BoardID = variables.GetValueOrDefault("hw-revision", "--");
             SystemSDK = variables.GetValueOrDefault("version-baseband", "--");
             Compile = variables.GetValueOrDefault("version-bootloader", "--");
-
-            // 获取当前槽位信息
             var currentSlot = variables.GetValueOrDefault("current-slot", "--");
             if (currentSlot != "--")
             {
@@ -85,8 +84,13 @@ public class FastbootDevice : DeviceBase
         {
             AddLog($"正在增量刷新Fastboot设备 {SerialNumber} 的动态信息...", LogLevel.Debug);
 
-            // Fastboot模式下动态信息有限，主要是槽位状态可能会变化
             var variables = await GetFastbootVariables();
+            var isUserspace = variables.GetValueOrDefault("is-userspace", "no");
+            if (string.Equals(isUserspace, "yes", StringComparison.OrdinalIgnoreCase))
+            {
+                Mode = DeviceMode.Fastbootd;
+                Status = "Fastbootd";
+            }
             var currentSlot = variables.GetValueOrDefault("current-slot", "--");
             if (currentSlot != "--")
             {
@@ -113,33 +117,47 @@ public class FastbootDevice : DeviceBase
 
         try
         {
-            // 获取基本变量列表
             var variableNames = new[]
             {
                 "product", "version-bootloader", "version-baseband", "serialno",
                 "unlocked", "secure", "slot-count", "current-slot", "platform",
-                "hw-revision", "max-download-size", "partition-type", "has-slot"
+                "hw-revision", "max-download-size", "partition-type", "has-slot",
+                "is-userspace"
             };
 
             foreach (var varName in variableNames)
             {
                 var value = await ExecuteFastbootCommand($"getvar {varName}");
-                if (!string.IsNullOrEmpty(value))
+                if (string.IsNullOrEmpty(value))
                 {
-                    // Fastboot输出格式通常是 "varname: value"
-                    var lines = value.Split('\n');
-                    foreach (var line in lines)
+                    if (varName == "is-userspace")
                     {
-                        if (line.Contains($"{varName}:"))
-                        {
-                            var parts = line.Split(':');
-                            if (parts.Length >= 2)
-                            {
-                                variables[varName] = parts[1].Trim();
-                            }
-                            break;
-                        }
+                        variables[varName] = "no";
                     }
+                    continue;
+                }
+
+                var lines = value.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries);
+                var found = false;
+                foreach (var line in lines)
+                {
+                    if (line.Contains($"{varName}:", StringComparison.OrdinalIgnoreCase))
+                    {
+                        var parts = line.Split(':');
+                        if (parts.Length >= 2)
+                        {
+                            var parsed = parts[1].Trim();
+                            variables[varName] = varName == "is-userspace" ? string.Equals(parsed, "yes", StringComparison.OrdinalIgnoreCase) ? "yes" : "no" : parsed;
+                        }
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (!found && varName == "is-userspace")
+                {
+                    var trimmed = value.Trim();
+                    variables[varName] = string.Equals(trimmed, "yes", StringComparison.OrdinalIgnoreCase) ? "yes" : "no";
                 }
             }
         }
@@ -199,50 +217,73 @@ public class FastbootDevice : DeviceBase
     /// </summary>
     /// <param name="mode">目标模式</param>
     /// <returns></returns>
-    public override Task<bool> RebootToModeAsync(DeviceMode mode) => Task.FromResult(false);
-    // 等待重写具体逻辑
+    public override async Task<bool> RebootToModeAsync(DeviceMode mode)
+    {
+        try
+        {
+            if (mode is DeviceMode.Adb)
+            {
+                await ExecuteFastbootCommand("reboot");
+            }
+            else if (mode is DeviceMode.Recovery)
+            {
+
+                var output = await ExecuteFastbootCommand($"oem reboot-recovery");
+                if (output.Contains("unknown command"))
+                {
+                    await ExecuteFastbootCommand($"flash misc \"{Path.Combine(Global.ImageDirectory.FullName, "misc.img")}\"");
+                    await ExecuteFastbootCommand("reboot");
+                }
+                else
+                {
+                    await ExecuteFastbootCommand("reboot recovery");
+                }
+            }
+            else if (mode is DeviceMode.Fastboot or DeviceMode.Fastbootd)
+            {
+                await ExecuteFastbootCommand("reboot-fastboot");
+            }
+            else if (mode is DeviceMode.EDL)
+            {
+                await ExecuteFastbootCommand("oem edl");
+            }
+            else if (mode is DeviceMode.Sideload)
+            {
+                throw new ArgumentException($"不支持的重启模式: {mode}");
+            }
+
+            AddLog($"已向设备 {SerialNumber} 发送重启命令：{mode}", LogLevel.Info);
+            return true;
+        }
+        catch (Exception ex)
+        {
+            AddLog($"重启设备到模式 {mode} 失败：{ex.Message}", LogLevel.Error);
+            return false;
+        }
+    }
 
     /// <summary>
-    /// 关机（Fastboot模式下重启到系统）
+    /// 关机
     /// </summary>
     /// <returns></returns>
     public override async Task<bool> PowerOffAsync()
     {
         try
         {
-            await ExecuteFastbootCommand("reboot");
-            AddLog($"Fastboot设备 {SerialNumber} 正在重启到系统", LogLevel.Info);
+            var output = await ExecuteFastbootCommand("oem poweroff");
+            if (output.Contains("unknown command"))
+            {
+                AddLog($"不支持在Fastboot模式下关机", LogLevel.Error);
+                return false;
+            }
+            AddLog($"Fastboot设备 {SerialNumber} 正在关闭电源", LogLevel.Info);
             return true;
         }
         catch (Exception ex)
         {
-            AddLog($"Fastboot重启失败：{ex.Message}", LogLevel.Error);
+            AddLog($"Fastboot关机失败：{ex.Message}", LogLevel.Error);
             return false;
         }
-    }
-
-    /// <summary>
-    /// 获取设备支持的操作
-    /// </summary>
-    /// <returns></returns>
-    public override List<string> GetSupportedOperations()
-    {
-        return
-        [
-            "刷新设备信息",
-            "重启到系统",
-            "重启到Recovery",
-            "重启到Bootloader",
-            "重启到EDL",
-            "解锁Bootloader",
-            "锁定Bootloader",
-            "刷写分区",
-            "擦除分区",
-            "格式化分区",
-            "获取变量",
-            "设置变量",
-            "启动镜像"
-        ];
     }
 
     /// <summary>

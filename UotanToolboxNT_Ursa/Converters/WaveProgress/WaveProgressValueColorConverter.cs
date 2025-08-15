@@ -18,12 +18,9 @@ public class WaveProgressValueColorConverter : IValueConverter
             return Brushes.Black;
         }
 
-        if (d > 50)
-        {
-            return Brushes.GhostWhite;
-        }
-
-        return Application.Current?.ActualThemeVariant == ThemeVariant.Dark ? Brushes.GhostWhite : Brushes.Black;
+        return d > 50
+            ? Brushes.GhostWhite
+            : Application.Current?.ActualThemeVariant == ThemeVariant.Dark ? Brushes.GhostWhite : Brushes.Black;
     }
 
     public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) => throw new NotSupportedException();

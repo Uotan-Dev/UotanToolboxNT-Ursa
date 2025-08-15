@@ -35,7 +35,7 @@ public partial class MainViewViewModel : ViewModelBase, IDisposable
         Global.DeviceManager.CurrentDeviceChanged += OnCurrentDeviceChanged;
 
         // 初始化设备状态信息
-        // 立即更新当前设备状态
+        // 不立即更新当前设备状态来避免重复获取设备信息，此为调试用
         _ = UpdateDeviceStatusInfoAsync();
     }
 
@@ -65,7 +65,8 @@ public partial class MainViewViewModel : ViewModelBase, IDisposable
 
         if (currentDevice != null)
         {
-            // 强制刷新设备信息以获取最新数据
+            // 强制刷新设备信息以获取最新数据，否则无法获得除Status外的其他信息。但会导致二次刷新，暂时先这样吧
+
             await currentDevice.RefreshDeviceInfoAsync();
 
             Status = currentDevice.Status;

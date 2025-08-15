@@ -233,12 +233,6 @@ public abstract class DeviceBase
     public abstract Task<bool> PowerOffAsync();
 
     /// <summary>
-    /// 获取设备支持的操作
-    /// </summary>
-
-    public abstract List<string> GetSupportedOperations();
-
-    /// <summary>
     /// 检查设备连接状态
     /// </summary>
 

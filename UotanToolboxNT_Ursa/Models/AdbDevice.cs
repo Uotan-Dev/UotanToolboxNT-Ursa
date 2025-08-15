@@ -390,8 +390,9 @@ public class AdbDevice : DeviceBase
                 DeviceMode.EDL => "reboot edl",
                 DeviceMode.Sideload => "reboot sideload",
                 DeviceMode.Adb => "reboot",
+                DeviceMode.Fastbootd => "reboot fastboot",
                 DeviceMode.Unknown => throw new ArgumentException($"不支持的重启模式: {mode}"),
-                _ => throw new ArgumentException($"不支持的重启模式: {mode}")
+                _ => throw new ArgumentException($"未知的重启模式: {mode}")
             };
 
             await ExecuteShellCommand(command);
@@ -422,31 +423,6 @@ public class AdbDevice : DeviceBase
             AddLog($"关机失败：{ex.Message}", LogLevel.Error);
             return false;
         }
-    }
-
-    /// <summary>
-    /// 获取设备支持的操作
-    /// </summary>
-    /// <returns></returns>
-    public override List<string> GetSupportedOperations()
-    {
-        return
-        [
-            "刷新设备信息",
-            "获取应用列表",
-            "重启到系统",
-            "重启到Recovery",
-            "重启到Bootloader",
-            "重启到EDL",
-            "重启到Sideload",
-            "关机",
-            "安装应用",
-            "卸载应用",
-            "执行Shell命令",
-            "文件传输",
-            "截屏",
-            "录屏"
-        ];
     }
 
     /// <summary>
@@ -693,24 +669,6 @@ public class AdbDevice : DeviceBase
         catch
         {
             return "--";
-        }
-    }
-
-    /// <summary>
-    /// 截取屏幕截图并保存到设备
-    /// </summary>
-    /// <param name="fileName">文件名</param>
-    public async Task<bool> TakeScreenshotAsync(string fileName)
-    {
-        try
-        {
-            var result = await ExecuteShellCommand($"/system/bin/screencap -p /sdcard/{fileName}.png");
-            return string.IsNullOrEmpty(result); // 成功时通常没有输出
-        }
-        catch (Exception ex)
-        {
-            AddLog($"截图失败：{ex.Message}", LogLevel.Error);
-            return false;
         }
     }
 
