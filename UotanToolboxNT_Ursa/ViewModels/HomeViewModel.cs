@@ -1,10 +1,17 @@
 using System;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Avalonia.Collections;
+//using Avalonia.Controls.Notifications;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using UotanToolboxNT_Ursa.Models;
+using UotanToolboxNT_Ursa.Pages;
+using Ursa.Controls;
+using static UotanToolboxNT_Ursa.Helper.LanguageResourceHelper;
 using static UotanToolboxNT_Ursa.Models.GlobalLogModel;
 
 namespace UotanToolboxNT_Ursa.ViewModels;
@@ -229,7 +236,7 @@ public partial class HomeViewModel : ObservableObject
             {
                 // 没有当前设备，自动选择第一个设备并设置为当前设备
                 SelectedSimpleContent = SimpleContent[0];
-                
+
                 // 解析第一个设备信息并设置为当前设备
                 var firstDeviceDisplay = SimpleContent[0];
                 var parts = firstDeviceDisplay.Split(" (");
@@ -331,11 +338,39 @@ public partial class HomeViewModel : ObservableObject
     [RelayCommand]
     public async Task OpenAFDI()
     {
-        var device = Global.DeviceManager.CurrentDevice;
-        if (device != null && device.Mode == DeviceMode.Adb)
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
-            _ = await device.GetApplicationListAsync();
-            // TODO: 打开应用管理界面，显示应用列表
+            if (RuntimeInformation.OSArchitecture == Architecture.X64)
+            {
+                Process.Start(@"Drive\adb.exe");
+            }
+            else if (RuntimeInformation.OSArchitecture == Architecture.Arm64)
+            {
+                var drvpath = string.Format($"\"{Path.Combine(Global.DriveDirectory.FullName, "adb", "*.inf")}\"");
+                var shell = string.Format("/add-driver {0} /subdirs /install", drvpath);
+                var drvlog = await Pnputil(shell);
+                AddLog(drvlog);
+                if (drvlog.Contains(GetLanguageResource<string>("Basicflash_Success")))
+                {
+                    /*var options = new DialogOptions
+                    {
+                        Title = GetLanguageResource<string>("Common_InstallSuccess"),
+                        Mode = DialogMode.Error,
+                        Button = DialogButton.OK
+                    };
+                    await Dialog.ShowModal<Home, HomeViewModel>(new HomeViewModel(), options: options);
+                    Global.MainDialogManager.CreateDialog().WithTitle(GetLanguageResource<string>("Common_Succ")).OfType(NotificationType.Success).WithContent(GetLanguageResource<string>("Common_InstallSuccess")).Dismiss().ByClickingBackground().TryShow();
+                    */
+                }
+                else
+                {
+                    //Global.MainDialogManager.CreateDialog().WithTitle(GetLanguageResource<string>("Common_Error")).OfType(NotificationType.Error).WithContent(GetLanguageResource<string>("Common_InstallFailed")).Dismiss().ByClickingBackground().TryShow();
+                }
+            }
+        }
+        else
+        {
+            //Global.MainDialogManager.CreateDialog().WithTitle(GetLanguageResource<string>("Common_Error")).OfType(NotificationType.Error).WithContent(GetLanguageResource<string>("Basicflash_NotUsed")).Dismiss().ByClickingBackground().TryShow();
         }
     }
 
@@ -345,13 +380,22 @@ public partial class HomeViewModel : ObservableObject
         Task.CompletedTask;
 
     [RelayCommand]
-    public Task OpenUSBP() => Task.CompletedTask;
+    public async Task OpenUSBP()
+    {
+        var options = new DialogOptions
+        {
+            Title = GetLanguageResource<string>("Common_InstallSuccess"),
+            Mode = DialogMode.Error,
+            Button = DialogButton.OK
+        };
+        await Dialog.ShowModal<Home, HomeViewModel>(new HomeViewModel(), options: options);
+    }
 
 
     [RelayCommand]
     public Task OpenReUSBP() =>
-        // TODO: 重新枚举USB端口
-        Task.CompletedTask;
+// TODO: 重新枚举USB端口
+Task.CompletedTask;
 
     [RelayCommand]
     public async Task RebootSys()
@@ -389,7 +433,7 @@ public partial class HomeViewModel : ObservableObject
         var device = Global.DeviceManager.CurrentDevice;
         if (device != null)
         {
-            await device.RebootToModeAsync(DeviceMode.Fastboot);
+            await device.RebootToModeAsync(DeviceMode.Fastbootd);
         }
     }
 
@@ -411,5 +455,28 @@ public partial class HomeViewModel : ObservableObject
         {
             await device.RebootToModeAsync(DeviceMode.EDL);
         }
+    }
+
+    private static async Task<string> Pnputil(string shell)
+    {
+        var cmd = @"pnputil.exe";
+        var pnputil = new ProcessStartInfo(cmd, shell)
+        {
+            CreateNoWindow = true,
+            UseShellExecute = false,
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+            StandardOutputEncoding = System.Text.Encoding.UTF8,
+            StandardErrorEncoding = System.Text.Encoding.UTF8
+        };
+        using var pnp = new Process();
+        pnp.StartInfo = pnputil;
+        _ = pnp.Start();
+        var output = await pnp.StandardError.ReadToEndAsync();
+        if (output == "")
+        {
+            output = await pnp.StandardOutput.ReadToEndAsync();
+        }
+        return output;
     }
 }
