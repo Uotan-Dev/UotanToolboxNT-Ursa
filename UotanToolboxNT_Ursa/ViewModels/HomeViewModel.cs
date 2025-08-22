@@ -5,11 +5,9 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Avalonia.Collections;
-//using Avalonia.Controls.Notifications;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using UotanToolboxNT_Ursa.Models;
-using UotanToolboxNT_Ursa.Pages;
 using Ursa.Controls;
 using static UotanToolboxNT_Ursa.Helper.LanguageResourceHelper;
 using static UotanToolboxNT_Ursa.Models.GlobalLogModel;
@@ -352,50 +350,91 @@ public partial class HomeViewModel : ObservableObject
                 AddLog(drvlog);
                 if (drvlog.Contains(GetLanguageResource<string>("Basicflash_Success")))
                 {
-                    /*var options = new DialogOptions
-                    {
-                        Title = GetLanguageResource<string>("Common_InstallSuccess"),
-                        Mode = DialogMode.Error,
-                        Button = DialogButton.OK
-                    };
-                    await Dialog.ShowModal<Home, HomeViewModel>(new HomeViewModel(), options: options);
-                    Global.MainDialogManager.CreateDialog().WithTitle(GetLanguageResource<string>("Common_Succ")).OfType(NotificationType.Success).WithContent(GetLanguageResource<string>("Common_InstallSuccess")).Dismiss().ByClickingBackground().TryShow();
-                    */
+                    await MessageBox.ShowAsync(GetLanguageResource<string>("Common_InstallSuccess"), GetLanguageResource<string>("Common_Succ"), MessageBoxIcon.Success);
                 }
                 else
                 {
-                    //Global.MainDialogManager.CreateDialog().WithTitle(GetLanguageResource<string>("Common_Error")).OfType(NotificationType.Error).WithContent(GetLanguageResource<string>("Common_InstallFailed")).Dismiss().ByClickingBackground().TryShow();
+                    await MessageBox.ShowAsync(GetLanguageResource<string>("Common_InstallFailed"), GetLanguageResource<string>("Common_Error"), MessageBoxIcon.Warning);
                 }
             }
         }
         else
         {
-            //Global.MainDialogManager.CreateDialog().WithTitle(GetLanguageResource<string>("Common_Error")).OfType(NotificationType.Error).WithContent(GetLanguageResource<string>("Basicflash_NotUsed")).Dismiss().ByClickingBackground().TryShow();
+            await MessageBox.ShowAsync(GetLanguageResource<string>("Basicflash_NotUsed"), GetLanguageResource<string>("Common_Error"), MessageBoxIcon.Warning);
         }
     }
 
     [RelayCommand]
-    public Task Open9008DI() =>
-        // TODO: 处理9008模式设备信息
-        Task.CompletedTask;
+    public async Task Open9008DI()
+    {
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            if (RuntimeInformation.OSArchitecture == Architecture.X64)
+            {
+                Process.Start(@"Drive\Qualcomm_HS-USB_Driver.exe");
+            }
+            else if (RuntimeInformation.OSArchitecture == Architecture.Arm64)
+            {
+                var drvpath = string.Format($"\"{Path.Combine(Global.DriveDirectory.FullName, "9008", "*.inf")}\"");
+                var shell = string.Format("/add-driver {0} /subdirs /install", drvpath);
+                var drvlog = await Pnputil(shell);
+                AddLog(drvlog);
+                if (drvlog.Contains(GetLanguageResource<string>("Basicflash_Success")))
+                {
+                    await MessageBox.ShowAsync(GetLanguageResource<string>("Common_InstallSuccess"), GetLanguageResource<string>("Common_Succ"), MessageBoxIcon.Success);
+                }
+                else
+                {
+                    await MessageBox.ShowAsync(GetLanguageResource<string>("Common_InstallFailed"), GetLanguageResource<string>("Common_Error"), MessageBoxIcon.Warning);
+                }
+            }
+        }
+        else
+        {
+            await MessageBox.ShowAsync(GetLanguageResource<string>("Basicflash_NotUsed"), GetLanguageResource<string>("Common_Error"), MessageBoxIcon.Warning);
+        }
+    }
 
     [RelayCommand]
     public async Task OpenUSBP()
     {
-        var options = new DialogOptions
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
-            Title = GetLanguageResource<string>("Common_InstallSuccess"),
-            Mode = DialogMode.Error,
-            Button = DialogButton.OK
-        };
-        await Dialog.ShowModal<Home, HomeViewModel>(new HomeViewModel(), options: options);
+            var cmd = @"drive\USB3.bat";
+            var cmdshell = new ProcessStartInfo(cmd)
+            {
+                CreateNoWindow = true,
+                UseShellExecute = false
+            };
+            Process.Start(cmdshell);
+            await MessageBox.ShowAsync(GetLanguageResource<string>("Common_Execution"), GetLanguageResource<string>("Common_Execution"), MessageBoxIcon.Information);
+        }
+        else
+        {
+            await MessageBox.ShowAsync(GetLanguageResource<string>("Basicflash_NotUsed"), GetLanguageResource<string>("Common_Error"), MessageBoxIcon.Warning);
+        }
     }
 
 
     [RelayCommand]
-    public Task OpenReUSBP() =>
-// TODO: 重新枚举USB端口
-Task.CompletedTask;
+    public async Task OpenReUSBP()
+    {
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            var cmd = @"drive\ReUSB3.bat";
+            var cmdshell = new ProcessStartInfo(cmd)
+            {
+                CreateNoWindow = true,
+                UseShellExecute = false
+            };
+            Process.Start(cmdshell);
+            await MessageBox.ShowAsync(GetLanguageResource<string>("Common_Execution"), GetLanguageResource<string>("Common_Execution"), MessageBoxIcon.Information);
+        }
+        else
+        {
+            await MessageBox.ShowAsync(GetLanguageResource<string>("Basicflash_NotUsed"), GetLanguageResource<string>("Common_Error"), MessageBoxIcon.Warning);
+        }
+    }
 
     [RelayCommand]
     public async Task RebootSys()
