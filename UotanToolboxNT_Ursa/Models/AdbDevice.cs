@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AdvancedSharpAdbClient;
 using AdvancedSharpAdbClient.DeviceCommands;
 using AdvancedSharpAdbClient.Models;
+using UotanToolboxNT_Ursa.Helper;
 using static UotanToolboxNT_Ursa.Models.GlobalLogModel;
 
 namespace UotanToolboxNT_Ursa.Models;
@@ -15,7 +17,7 @@ namespace UotanToolboxNT_Ursa.Models;
 public class AdbDevice : DeviceBase
 {
     private readonly DeviceData _deviceData;
-
+    private static readonly char[] SeparatorArray = ['\r', '\n'];
     internal static readonly char[] Separator = ['\r', '\n'];
     public AdbDevice(DeviceData deviceData)
     {
@@ -33,6 +35,13 @@ public class AdbDevice : DeviceBase
     /// <returns>清理后的字符串</returns>
     private static string CleanString(string? input) =>
         string.IsNullOrEmpty(input) ? "--" : input.Replace("\r", "").Replace("\n", "").Trim();
+
+    /// <summary>
+    /// 获取翻译文本
+    /// </summary>
+    /// <param name="key">翻译键</param>
+    /// <returns>翻译后的文本</returns>
+    private static string GetTranslation(string key) => LanguageResourceHelper.GetLanguageResource<string>(key) ?? key;
 
     /// <summary>
     /// 刷新完整设备信息（所有属性）
@@ -345,26 +354,40 @@ public class AdbDevice : DeviceBase
     /// </summary>
     /// <param name="thirdPartyOnly">是否只获取第三方应用</param>
     /// <returns></returns>
-    public override async Task<List<string>> GetApplicationListAsync() => await GetApplicationListAsync(false);
+    public override async Task<List<ApplicationInfo>> GetApplicationListAsync() => await GetApplicationListAsync(false);
 
     /// <summary>
     /// 获取应用列表
     /// </summary>
     /// <param name="thirdPartyOnly">是否只获取第三方应用</param>
     /// <returns></returns>
-    public async Task<List<string>> GetApplicationListAsync(bool thirdPartyOnly)
+    public async Task<List<ApplicationInfo>> GetApplicationListAsync(bool thirdPartyOnly)
     {
         try
         {
+            await PushFileAsync(Path.Combine(Global.PushDirectory.FullName, "list_apps"), "/data/local/tmp/list_apps");
+            AddLog($"推送 list_apps 到设备 {SerialNumber} 的 /data/local/tmp/ 目录");
+            await ExecuteShellCommand("chmod 0777 /data/local/tmp/list_apps");
+            var full_lists = await ExecuteShellCommand("/data/local/tmp/list_apps");
+            AddLog(full_lists);
+            var applicationInfos = new List<ApplicationInfo>();
+            var lines = full_lists.Split(['\n'], StringSplitOptions.RemoveEmptyEntries);
+            foreach (var line in lines)
+            {
+                var parts = line.Split([' '], 3, StringSplitOptions.RemoveEmptyEntries);
+                if (parts.Length == 3)
+                {
+                    applicationInfos.Add(new ApplicationInfo
+                    {
+                        Name = parts[1],
+                        DisplayName = parts[2],
+                    });
+                }
+            }
+
             var command = thirdPartyOnly ? "pm list packages -3" : "pm list packages";
             var result = await ExecuteShellCommand(command);
-
-            if (!string.IsNullOrEmpty(result))
-            {
-                return [.. result.Split('\n')
-                    .Where(line => line.StartsWith("package:"))
-                    .Select(line => line.Replace("package:", "").Trim())];
-            }
+            return await ProcessAndroidApplications(applicationInfos, result);
         }
         catch (Exception ex)
         {
@@ -372,6 +395,46 @@ public class AdbDevice : DeviceBase
         }
 
         return [];
+    }
+
+    private async Task<List<ApplicationInfo>> ProcessAndroidApplications(List<ApplicationInfo> fullapplications, string fullApplicationsList)
+    {
+        var lines = fullApplicationsList.Split(SeparatorArray, StringSplitOptions.RemoveEmptyEntries);
+        var applicationInfosTasks = lines.Select(async line =>
+        {
+            var displayName = string.Empty;
+            var packageName = ExtractPackageName(line);
+            foreach (var app in fullapplications)
+            {
+                if (app.Name == packageName)
+                {
+                    displayName = app.DisplayName;
+                    break;
+                }
+            }
+
+            if (string.IsNullOrEmpty(packageName))
+            {
+                return null;
+            }
+            var combinedOutput = await ExecuteShellCommand($"dumpsys package {packageName}");
+            var splitOutput = combinedOutput.Split('\n', ' ');
+            var otherInfo = GetVersionName(splitOutput) + " | " + GetInstalledDate(splitOutput) + " | " + GetSdkVersion(splitOutput);
+
+            return new ApplicationInfo
+            {
+                Name = packageName,
+                DisplayName = RemoveLineFeed(displayName),
+                OtherInfo = otherInfo
+            };
+        });
+        var allApplicationInfos = await Task.WhenAll(applicationInfosTasks);
+        var processedApplications = allApplicationInfos.Where(info => info != null)
+                                                       .OrderByDescending(app => app.Size)
+                                                       .ThenBy(app => app.Name)
+                                                       .ToList();
+
+        return processedApplications;
     }
 
     /// <summary>
@@ -673,6 +736,201 @@ public class AdbDevice : DeviceBase
     }
 
     /// <summary>
+    /// 将本地文件推送到设备
+    /// </summary>
+    /// <param name="localFilePath">本地文件路径</param>
+    /// <param name="remoteFilePath">设备目标路径</param>
+    /// <returns>操作是否成功</returns>
+    public async Task<bool> PushFileAsync(string localFilePath, string remoteFilePath)
+    {
+        try
+        {
+            if (!IsConnected)
+            {
+                AddLog($"设备 {SerialNumber} 未连接，无法推送文件", LogLevel.Error);
+                return false;
+            }
+
+            if (!File.Exists(localFilePath))
+            {
+                AddLog($"本地文件不存在：{localFilePath}", LogLevel.Error);
+                return false;
+            }
+
+            AddLog($"正在将文件推送到设备 {SerialNumber}：{localFilePath} -> {remoteFilePath}", LogLevel.Info);
+
+            using var fileStream = File.OpenRead(localFilePath);
+            var syncService = new SyncService(Global.AdbClient, _deviceData);
+            await Task.Run(() => syncService.Push(fileStream, remoteFilePath,
+                UnixFileStatus.UserRead | UnixFileStatus.UserWrite | UnixFileStatus.GroupRead | UnixFileStatus.OtherRead,
+                DateTime.Now, null));
+
+            AddLog($"文件推送成功：{localFilePath} -> {remoteFilePath}", LogLevel.Info);
+            return true;
+        }
+        catch (Exception ex)
+        {
+            AddLog($"推送文件失败：{ex.Message}", LogLevel.Error);
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// 将设备文件拉取到本地
+    /// </summary>
+    /// <param name="remoteFilePath">设备文件路径</param>
+    /// <param name="localFilePath">本地目标路径</param>
+    /// <returns>操作是否成功</returns>
+    public async Task<bool> PullFileAsync(string remoteFilePath, string localFilePath)
+    {
+        try
+        {
+            if (!IsConnected)
+            {
+                AddLog($"设备 {SerialNumber} 未连接，无法拉取文件", LogLevel.Error);
+                return false;
+            }
+
+            // 确保本地目录存在
+            var localDirectory = Path.GetDirectoryName(localFilePath);
+            if (!string.IsNullOrEmpty(localDirectory) && !Directory.Exists(localDirectory))
+            {
+                Directory.CreateDirectory(localDirectory);
+            }
+
+            AddLog($"正在从设备 {SerialNumber} 拉取文件：{remoteFilePath} -> {localFilePath}", LogLevel.Info);
+
+            using var fileStream = File.Create(localFilePath);
+            var syncService = new SyncService(Global.AdbClient, _deviceData);
+            await Task.Run(() => syncService.Pull(remoteFilePath, fileStream, null));
+
+            AddLog($"文件拉取成功：{remoteFilePath} -> {localFilePath}", LogLevel.Info);
+            return true;
+        }
+        catch (Exception ex)
+        {
+            AddLog($"拉取文件失败：{ex.Message}", LogLevel.Error);
+
+            // 如果拉取失败，删除可能创建的空文件
+            try
+            {
+                if (File.Exists(localFilePath))
+                {
+                    File.Delete(localFilePath);
+                }
+            }
+            catch
+            {
+                // 忽略删除文件时的异常
+            }
+
+            return false;
+        }
+    }    /// <summary>
+         /// 推送多个文件到设备
+         /// </summary>
+         /// <param name="fileMap">文件映射字典 (本地路径 -> 设备路径)</param>
+         /// <returns>成功推送的文件数量</returns>
+    public async Task<int> PushMultipleFilesAsync(Dictionary<string, string> fileMap)
+    {
+        if (!IsConnected)
+        {
+            AddLog($"设备 {SerialNumber} 未连接，无法推送文件", LogLevel.Error);
+            return 0;
+        }
+
+        var successCount = 0;
+        AddLog($"开始批量推送 {fileMap.Count} 个文件到设备 {SerialNumber}", LogLevel.Info);
+
+        foreach (var kvp in fileMap)
+        {
+            if (await PushFileAsync(kvp.Key, kvp.Value))
+            {
+                successCount++;
+            }
+        }
+
+        AddLog($"批量推送完成，成功推送 {successCount}/{fileMap.Count} 个文件", LogLevel.Info);
+        return successCount;
+    }
+
+    /// <summary>
+    /// 拉取多个文件到本地
+    /// </summary>
+    /// <param name="fileMap">文件映射字典 (设备路径 -> 本地路径)</param>
+    /// <returns>成功拉取的文件数量</returns>
+    public async Task<int> PullMultipleFilesAsync(Dictionary<string, string> fileMap)
+    {
+        if (!IsConnected)
+        {
+            AddLog($"设备 {SerialNumber} 未连接，无法拉取文件", LogLevel.Error);
+            return 0;
+        }
+
+        var successCount = 0;
+        AddLog($"开始批量拉取 {fileMap.Count} 个文件从设备 {SerialNumber}", LogLevel.Info);
+
+        foreach (var kvp in fileMap)
+        {
+            if (await PullFileAsync(kvp.Key, kvp.Value))
+            {
+                successCount++;
+            }
+        }
+
+        AddLog($"批量拉取完成，成功拉取 {successCount}/{fileMap.Count} 个文件", LogLevel.Info);
+        return successCount;
+    }
+
+    /// <summary>
+    /// 检查设备上文件是否存在
+    /// </summary>
+    /// <param name="remoteFilePath">设备文件路径</param>
+    /// <returns>文件是否存在</returns>
+    public async Task<bool> FileExistsAsync(string remoteFilePath)
+    {
+        try
+        {
+            if (!IsConnected)
+            {
+                return false;
+            }
+
+            var result = await ExecuteShellCommand($"test -f '{remoteFilePath}' && echo 'exists' || echo 'not_exists'");
+            return result?.Trim() == "exists";
+        }
+        catch (Exception ex)
+        {
+            AddLog($"检查文件是否存在失败：{ex.Message}", LogLevel.Warning);
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// 获取设备文件大小
+    /// </summary>
+    /// <param name="remoteFilePath">设备文件路径</param>
+    /// <returns>文件大小（字节），如果文件不存在或获取失败返回-1</returns>
+    public async Task<long> GetFileSizeAsync(string remoteFilePath)
+    {
+        try
+        {
+            if (!IsConnected)
+            {
+                return -1;
+            }
+
+            var result = await ExecuteShellCommand($"stat -c %s '{remoteFilePath}'");
+            return long.TryParse(result?.Trim(), out var size) ? size : -1;
+        }
+        catch (Exception ex)
+        {
+            AddLog($"获取文件大小失败：{ex.Message}", LogLevel.Warning);
+            return -1;
+        }
+    }
+
+    /// <summary>
     /// 根据API级别获取Android版本代号
     /// </summary>
     /// <param name="apiLevel">API级别</param>
@@ -709,5 +967,63 @@ public class AdbDevice : DeviceBase
             _ when apiLevel > 36 => $"(API {apiLevel})",
             _ => $"(API {apiLevel})"
         };
+    }
+    private static string GetInstalledDate(string[] lines)
+    {
+        var installedDateLine = lines.FirstOrDefault(x => x.Contains("lastUpdateTime"));
+        if (installedDateLine != null)
+        {
+            var installedDate = installedDateLine[(installedDateLine.IndexOf('=') + 1)..].Trim();
+            return installedDate;
+        }
+        return GetTranslation("Appmgr_UnknownTime");
+    }
+
+    private static string GetSdkVersion(string[] lines)
+    {
+        var sdkVersion = lines.FirstOrDefault(x => x.Contains("targetSdk"));
+        if (sdkVersion != null)
+        {
+            var installedDate = "SDK" + sdkVersion[(sdkVersion.IndexOf('=') + 1)..].Trim();
+            return installedDate;
+        }
+        return GetTranslation("Appmgr_UnknownSDKVersion");
+    }
+
+    private static string GetVersionName(string[] lines)
+    {
+        var versionName = lines.FirstOrDefault(x => x.Contains("versionName"));
+        if (versionName != null)
+        {
+            var installedDate = versionName[(versionName.IndexOf('=') + 1)..].Trim();
+            return installedDate;
+        }
+        return GetTranslation("Appmgr_UnknownAppVersion");
+    }
+    private static string RemoveLineFeed(string str)
+    {
+        var lines = str.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries);
+        var result = string.Concat(lines);
+        if (result.Contains("FreeChannelContinue"))
+        {
+            result = lines[0];
+        }
+        return string.IsNullOrEmpty(result) || result.Contains("not found") || result.Contains("dialog on your device") || result.Contains("device offline") || result.Contains("closed") || result.Contains("fail!") || result.Contains("Fail") || result.Contains("unauthorized")
+                ? "--"
+                : result;
+    }
+    private static string? ExtractPackageName(string line)
+    {
+        var parts = line.Split(':');
+        if (parts.Length < 2)
+        {
+            return null;
+        }
+
+        var packageNamePart = parts[1];
+        var packageNameStartIndex = packageNamePart.LastIndexOf('/') + 1;
+        return packageNameStartIndex < packageNamePart.Length
+            ? packageNamePart[packageNameStartIndex..]
+            : null;
     }
 }

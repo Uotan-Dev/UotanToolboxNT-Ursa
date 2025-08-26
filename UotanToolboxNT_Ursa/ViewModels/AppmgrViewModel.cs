@@ -5,15 +5,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using UotanToolboxNT_Ursa.Models;
 using UotanToolboxNT_Ursa.Helper;
+using UotanToolboxNT_Ursa.Models;
+using static UotanToolboxNT_Ursa.Models.GlobalLogModel;
 
 namespace UotanToolboxNT_Ursa.ViewModels;
 
 public partial class AppmgrViewModel : ObservableObject
 {
-    #region 属性
-
     /// <summary>
     /// 应用程序列表
     /// </summary>
@@ -73,17 +72,8 @@ public partial class AppmgrViewModel : ObservableObject
     /// </summary>
     [ObservableProperty]
     private ApplicationInfo? _selectedApplication;
-
-    #endregion
-
-    #region 私有字段
-
     private ApplicationInfo[]? _allApplicationInfos;
     private List<ApplicationInfo>? _applicationInfos;
-
-    #endregion
-
-    #region 构造函数
 
     public AppmgrViewModel()
     {
@@ -93,10 +83,6 @@ public partial class AppmgrViewModel : ObservableObject
         // 监听搜索关键词变化
         PropertyChanged += OnPropertyChanged;
     }
-
-    #endregion
-
-    #region 私有方法
 
     /// <summary>
     /// 获取翻译文本
@@ -116,7 +102,6 @@ public partial class AppmgrViewModel : ObservableObject
         }
         else if (e.PropertyName == nameof(IsSystemAppDisplayed))
         {
-            // 重新获取应用列表
             _ = ConnectAsync();
         }
     }
@@ -150,47 +135,72 @@ public partial class AppmgrViewModel : ObservableObject
         }
     }
 
-    #endregion
-
-    #region 命令
-
     /// <summary>
     /// 连接设备并获取应用列表
     /// </summary>
     [RelayCommand]
     public async Task ConnectAsync()
     {
+        if (IsBusy)
+        {
+            return;
+        }
+
         IsBusy = true;
         SBoxEnabled = false;
-        SBoxWater = GetTranslation("Appmgr_SearchWait");
+        HasItems = false;
 
         try
         {
-            // 这里需要实现具体的设备连接和应用获取逻辑
-            // 模拟获取应用列表的过程
-            await Task.Delay(1000);
-
-            // 示例数据，实际实现需要调用设备API
-            var sampleApps = new List<ApplicationInfo>
+            var currentDevice = Global.DeviceManager.CurrentDevice;
+            if (currentDevice == null)
             {
-                new() { Name = "com.example.app1", DisplayName = "示例应用1", Size = "10MB", OtherInfo = "v1.0.0" },
-                new() { Name = "com.example.app2", DisplayName = "示例应用2", Size = "5MB", OtherInfo = "v2.1.0" }
-            };
+                AddLog("未连接设备", LogLevel.Warning);
+                Applications.Clear();
+                return;
+            }
 
-            _allApplicationInfos = [.. sampleApps];
-            _applicationInfos = sampleApps;
-            Applications = new ObservableCollection<ApplicationInfo>(sampleApps);
-            HasItems = sampleApps.Count > 0;
+            if (currentDevice is not AdbDevice adbDevice)
+            {
+                AddLog("当前设备不支持应用管理操作", LogLevel.Warning);
+                Applications.Clear();
+                return;
+            }
+
+            AddLog("正在获取应用列表...", LogLevel.Info);
+            var applicationList = await adbDevice.GetApplicationListAsync(!IsSystemAppDisplayed);
+
+            if (applicationList != null && applicationList.Count > 0)
+            {
+                _allApplicationInfos = [.. applicationList];
+                _applicationInfos = applicationList;
+
+                FilterApplications();
+
+                HasItems = Applications.Count > 0;
+                AddLog($"成功获取 {Applications.Count} 个应用", LogLevel.Info);
+            }
+            else
+            {
+                Applications.Clear();
+                _allApplicationInfos = null;
+                _applicationInfos = null;
+                HasItems = false;
+                AddLog("未找到任何应用", LogLevel.Warning);
+            }
         }
-        catch
+        catch (Exception ex)
         {
-            // 处理异常
+            AddLog($"获取应用列表时发生异常：{ex.Message}", LogLevel.Error);
+            Applications.Clear();
+            _allApplicationInfos = null;
+            _applicationInfos = null;
+            HasItems = false;
         }
         finally
         {
-            SBoxEnabled = true;
-            SBoxWater = GetTranslation("Appmgr_SearchApp");
             IsBusy = false;
+            SBoxEnabled = true;
         }
     }
 
@@ -229,7 +239,32 @@ public partial class AppmgrViewModel : ObservableObject
     /// 选择APK文件
     /// </summary>
     [RelayCommand]
-    public Task SelectApkFileAsync() => Task.CompletedTask;
+    public async Task SelectApkFileAsync()
+    {
+        try
+        {
+            if (FileSelectionHandler != null)
+            {
+                await FileSelectionHandler.Invoke();
+            }
+        }
+        catch (Exception ex)
+        {
+            AddLog($"选择应用时发生异常：{ex.Message}", LogLevel.Error);
+
+        }
+    }
+
+    /// <summary>
+    /// 文件选择处理委托
+    /// </summary>
+    public Func<Task>? FileSelectionHandler { get; set; }
+
+    /// <summary>
+    /// 设置选中的APK文件路径（由View调用）
+    /// </summary>
+    /// <param name="filePath">文件路径</param>
+    public void SetSelectedApkFile(string filePath) => ApkFile = filePath;
 
     /// <summary>
     /// 运行应用
@@ -239,17 +274,73 @@ public partial class AppmgrViewModel : ObservableObject
     {
         if (SelectedApplication == null)
         {
+            AddLog("未选择应用", LogLevel.Warning);
             return;
         }
 
         try
         {
-            // 实现运行应用的逻辑
-            await Task.Delay(500); // 模拟执行过程
+            var currentDevice = Global.DeviceManager.CurrentDevice;
+            if (currentDevice == null)
+            {
+                AddLog("未连接设备", LogLevel.Error);
+                return;
+            }
+
+            if (currentDevice is not AdbDevice adbDevice)
+            {
+                AddLog("当前设备不支持运行应用操作", LogLevel.Error);
+                return;
+            }
+
+            AddLog($"正在启动应用：{SelectedApplication.DisplayName ?? SelectedApplication.Name}", LogLevel.Info);
+
+            var deviceData = Global.AdbClient.GetDevices().FirstOrDefault(d => d.Serial == currentDevice.SerialNumber);
+            if (deviceData == null)
+            {
+                AddLog("无法获取设备信息", LogLevel.Error);
+                return;
+            }
+
+            var startCommand = $"am start -n {SelectedApplication.Name}/.MainActivity";
+            var result = await ExecuteAdbCommand(deviceData, startCommand);
+
+            if (string.IsNullOrEmpty(result) || result.Contains("Error") || result.Contains("does not exist"))
+            {
+                var launchCommand = $"monkey -p {SelectedApplication.Name} -c android.intent.category.LAUNCHER 1";
+                result = await ExecuteAdbCommand(deviceData, launchCommand);
+            }
+
+            if (!string.IsNullOrEmpty(result) && !result.Contains("Error"))
+            {
+                AddLog($"应用启动成功：{SelectedApplication.DisplayName ?? SelectedApplication.Name}", LogLevel.Info);
+            }
+            else
+            {
+                AddLog($"应用启动失败：{result}", LogLevel.Error);
+            }
         }
-        catch
+        catch (Exception ex)
         {
-            // 处理异常
+            AddLog($"启动应用时发生异常：{ex.Message}", LogLevel.Error);
+        }
+    }
+
+    /// <summary>
+    /// 执行ADB命令的辅助方法
+    /// </summary>
+    private static async Task<string> ExecuteAdbCommand(AdvancedSharpAdbClient.Models.DeviceData deviceData, string command)
+    {
+        try
+        {
+            var receiver = new AdvancedSharpAdbClient.Receivers.ConsoleOutputReceiver();
+            await Task.Run(() => Global.AdbClient.ExecuteRemoteCommand(command, deviceData, receiver, System.Text.Encoding.UTF8));
+            return receiver.ToString().Trim();
+        }
+        catch (Exception ex)
+        {
+            AddLog($"执行命令 '{command}' 失败：{ex.Message}", LogLevel.Warning);
+            return string.Empty;
         }
     }
 
@@ -261,17 +352,41 @@ public partial class AppmgrViewModel : ObservableObject
     {
         if (SelectedApplication == null)
         {
+            AddLog("未选择应用", LogLevel.Warning);
             return;
         }
 
         try
         {
-            // 实现强制停止应用的逻辑
-            await Task.Delay(500); // 模拟执行过程
+            var currentDevice = Global.DeviceManager.CurrentDevice;
+            if (currentDevice == null)
+            {
+                AddLog("未连接设备", LogLevel.Error);
+                return;
+            }
+
+            if (currentDevice is not AdbDevice)
+            {
+                AddLog("当前设备不支持强制停止应用操作", LogLevel.Error);
+                return;
+            }
+
+            AddLog($"正在强制停止应用：{SelectedApplication.DisplayName ?? SelectedApplication.Name}", LogLevel.Info);
+
+            var deviceData = Global.AdbClient.GetDevices().FirstOrDefault(d => d.Serial == currentDevice.SerialNumber);
+            if (deviceData == null)
+            {
+                AddLog("无法获取设备信息", LogLevel.Error);
+                return;
+            }
+            var stopCommand = $"am force-stop {SelectedApplication.Name}";
+            var result = await ExecuteAdbCommand(deviceData, stopCommand);
+
+            AddLog($"应用强制停止完成：{SelectedApplication.DisplayName ?? SelectedApplication.Name}", LogLevel.Info);
         }
-        catch
+        catch (Exception ex)
         {
-            // 处理异常
+            AddLog($"强制停止应用时发生异常：{ex.Message}", LogLevel.Error);
         }
     }
 
@@ -305,17 +420,49 @@ public partial class AppmgrViewModel : ObservableObject
     {
         if (SelectedApplication == null)
         {
+            AddLog("未选择应用", LogLevel.Warning);
             return;
         }
 
         try
         {
-            // 实现禁用应用的逻辑
-            await Task.Delay(500); // 模拟执行过程
+            var currentDevice = Global.DeviceManager.CurrentDevice;
+            if (currentDevice == null)
+            {
+                AddLog("未连接设备", LogLevel.Error);
+                return;
+            }
+
+            if (currentDevice is not AdbDevice)
+            {
+                AddLog("当前设备不支持禁用应用操作", LogLevel.Error);
+                return;
+            }
+
+            AddLog($"正在禁用应用：{SelectedApplication.DisplayName ?? SelectedApplication.Name}", LogLevel.Info);
+
+            var deviceData = Global.AdbClient.GetDevices().FirstOrDefault(d => d.Serial == currentDevice.SerialNumber);
+            if (deviceData == null)
+            {
+                AddLog("无法获取设备信息", LogLevel.Error);
+                return;
+            }
+
+            var disableCommand = $"pm disable-user --user 0 {SelectedApplication.Name}";
+            var result = await ExecuteAdbCommand(deviceData, disableCommand);
+
+            if (result.Contains("disabled"))
+            {
+                AddLog($"应用禁用成功：{SelectedApplication.DisplayName ?? SelectedApplication.Name}", LogLevel.Info);
+            }
+            else
+            {
+                AddLog($"应用禁用失败：{result}", LogLevel.Error);
+            }
         }
-        catch
+        catch (Exception ex)
         {
-            // 处理异常
+            AddLog($"禁用应用时发生异常：{ex.Message}", LogLevel.Error);
         }
     }
 
@@ -327,17 +474,49 @@ public partial class AppmgrViewModel : ObservableObject
     {
         if (SelectedApplication == null)
         {
+            AddLog("未选择应用", LogLevel.Warning);
             return;
         }
 
         try
         {
-            // 实现启用应用的逻辑
-            await Task.Delay(500); // 模拟执行过程
+            var currentDevice = Global.DeviceManager.CurrentDevice;
+            if (currentDevice == null)
+            {
+                AddLog("未连接设备", LogLevel.Error);
+                return;
+            }
+
+            if (currentDevice is not AdbDevice)
+            {
+                AddLog("当前设备不支持启用应用操作", LogLevel.Error);
+                return;
+            }
+
+            AddLog($"正在启用应用：{SelectedApplication.DisplayName ?? SelectedApplication.Name}", LogLevel.Info);
+
+            var deviceData = Global.AdbClient.GetDevices().FirstOrDefault(d => d.Serial == currentDevice.SerialNumber);
+            if (deviceData == null)
+            {
+                AddLog("无法获取设备信息", LogLevel.Error);
+                return;
+            }
+
+            var enableCommand = $"pm enable {SelectedApplication.Name}";
+            var result = await ExecuteAdbCommand(deviceData, enableCommand);
+
+            if (result.Contains("enabled"))
+            {
+                AddLog($"应用启用成功：{SelectedApplication.DisplayName ?? SelectedApplication.Name}", LogLevel.Info);
+            }
+            else
+            {
+                AddLog($"应用启用失败：{result}", LogLevel.Error);
+            }
         }
-        catch
+        catch (Exception ex)
         {
-            // 处理异常
+            AddLog($"启用应用时发生异常：{ex.Message}", LogLevel.Error);
         }
     }
 
@@ -421,19 +600,49 @@ public partial class AppmgrViewModel : ObservableObject
     {
         if (SelectedApplication == null)
         {
+            AddLog("未选择应用", LogLevel.Warning);
             return;
         }
 
         try
         {
-            // 实现清除应用数据的逻辑
-            await Task.Delay(500); // 模拟清除过程
+            var currentDevice = Global.DeviceManager.CurrentDevice;
+            if (currentDevice == null)
+            {
+                AddLog("未连接设备", LogLevel.Error);
+                return;
+            }
+
+            if (currentDevice is not AdbDevice)
+            {
+                AddLog("当前设备不支持清除应用数据操作", LogLevel.Error);
+                return;
+            }
+
+            AddLog($"正在清除应用数据：{SelectedApplication.DisplayName ?? SelectedApplication.Name}", LogLevel.Info);
+
+            var deviceData = Global.AdbClient.GetDevices().FirstOrDefault(d => d.Serial == currentDevice.SerialNumber);
+            if (deviceData == null)
+            {
+                AddLog("无法获取设备信息", LogLevel.Error);
+                return;
+            }
+
+            var clearCommand = $"pm clear {SelectedApplication.Name}";
+            var result = await ExecuteAdbCommand(deviceData, clearCommand);
+
+            if (result.Contains("Success"))
+            {
+                AddLog($"应用数据清除成功：{SelectedApplication.DisplayName ?? SelectedApplication.Name}", LogLevel.Info);
+            }
+            else
+            {
+                AddLog($"应用数据清除失败：{result}", LogLevel.Error);
+            }
         }
-        catch
+        catch (Exception ex)
         {
-            // 处理异常
+            AddLog($"清除应用数据时发生异常：{ex.Message}", LogLevel.Error);
         }
     }
-
-    #endregion
 }

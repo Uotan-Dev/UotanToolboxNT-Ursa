@@ -36,14 +36,17 @@ public partial class GlobalLogModel
 
     public static void AddLog(string message, LogLevel level = LogLevel.Info)
     {
-        var timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-        var logEntry = $"[{timestamp}] [{level}] {message}";
-
-        lock (LockObject)
+        if (message != string.Empty)
         {
-            File.AppendAllText(Global.LatestLogFile.FullName, logEntry + Environment.NewLine);
+            var timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            var logEntry = $"[{timestamp}] [{level}] {message}";
+
+            lock (LockObject)
+            {
+                File.AppendAllText(Global.LatestLogFile.FullName, logEntry + Environment.NewLine);
+            }
+            UpdateLogContent(logEntry);
         }
-        UpdateLogContent(logEntry);
     }
 
     private static void UpdateLogContent(string logEntry) => GlobalLogViewModel._logContent += logEntry + Environment.NewLine;

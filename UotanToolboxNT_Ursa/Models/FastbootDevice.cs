@@ -205,7 +205,7 @@ public class FastbootDevice : DeviceBase
     /// 获取应用列表（Fastboot模式不支持）
     /// </summary>
     /// <returns></returns>
-    public override async Task<List<string>> GetApplicationListAsync()
+    public override async Task<List<ApplicationInfo>> GetApplicationListAsync()
     {
         await Task.CompletedTask;
         AddLog("Fastboot模式不支持获取应用列表", LogLevel.Warning);

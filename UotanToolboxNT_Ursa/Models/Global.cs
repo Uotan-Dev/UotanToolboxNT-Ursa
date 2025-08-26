@@ -25,6 +25,8 @@ internal class Global
 
     public static DirectoryInfo DriveDirectory = new(Path.Join(BaseDirectory.FullName, "Drive"));//工具箱驱动文件目录
 
+    public static DirectoryInfo PushDirectory = new(Path.Join(BaseDirectory.FullName, "Push"));//工具箱驱动文件目录
+
     public static DirectoryInfo LogDirectory = new(Path.Join(BaseDirectory.FullName, "Logs"));//工具箱日志目录
 
     public static FileInfo SettingsFile = new(Path.Join(BaseDirectory.FullName, "settings.json"));//工具箱配置文件信息

@@ -166,7 +166,6 @@ public abstract class DeviceBase
 
     /// <summary>
     /// 刷新设备信息（智能缓存模式）
-    /// 首次调用时获取完整信息并缓存，后续调用仅刷新变化频繁的信息。
     /// </summary>
     /// <returns>是否刷新成功</returns>
     public async Task<bool> RefreshDeviceInfoAsync()
@@ -217,7 +216,7 @@ public abstract class DeviceBase
     /// 获取应用列表
     /// </summary>
 
-    public abstract Task<List<string>> GetApplicationListAsync();
+    public abstract Task<List<ApplicationInfo>> GetApplicationListAsync();
 
     /// <summary>
     /// 重启到指定模式
