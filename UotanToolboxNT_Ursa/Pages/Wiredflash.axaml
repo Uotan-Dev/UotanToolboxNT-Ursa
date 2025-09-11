@@ -40,12 +40,11 @@
 													   Text="FASTBOOT" />
 											<TextBox Width="600"
 													 Classes="Bordered"
-													 Text=""
-													 />
+													 Text="{Binding FastbootFile}"/>
 											<Button Height="35"
 													Padding="10,0,10,0"
 													Theme="{DynamicResource OutlineButton}"
-													
+													Command="{Binding OpenFastbootFile}"
 													Content="{DynamicResource Common_ChooseFile}">
 											</Button>
 										</StackPanel>
@@ -57,26 +56,25 @@
 													   Text="FASTBOOTD" />
 											<TextBox Width="600"
 													 Classes="Bordered"
-													 Text=""
-													 />
+													 Text="{Binding FastbootdFile}"/>
 											<Button Height="35"
 													Padding="10,0,10,0"
 													Theme="{DynamicResource OutlineButton}"
-													
+													Command="{Binding OpenFastbootdFile}"
 													Content="{DynamicResource Common_ChooseFile}">
 											</Button>
 										</StackPanel>
 									</StackPanel>
 									<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="5">
 										<StackPanel Margin="5 0 0 0" Height="20" HorizontalAlignment="Center" Orientation="Horizontal" Spacing="10">
-											<CheckBox IsChecked="False" Checked=""/>
+											<CheckBox IsChecked="{Binding AddRoot}"/>
 											<TextBlock VerticalAlignment="Center"
 													   Margin="0 -5 0 0"
 													   FontSize="13"
 													   Text="{DynamicResource Wiredflash_AddMagisk}" />
 										</StackPanel>
 										<StackPanel Height="30" HorizontalAlignment="Center" Orientation="Horizontal" Spacing="10">
-											<CheckBox IsChecked="False" />
+											<CheckBox IsChecked="{Binding ErasData}" />
 											<TextBlock VerticalAlignment="Center"
 													   Margin="0 -15 0 0"
 													   FontSize="13"
@@ -87,7 +85,7 @@
 												Margin="0 -15 0 0"
 												HorizontalAlignment="Left"
 												Theme="{DynamicResource OutlineButton}"
-												
+												Command="{Binding StartTXTFlash}"
 												Content="{DynamicResource Wiredflash_StartFlashing}">
 										</Button>
 									</StackPanel>
@@ -121,12 +119,11 @@
 													   Text="ADB Sideload" />
 											<TextBox Width="570"
 													 Classes="Bordered"
-													 Text=""
-													 />
+													 Text="{Binding AdbSideloadFile}"/>
 											<Button Height="35"
 													Padding="10,0,10,0"
 													Theme="{DynamicResource OutlineButton}"
-													
+													Command="{Binding OpenSideloadFile}"
 													Content="{DynamicResource Common_ChooseFile}">
 											</Button>
 										</StackPanel>
@@ -138,12 +135,11 @@
 													   Text="Fastboot Updated" />
 											<TextBox Width="570"
 													 Classes="Bordered"
-													 Text=""
-													 />
+													 Text="{Binding FastbootUpdatedFile}"/>
 											<Button Height="35"
 													Padding="10,0,10,0"
 													Theme="{DynamicResource OutlineButton}"
-													
+													Command="{Binding OpenUpdatedFile}"
 													Content="{DynamicResource Common_ChooseFile}">
 											</Button>
 										</StackPanel>
@@ -155,12 +151,11 @@
 													   Text="{DynamicResource Wiredflash_XiaomiFlashScript}" />
 											<TextBox Width="570" 
 													 Classes="Bordered"
-													 Text=""
-													 />
+													 Text="{Binding BatFile}"/>
 											<Button Height="35"
 													Padding="10,0,10,0"
 													Theme="{DynamicResource OutlineButton}"
-													
+													Command="{Binding OpenBatFile}"
 													Content="{DynamicResource Common_ChooseFile}">
 											</Button>
 										</StackPanel>
@@ -170,21 +165,21 @@
 												Height="35"
 												HorizontalAlignment="Left"
 												Theme="{DynamicResource OutlineButton}"
-												
+												Command="{Binding SetToA}"
 												Content="{DynamicResource Wiredflash_SwitchToASlot}">
 										</Button>
 										<Button Width="115"
 												Height="35"
 												HorizontalAlignment="Left"
 												Theme="{DynamicResource OutlineButton}"
-												
+												Command="{Binding SetToB}"
 												Content="{DynamicResource Wiredflash_SwitchToBSlot}">
 										</Button>
 										<Button Width="115"
 												Height="35"
 												HorizontalAlignment="Left"
 												Theme="{DynamicResource OutlineButton}"
-												
+												Command="{Binding StartFlash}"
 												Content="{DynamicResource Wiredflash_StartFlashing}">
 										</Button>
 									</StackPanel>
@@ -204,7 +199,7 @@
 							 Width="930" Height="380"
 							 Watermark="{DynamicResource Common_Log}"
 							 Classes="TextArea"
-							 Text=""
+							 Text="{Binding WiredflashLog}"
 							 TextWrapping="Wrap"
 							 IsReadOnly="True"/>
 				</Border>
