@@ -28,12 +28,13 @@
 										 Width="200"
 										 Height="30"
 										 FontSize="15"
-										 Watermark="{DynamicResource Modifypartition_SearchPart}"/>
+										 Watermark="{DynamicResource Modifypartition_SearchPart}"
+										 Text="{Binding SearchBox}"/>
 								<TextBlock Margin="80 6 0 0" Text="{DynamicResource Modifypartition_ShowAllPart}"/>
-								<ToggleSwitch IsEnabled="False" />
+								<ToggleSwitch IsEnabled="{Binding ShowAllPartEnabled}" IsChecked="{Binding ShowAllPartChecked}"/>
 							</StackPanel>
 
-							<u:LoadingContainer IsLoading=""
+							<u:LoadingContainer IsLoading="{Binding BusyPart}"
 												LoadingMessage="{DynamicResource FormatExtract_Executing}">
 								<DataGrid Width="625"
 							              Height="565"
@@ -67,19 +68,19 @@
 											   VerticalAlignment="Center"
 											   FontSize="15"
 											   Text="{DynamicResource Modifypartition_IdColon}" />
-									<TextBox Width="155" FontSize="15" Classes="Bordered" />
+									<TextBox Width="155" FontSize="15" Classes="Bordered" Text="{Binding IdNumber}"/>
 								</StackPanel>
 								<StackPanel Margin="0 5 0 0" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="10">
 									<Button Width="90"
 											Theme="{DynamicResource OutlineButton}"
-											
+											Command="{Binding RMPart}"
 											HorizontalAlignment="Left"
 											Padding="8">
 										<TextBlock FontSize="15" Text="{DynamicResource Modifypartition_Delete}"/>
 									</Button>
 									<Button Width="90"
 											Theme="{DynamicResource OutlineButton}"
-											
+											Command="{Binding ESPON}"
 											HorizontalAlignment="Left"
 											Padding="8">
 										<TextBlock FontSize="15" Text="{DynamicResource Modifypartition_Mark}"/>
@@ -103,33 +104,33 @@
 											   Width="65"
 											   FontSize="15"
 											   Text="{DynamicResource Modifypartition_PartName}" />
-									<TextBox Width="145" FontSize="15" Classes="Bordered"/>
+									<TextBox Width="145" FontSize="15" Classes="Bordered" Text="{Binding NewPartitionName}"/>
 								</StackPanel>
 								<StackPanel Margin="8,0,0,0" Orientation="Horizontal" VerticalAlignment="Center">
 									<TextBlock VerticalAlignment="Center"
 											   Width="65"
 											   FontSize="15"
 											   Text="{DynamicResource Modifypartition_PartFormat}" />
-									<TextBox Width="145" FontSize="15" Classes="Bordered"/>
+									<TextBox Width="145" FontSize="15" Classes="Bordered" Text="{Binding NewPartitionFormat}"/>
 								</StackPanel>
 								<StackPanel Margin="8,0,0,0" Orientation="Horizontal" VerticalAlignment="Center">
 									<TextBlock VerticalAlignment="Center"
 											   Width="65"
 											   FontSize="15"
 											   Text="{DynamicResource Modifypartition_StartpointColon}" />
-									<TextBox Width="145" FontSize="15" Watermark="{DynamicResource Modifypartition_AddUnit}" Classes="Bordered"/>
+									<TextBox Width="145" FontSize="15" Text="{Binding NewPartitionStartpoint}" Watermark="{DynamicResource Modifypartition_AddUnit}" Classes="Bordered"/>
 								</StackPanel>
 								<StackPanel Margin="8,0,0,0" Orientation="Horizontal" VerticalAlignment="Center">
 									<TextBlock VerticalAlignment="Center"
 											   Width="65"
 											   FontSize="15"
 											   Text="{DynamicResource Modifypartition_EndpointColon}" />
-									<TextBox Width="145" FontSize="15" Watermark="{DynamicResource Modifypartition_AddUnit}" Classes="Bordered"/>
+									<TextBox Width="145" FontSize="15" Text="{Binding NewPartitionEndpoint}" Watermark="{DynamicResource Modifypartition_AddUnit}" Classes="Bordered"/>
 								</StackPanel>
 								<StackPanel Margin="0,10,0,0" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="10">
 									<Button Width="200"
 											Theme="{DynamicResource OutlineButton}"
-											
+											Command="{Binding MKPart}"
 											HorizontalAlignment="Left"
 											Padding="8">
 										<TextBlock FontSize="15" Text="{DynamicResource Modifypartition_CreatePart}" />
@@ -149,16 +150,16 @@
 						<StackPanel Orientation="Horizontal" Spacing="0">
 							<StackPanel Orientation="Vertical" VerticalAlignment="Center" Spacing="10">
 								<StackPanel Orientation="Horizontal" Spacing="20">
-									<RadioButton Width="60" FontSize="15" Content="sda" GroupName="FormatContent" />
-									<RadioButton Width="60" FontSize="15" Content="sdb" GroupName="FormatContent" />
-									<RadioButton Width="60" FontSize="15" Content="sdc" GroupName="FormatContent" />
-									<RadioButton FontSize="15" Content="EMMC" GroupName="FormatContent" />
+									<RadioButton Width="60" FontSize="15" Content="sda" GroupName="FormatContent" IsChecked="{Binding Sda}"/>
+									<RadioButton Width="60" FontSize="15" Content="sdb" GroupName="FormatContent" IsChecked="{Binding Sdb}"/>
+									<RadioButton Width="60" FontSize="15" Content="sdc" GroupName="FormatContent" IsChecked="{Binding Sdc}"/>
+									<RadioButton FontSize="15" Content="EMMC" GroupName="FormatContent" IsChecked="{Binding EMMC}"/>
 								</StackPanel>
 								<StackPanel Orientation="Horizontal" Spacing="20">
-									<RadioButton Width="60" FontSize="15" Content="sdd" GroupName="FormatContent" />
-									<RadioButton Width="60" FontSize="15" Content="sde" GroupName="FormatContent" />
-									<RadioButton Width="60" FontSize="15" Content="sdf" GroupName="FormatContent" />
-									<RadioButton FontSize="15" Content="FASTBOOT" GroupName="FormatContent" IsCheckedChanged=""/>
+									<RadioButton Width="60" FontSize="15" Content="sdd" GroupName="FormatContent" IsChecked="{Binding Sdd}"/>
+									<RadioButton Width="60" FontSize="15" Content="sde" GroupName="FormatContent" IsChecked="{Binding Sde}"/>
+									<RadioButton Width="60" FontSize="15" Content="sdf" GroupName="FormatContent" IsChecked="{Binding Sdf}"/>
+									<RadioButton FontSize="15" Content="FASTBOOT" GroupName="FormatContent" IsChecked="{Binding Fastboot}" IsCheckedChanged="SetFastboot"/>
 								</StackPanel>
 							</StackPanel>
 							<TextBlock Margin="20 0 0 0"
@@ -173,7 +174,7 @@
 							<Button Width="100"
 									Margin="-15,0,0,0"
 									Theme="{DynamicResource OutlineButton}"
-									
+									Command="{Binding ReadPart}"
 									HorizontalAlignment="Left"
 									Padding="8">
 								<TextBlock Text="{DynamicResource Modifypartition_ReadPart}" />
@@ -190,7 +191,7 @@
 							<Button Width="200"
 									Height="40"
 									Theme="{DynamicResource OutlineButton}"
-									
+									Command="{Binding RemoveLimit}"
 									HorizontalAlignment="Left"
 									Padding="8">
 								<TextBlock Text="{DynamicResource Modifypartition_RemoveLimit}" />
