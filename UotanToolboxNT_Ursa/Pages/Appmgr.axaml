@@ -52,7 +52,7 @@
 											Theme="{DynamicResource OutlineButton}"
 											HorizontalAlignment="Left"
 											Padding="8"
-											Command="{Binding ToggleAppStatusCommand}">
+											Command="{Binding ActivateAppCommand}">
 										<TextBlock>
 											<avalonia:MaterialIcon Kind="StarFourPointsCircleOutline" />
 											<TextBlock Text="{DynamicResource Appmgr_ActivateSwitch}" />
@@ -206,9 +206,9 @@
 														<RadioButton GroupName="ApplicationSelection" HorizontalAlignment="Right" IsChecked="{Binding IsSelected}" />
 														<TextBlock FontSize="15" FontWeight="DemiBold" Text="{Binding DisplayName}" HorizontalAlignment="Left" />
 													</StackPanel>
-													<Button Theme="{StaticResource ToolboxButtonFile}" FontSize="15" FontWeight="DemiBold" Content="{Binding Name}" HorizontalAlignment="Left"/>
+													<Button Theme="{StaticResource ToolboxButtonFile}" FontSize="15" FontWeight="DemiBold" Content="{Binding Name}" HorizontalAlignment="Left" Click="CopyButton_OnClick"/>
 													<TextBlock FontSize="12" Text="{Binding OtherInfo}" />
-													<Button Classes="Hyperlink" Foreground="White" FontSize="12" Content="{DynamicResource Appmgr_Uninstall}" HorizontalAlignment="Right"/>
+													<Button Classes="Hyperlink" Foreground="White" FontSize="12" Content="{DynamicResource Appmgr_Uninstall}" HorizontalAlignment="Right" Click="UninstallButton_Click"/>
 												</StackPanel>
 											</Border>
 										</DataTemplate>
