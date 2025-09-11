@@ -127,7 +127,7 @@
 												Theme="{DynamicResource OutlineButton}"
 												HorizontalAlignment="Left"
 												Padding="8"
-												>
+												Command="{Binding FlashRecoveryACommand}">
 											<TextBlock>
 												<avalonia:MaterialIcon Kind="NetworkOutline" />
 												<TextBlock Text="{DynamicResource Basicflash_ToRecoveryAPart}" />
@@ -137,7 +137,7 @@
 												Theme="{DynamicResource OutlineButton}"
 												HorizontalAlignment="Left"
 												Padding="8"
-												>
+												Command="{Binding FlashRecoveryBCommand}">
 											<TextBlock>
 												<avalonia:MaterialIcon Kind="NetworkPos" />
 												<TextBlock Text="{DynamicResource Basicflash_ToRecoveryBPart}" />
@@ -149,7 +149,7 @@
 												Theme="{DynamicResource OutlineButton}"
 												HorizontalAlignment="Left"
 												Padding="8"
-												Command="{Binding BootToBootAPartCommand}">
+												Command="{Binding BootCommand}">
 											<TextBlock>
 												<avalonia:MaterialIcon Kind="ProgressDownload" />
 												<TextBlock Text="{DynamicResource Basicflash_TempBoot}" />
@@ -159,7 +159,7 @@
 												Theme="{DynamicResource OutlineButton}"
 												HorizontalAlignment="Left"
 												Padding="8"
-												Command="{Binding BootToBootAPartCommand}">
+												Command="{Binding FlashBootACommand}">
 											<TextBlock>
 												<avalonia:MaterialIcon Kind="ProgressDownload" />
 												<TextBlock Text="{DynamicResource Basicflash_ToBootAPart}" />
@@ -169,7 +169,7 @@
 												Theme="{DynamicResource OutlineButton}"
 												HorizontalAlignment="Left"
 												Padding="8"
-												Command="{Binding BootToBootBPartCommand}">
+												Command="{Binding FlashBootBCommand}">
 											<TextBlock>
 												<avalonia:MaterialIcon Kind="ProgressDownload" />
 												<TextBlock Text="{DynamicResource Basicflash_ToBootBPart}" />

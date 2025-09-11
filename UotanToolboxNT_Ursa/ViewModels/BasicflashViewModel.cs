@@ -10,16 +10,17 @@ namespace UotanToolboxNT_Ursa.ViewModels;
 
 public partial class BasicflashViewModel : ObservableObject
 {
+    #region 执行状态
+
+    [ObservableProperty]
+    private bool _isUnlockExecuting = false, _isBasicCommandExecuting = false, _isRecoveryExecuting = false, _isRebootExecuting = false, _isBootRepairExecuting = false, _isEasyFlashExecuting = false;
+    
+    #endregion
+
     #region 解锁相关属性
 
     [ObservableProperty]
-    private string _unlockFilePath = string.Empty;
-
-    [ObservableProperty]
-    private string _unlockCode = string.Empty;
-
-    [ObservableProperty]
-    private string _selectedUnlockCodeType = string.Empty;
+    private string _unlockFilePath = string.Empty, _unlockCode = string.Empty, _selectedUnlockCodeType = string.Empty;
 
     public AvaloniaList<string> UnlockCodeTypes { get; } = [.. BasicflashModel.UnlockCodeTypes];
 
@@ -53,25 +54,10 @@ public partial class BasicflashViewModel : ObservableObject
     #region Boot修复相关属性
 
     [ObservableProperty]
-    private string _magiskFilePath = string.Empty;
+    private string _magiskFilePath = string.Empty, _bootFilePath = string.Empty;
 
     [ObservableProperty]
-    private string _bootFilePath = string.Empty;
-
-    [ObservableProperty]
-    private bool _keepAVBOrDM = true;
-
-    [ObservableProperty]
-    private bool _keepStrongEncryption = true;
-
-    [ObservableProperty]
-    private bool _repairVbmeta = false;
-
-    [ObservableProperty]
-    private bool _installToRecovery = false;
-
-    [ObservableProperty]
-    private bool _forceRootfs = true;
+    private bool _keepAVBOrDM = true, _keepStrongEncryption = true, _repairVbmeta = false, _installToRecovery = false, _forceRootfs = true;
 
     [ObservableProperty]
     private string _selectedImageArchitecture = string.Empty;
@@ -90,27 +76,7 @@ public partial class BasicflashViewModel : ObservableObject
 
     #endregion
 
-    #region 执行状态
-
-    [ObservableProperty]
-    private bool _isUnlockExecuting = false;
-
-    [ObservableProperty]
-    private bool _isBasicCommandExecuting = false;
-
-    [ObservableProperty]
-    private bool _isRecoveryExecuting = false;
-
-    [ObservableProperty]
-    private bool _isRebootExecuting = false;
-
-    [ObservableProperty]
-    private bool _isBootRepairExecuting = false;
-
-    [ObservableProperty]
-    private bool _isEasyFlashExecuting = false;
-
-    #endregion
+    
 
     public BasicflashViewModel()
     {
@@ -136,8 +102,6 @@ public partial class BasicflashViewModel : ObservableObject
         }
     }
 
-    #region 文件选择命令
-
     [RelayCommand]
     private async Task ChooseUnlockFileAsync()
     {
@@ -153,55 +117,6 @@ public partial class BasicflashViewModel : ObservableObject
             AddLog($"选择解锁文件失败: {ex.Message}", LogLevel.Error);
         }
     }
-
-    [RelayCommand]
-    private async Task ChooseRecoveryFileAsync()
-    {
-        try
-        {
-            // TODO: 实现文件选择功能
-            await Task.CompletedTask;
-            AddLog("文件选择功能待实现");
-        }
-        catch (System.Exception ex)
-        {
-            AddLog($"选择Recovery文件失败: {ex.Message}", LogLevel.Error);
-        }
-    }
-
-    [RelayCommand]
-    private async Task ChooseMagiskFileAsync()
-    {
-        try
-        {
-            // TODO: 实现文件选择功能
-            await Task.CompletedTask;
-            AddLog("文件选择功能待实现");
-        }
-        catch (System.Exception ex)
-        {
-            AddLog($"选择Magisk文件失败: {ex.Message}", LogLevel.Error);
-        }
-    }
-
-    [RelayCommand]
-    private async Task ChooseBootFileAsync()
-    {
-        try
-        {
-            // TODO: 实现文件选择功能
-            await Task.CompletedTask;
-            AddLog("文件选择功能待实现");
-        }
-        catch (System.Exception ex)
-        {
-            AddLog($"选择Boot文件失败: {ex.Message}", LogLevel.Error);
-        }
-    }
-
-    #endregion
-
-    #region 解锁相关命令
 
     [RelayCommand]
     private async Task UnlockNowAsync()
@@ -285,10 +200,6 @@ public partial class BasicflashViewModel : ObservableObject
         }
     }
 
-    #endregion
-
-    #region 基础命令相关
-
     [RelayCommand]
     private async Task ExecuteUnlockCommandAsync()
     {
@@ -325,9 +236,20 @@ public partial class BasicflashViewModel : ObservableObject
         }
     }
 
-    #endregion
-
-    #region Recovery刷写相关命令
+    [RelayCommand]
+    private async Task ChooseRecoveryFileAsync()
+    {
+        try
+        {
+            // TODO: 实现文件选择功能
+            await Task.CompletedTask;
+            AddLog("文件选择功能待实现");
+        }
+        catch (System.Exception ex)
+        {
+            AddLog($"选择Recovery文件失败: {ex.Message}", LogLevel.Error);
+        }
+    }
 
     [RelayCommand]
     private async Task FlashRecoveryAsync()
@@ -374,7 +296,95 @@ public partial class BasicflashViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async Task BootToBootAPartAsync()
+    private async Task FlashRecoveryAAsync()
+    {
+        if (IsRecoveryExecuting)
+        {
+            return;
+        }
+
+        try
+        {
+            IsRecoveryExecuting = true;
+            AddLog("开始刷写Recovery...");
+
+            if (string.IsNullOrEmpty(RecoveryFilePath) || !File.Exists(RecoveryFilePath))
+            {
+                AddLog("请先选择有效的Recovery文件", LogLevel.Warning);
+                return;
+            }
+
+            // 检查设备连接
+            var device = Global.DeviceManager.CurrentDevice;
+            if (device == null)
+            {
+                AddLog("未检测到设备连接", LogLevel.Warning);
+                return;
+            }
+
+            AddLog($"正在刷写Recovery文件: {RecoveryFilePath}");
+
+            // 这里添加实际的Recovery刷写逻辑
+            await Task.Delay(3000); // 模拟执行时间
+
+            AddLog("Recovery刷写完成");
+        }
+        catch (System.Exception ex)
+        {
+            AddLog($"Recovery刷写失败: {ex.Message}", LogLevel.Error);
+        }
+        finally
+        {
+            IsRecoveryExecuting = false;
+        }
+    }
+
+    [RelayCommand]
+    private async Task FlashRecoveryBAsync()
+    {
+        if (IsRecoveryExecuting)
+        {
+            return;
+        }
+
+        try
+        {
+            IsRecoveryExecuting = true;
+            AddLog("开始刷写Recovery...");
+
+            if (string.IsNullOrEmpty(RecoveryFilePath) || !File.Exists(RecoveryFilePath))
+            {
+                AddLog("请先选择有效的Recovery文件", LogLevel.Warning);
+                return;
+            }
+
+            // 检查设备连接
+            var device = Global.DeviceManager.CurrentDevice;
+            if (device == null)
+            {
+                AddLog("未检测到设备连接", LogLevel.Warning);
+                return;
+            }
+
+            AddLog($"正在刷写Recovery文件: {RecoveryFilePath}");
+
+            // 这里添加实际的Recovery刷写逻辑
+            await Task.Delay(3000); // 模拟执行时间
+
+            AddLog("Recovery刷写完成");
+        }
+        catch (System.Exception ex)
+        {
+            AddLog($"Recovery刷写失败: {ex.Message}", LogLevel.Error);
+        }
+        finally
+        {
+            IsRecoveryExecuting = false;
+        }
+    }
+
+    [RelayCommand]
+    private async Task BootAsync()
     {
         if (IsRecoveryExecuting)
         {
@@ -410,7 +420,43 @@ public partial class BasicflashViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async Task BootToBootBPartAsync()
+    private async Task FlashBootAAsync()
+    {
+        if (IsRecoveryExecuting)
+        {
+            return;
+        }
+
+        try
+        {
+            IsRecoveryExecuting = true;
+            AddLog("开始切换到Boot A分区...");
+
+            // 检查设备连接
+            var device = Global.DeviceManager.CurrentDevice;
+            if (device == null)
+            {
+                AddLog("未检测到设备连接", LogLevel.Warning);
+                return;
+            }
+
+            // 这里添加实际的切换逻辑
+            await Task.Delay(1000); // 模拟执行时间
+
+            AddLog("已切换到Boot A分区");
+        }
+        catch (System.Exception ex)
+        {
+            AddLog($"切换到Boot A分区失败: {ex.Message}", LogLevel.Error);
+        }
+        finally
+        {
+            IsRecoveryExecuting = false;
+        }
+    }
+
+    [RelayCommand]
+    private async Task FlashBootBAsync()
     {
         if (IsRecoveryExecuting)
         {
@@ -444,10 +490,6 @@ public partial class BasicflashViewModel : ObservableObject
             IsRecoveryExecuting = false;
         }
     }
-
-    #endregion
-
-    #region 重启相关命令
 
     [RelayCommand]
     private async Task ExecuteRebootAsync()
@@ -485,9 +527,35 @@ public partial class BasicflashViewModel : ObservableObject
         }
     }
 
-    #endregion
+    [RelayCommand]
+    private async Task ChooseMagiskFileAsync()
+    {
+        try
+        {
+            // TODO: 实现文件选择功能
+            await Task.CompletedTask;
+            AddLog("文件选择功能待实现");
+        }
+        catch (System.Exception ex)
+        {
+            AddLog($"选择Magisk文件失败: {ex.Message}", LogLevel.Error);
+        }
+    }
 
-    #region Boot修复相关命令
+    [RelayCommand]
+    private async Task ChooseBootFileAsync()
+    {
+        try
+        {
+            // TODO: 实现文件选择功能
+            await Task.CompletedTask;
+            AddLog("文件选择功能待实现");
+        }
+        catch (System.Exception ex)
+        {
+            AddLog($"选择Boot文件失败: {ex.Message}", LogLevel.Error);
+        }
+    }
 
     [RelayCommand]
     private async Task StartBootRepairAsync()
@@ -544,10 +612,6 @@ public partial class BasicflashViewModel : ObservableObject
             IsBootRepairExecuting = false;
         }
     }
-
-    #endregion
-
-    #region 快捷刷写相关命令
 
     [RelayCommand]
     private async Task FlashChosenMagiskAsync()
@@ -663,10 +727,6 @@ public partial class BasicflashViewModel : ObservableObject
         }
     }
 
-    #endregion
-
-    #region 无线电选项处理
-
     partial void OnIsTWRPInstallChanged(bool value)
     {
         if (value)
@@ -682,6 +742,4 @@ public partial class BasicflashViewModel : ObservableObject
             IsTWRPInstall = false;
         }
     }
-
-    #endregion
 }
