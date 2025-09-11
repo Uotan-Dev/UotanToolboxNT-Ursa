@@ -18,7 +18,7 @@
             <StackPanel>
 				<u:LoadingContainer
 							Margin="5"
-							IsLoading=""
+							IsLoading="{Binding IsConnecting}"
 							LoadingMessage="{DynamicResource Scrcpy_Casting}">
 					<Border Width="960"
 							CornerRadius="15"
@@ -40,7 +40,7 @@
                                        Text="{DynamicResource Scrcpy_WindowTitle}" />
 							<TextBox Margin="0,0,0,25"
 									 Classes="Bordered"
-                                     Text=""
+                                     Text="{Binding WindowTitle}"
                                      Watermark="{DynamicResource Scrcpy_FillInWantedTitle}" />
 							<Button MinWidth="150"
                                     Height="40"
@@ -49,7 +49,7 @@
                                     VerticalAlignment="Bottom"
 								    Theme="{DynamicResource OutlineButton}"
                                     Classes="Flat Rounded"
-                                    Command=""
+                                    Command="{Binding ConnectCommand}"
                                     FontWeight="DemiBold"
                                     Content="{DynamicResource Scrcpy_StartCasting}">
 							</Button>
@@ -85,12 +85,11 @@
 										   Text="{DynamicResource Scrcpy_Folder}" />
 								<TextBox Width="250" Classes="Bordered"
 										 Watermark="{DynamicResource Scrcpy_RecordDictionary}"
-										 Text=""
-										 />
+										 Text="{Binding RecordFolder}" />
 								<Button Height="35"
 										Margin="5 0 0 0"
 										Padding="10,0,10,0"
-										
+										Command="{Binding OpenFolderBut}"
 										Content="{DynamicResource Common_ChooseFolder}">
 								</Button>
 							</StackPanel>
@@ -102,14 +101,14 @@
 										   Foreground="{DynamicResource SukiLowText}"
 										   Text="{DynamicResource Scrcpy_Bitrate}" />
 								<Slider Width="300" IsSnapToTickEnabled="True" Maximum="50" Minimum="0" TickFrequency="1"
-										Value="" VerticalAlignment="Center">
+										Value="{Binding BitRate}" VerticalAlignment="Center">
 								</Slider>
 								<TextBox Width="60"
 										 Classes="Bordered"
 										 TextAlignment="Center"
 										 VerticalAlignment="Center"
 										 FontWeight="DemiBold"
-										 Text="" />
+										 Text="{Binding BitRate}" />
 							</StackPanel>
 							<StackPanel Orientation="Horizontal">
 								<TextBlock Width="60"
@@ -119,14 +118,14 @@
 										   Foreground="{DynamicResource SukiLowText}"
 										   Text="{DynamicResource Scrcpy_MaxFps}" />
 								<Slider Width="300" IsSnapToTickEnabled="True" Maximum="144" Minimum="0" TickFrequency="1"
-										Value="" VerticalAlignment="Center">
+										Value="{Binding FrameRate}" VerticalAlignment="Center">
 								</Slider>
 								<TextBox Width="60"
 										 Classes="Bordered"
 										 TextAlignment="Center"
 										 VerticalAlignment="Center"
 										 FontWeight="DemiBold"
-										 Text="" />
+										 Text="{Binding FrameRate}" />
 							</StackPanel>
 							<StackPanel Orientation="Horizontal">
 								<TextBlock Width="60"
@@ -136,14 +135,14 @@
 										   Foreground="{DynamicResource SukiLowText}"
 										   Text="{DynamicResource Scrcpy_ProportionalScaling}" />
 								<Slider Width="300" IsSnapToTickEnabled="True" Maximum="2048" Minimum="0" TickFrequency="1"
-										Value="" VerticalAlignment="Center">
+										Value="{Binding SizeResolution}" VerticalAlignment="Center">
 								</Slider>
 								<TextBox Width="60"
 										 Classes="Bordered"
 										 TextAlignment="Center"
 										 VerticalAlignment="Center"
 										 FontWeight="DemiBold"
-										 Text="" />
+										 Text="{Binding SizeResolution}" />
 							</StackPanel>
 						</StackPanel>
 					</Border>
@@ -340,7 +339,7 @@
 											HorizontalAlignment="Left"
 											Padding="8"
 											Theme="{DynamicResource OutlineButton}"
-											Command="">
+											Command="{Binding BackCommand}">
 										<TextBlock>
 											<avalonia:MaterialIcon Kind="ArrowBack" />
 											<TextBlock FontSize="13" Text="{DynamicResource Home_BackButton}" />
@@ -350,7 +349,7 @@
 											HorizontalAlignment="Left"
 											Padding="8"
 											Theme="{DynamicResource OutlineButton}"
-											Command="">
+											Command="{Binding HomeCommand}">
 										<TextBlock>
 											<avalonia:MaterialIcon Kind="CircleOutline" />
 											<TextBlock Text="{DynamicResource Home_HomeButton}" />
@@ -360,7 +359,7 @@
 											HorizontalAlignment="Left"
 											Padding="8"
 											Theme="{DynamicResource OutlineButton}"
-											Command="">
+											Command="{Binding MulCommand}">
 										<TextBlock>
 											<avalonia:MaterialIcon Kind="CardMultipleOutline" />
 											<TextBlock FontSize="13" Text="{DynamicResource Home_MultiTask}" />
@@ -370,7 +369,7 @@
 											HorizontalAlignment="Left"
 											Padding="8"
 											Theme="{DynamicResource OutlineButton}"
-											Command="">
+											Command="{Binding LockCommand}">
 										<TextBlock>
 											<avalonia:MaterialIcon Kind="LockOpenOutline" />
 											<TextBlock FontSize="13" Text="{DynamicResource Home_LockScreen}" />
@@ -382,7 +381,7 @@
 											HorizontalAlignment="Left"
 											Padding="8"
 											Theme="{DynamicResource OutlineButton}"
-											Command="">
+											Command="{Binding VolUCommand}">
 										<TextBlock>
 											<avalonia:MaterialIcon Kind="VolumePlus" />
 											<TextBlock FontSize="13" Text="{DynamicResource Home_VolumeUp}" />
@@ -392,7 +391,7 @@
 											HorizontalAlignment="Left"
 											Padding="8"
 											Theme="{DynamicResource OutlineButton}"
-											Command="">
+											Command="{Binding VolDCommand}">
 										<TextBlock>
 											<avalonia:MaterialIcon Kind="VolumeDecrease" />
 											<TextBlock FontSize="13" Text="{DynamicResource Home_VolumeDown}" />
@@ -402,7 +401,7 @@
 											HorizontalAlignment="Left"
 											Padding="8"
 											Theme="{DynamicResource OutlineButton}"
-											Command="">
+											Command="{Binding MuteCommand}">
 										<TextBlock>
 											<avalonia:MaterialIcon Kind="VolumeOff" />
 											<TextBlock FontSize="13" Text="{DynamicResource Home_VolumeMute}" />
@@ -412,7 +411,7 @@
 											HorizontalAlignment="Left"
 											Padding="8"
 											Theme="{DynamicResource OutlineButton}"
-											Command="">
+											Command="{Binding SCCommand}">
 										<TextBlock>
 											<avalonia:MaterialIcon Kind="CameraOutline" />
 											<TextBlock FontSize="13" Text="{DynamicResource Home_Screenshot}" />
