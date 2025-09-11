@@ -37,17 +37,17 @@
 												   Text="System" />
 										<TextBox Width="270"
 												 Classes="Bordered"
-												/>
+												 Text="{Binding SystemFile}"/>
 										<Button Theme="{DynamicResource OutlineButton}"
 												Height="35"
 												Padding="10,0,10,0"
-												
+												Command="{Binding OpenSystemFileBut}"
 												Content="{DynamicResource Customizedflash_File}"/>
 										<Button Theme="{DynamicResource OutlineButton}"
 												Height="35"
 												Margin="5,0,0,0"
 												Padding="10,0,10,0"
-												
+												Command="{Binding FlashSystemFileBut}"
 												Content="{DynamicResource Customizedflash_Flash}"/>
 									</StackPanel>
 									<StackPanel Margin="0" Orientation="Horizontal">
@@ -58,17 +58,17 @@
 												   Text="Product" />
 										<TextBox Width="270"
 												 Classes="Bordered"
-												 />
+												 Text="{Binding ProductFile}"/>
 										<Button Theme="{DynamicResource OutlineButton}"
 												Height="35"
 												Padding="10,0,10,0"
-												
+												Command="{Binding OpenProductFileBut}"
 												Content="{DynamicResource Customizedflash_File}"/>
 										<Button Theme="{DynamicResource OutlineButton}"
 												Height="35"
 												Margin="5,0,0,0"
 												Padding="10,0,10,0"
-												
+												Command="{Binding FlashProductFileBut}"
 												Content="{DynamicResource Customizedflash_Flash}"/>
 									</StackPanel>
 									<StackPanel Margin="0" Orientation="Horizontal">
@@ -79,17 +79,17 @@
 												   Text="Vendor" />
 										<TextBox Width="270" 
 												 Classes="Bordered"
-												 />
+												 Text="{Binding VenderFile}"/>
 										<Button Theme="{DynamicResource OutlineButton}"
 												Height="35"
 												Padding="10,0,10,0"
-												
+												Command="{Binding OpenVenderFileBut}"
 												Content="{DynamicResource Customizedflash_File}"/>
 										<Button Theme="{DynamicResource OutlineButton}"
 												Height="35"
 												Margin="5,0,0,0"
 												Padding="10,0,10,0"
-												
+												Command="{Binding FlashVenderFileBut}"
 												Content="{DynamicResource Customizedflash_Flash}"/>
 									</StackPanel>
 									<StackPanel Margin="0" Orientation="Horizontal">
@@ -100,17 +100,17 @@
 												   Text="Boot" />
 										<TextBox Width="270" 
 												 Classes="Bordered"
-												 />
+												 Text="{Binding BootFile}"/>
 										<Button Theme="{DynamicResource OutlineButton}"
 												Height="35"
 												Padding="10,0,10,0"
-												
+												Command="{Binding OpenBootFileBut}"
 												Content="{DynamicResource Customizedflash_File}"/>
 										<Button Theme="{DynamicResource OutlineButton}"
 												Height="35"
 												Margin="5,0,0,0"
 												Padding="10,0,10,0"
-												
+												Command="{Binding FlashBootFileBut}"
 												Content="{DynamicResource Customizedflash_Flash}"/>
 									</StackPanel>
 								</StackPanel>
@@ -123,17 +123,17 @@
 												   Text="System_ext" />
 										<TextBox Width="240" 
 												 Classes="Bordered"
-												 />
+												 Text="{Binding SystemextFile}"/>
 										<Button Theme="{DynamicResource OutlineButton}"
 												Height="35"
 												Padding="10,0,10,0"
-												
+												Command="{Binding OpenSystemextFileBut}"
 												Content="{DynamicResource Customizedflash_File}"/>
 										<Button Theme="{DynamicResource OutlineButton}"
 												Height="35"
 												Margin="5,0,0,0"
 												Padding="10,0,10,0"
-												
+												Command="{Binding FlashSystemextFileBut}"
 												Content="{DynamicResource Customizedflash_Flash}"/>
 									</StackPanel>
 									<StackPanel Margin="0" Orientation="Horizontal">
@@ -144,17 +144,17 @@
 												   Text="Odm" />
 										<TextBox Width="240"
 												 Classes="Bordered"
-												 />
+												 Text="{Binding OdmFile}"/>
 										<Button Theme="{DynamicResource OutlineButton}"
 												Height="35"
 												Padding="10,0,10,0"
-												
+												Command="{Binding OpenOdmFileBut}"
 												Content="{DynamicResource Customizedflash_File}"/>
 										<Button Theme="{DynamicResource OutlineButton}"
 												Height="35"
 												Margin="5,0,0,0"
 												Padding="10,0,10,0"
-												
+												Command="{Binding FlashOdmFileBut}"
 												Content="{DynamicResource Customizedflash_Flash}"/>
 									</StackPanel>
 									<StackPanel Margin="0" Orientation="Horizontal">
@@ -165,17 +165,17 @@
 												   Text="Vender_boot" />
 										<TextBox Width="240"
 												 Classes="Bordered"
-												 />
+												 Text="{Binding VenderbootFile}"/>
 										<Button Theme="{DynamicResource OutlineButton}"
 												Height="35"
 												Padding="10,0,10,0"
-												
+												Command="{Binding OpenVenderbootFileBut}"
 												Content="{DynamicResource Customizedflash_File}"/>
 										<Button Theme="{DynamicResource OutlineButton}"
 												Height="35"
 												Margin="5,0,0,0"
 												Padding="10,0,10,0"
-												
+												Command="{Binding FlashVenderbootFileBut}"
 												Content="{DynamicResource Customizedflash_Flash}"/>
 									</StackPanel>
 									<StackPanel Margin="0" Orientation="Horizontal">
@@ -186,17 +186,17 @@
 												   Text="Init_boot" />
 										<TextBox Width="240"
 												 Classes="Bordered"
-												 />
+												 Text="{Binding InitbootFile}"/>
 										<Button Theme="{DynamicResource OutlineButton}"
 												Height="35"
 												Padding="10,0,10,0"
-												
+												Command="{Binding OpenInitbootFileBut}"
 												Content="{DynamicResource Customizedflash_File}"/>
 										<Button Theme="{DynamicResource OutlineButton}"
 												Height="35"
 												Margin="5,0,0,0"
 												Padding="10,0,10,0"
-												
+												Command="{Binding FlashInitbootFileBut}"
 												Content="{DynamicResource Customizedflash_Flash}"/>
 									</StackPanel>
 								</StackPanel>
@@ -220,23 +220,23 @@
 								<Button Theme="{DynamicResource OutlineButton}"
 										Height="35"
 										Padding="10,0,10,0"
-										
+										Command="{Binding OpenImageFileBut}"
 										Content="{DynamicResource Customizedflash_File}"/>
 								<TextBox Width="350"
 										 Classes="Bordered"
-										 />
+										 Text="{Binding ImageFile}"/>
 								<TextBlock Width="55"
 										   FontSize="15"
 										   VerticalAlignment="Center"
 										   Text="{DynamicResource Customizedflash_FlashTo}" />
 								<TextBox Width="160"
 										 Classes="Bordered"
-										 />
+										 Text="{Binding Part}"/>
 								<Button Theme="{DynamicResource OutlineButton}"
 										Height="35"
 										Margin="5,0,0,0"
 										Padding="10,0,10,0"
-										
+										Command="{Binding FlashImageFileBut}"
 										Content="{DynamicResource Customizedflash_Flash}"/>
 							</StackPanel>
 						</StackPanel>
@@ -251,11 +251,11 @@
 							<StackPanel Orientation="Vertical" Spacing="10">
 								<Button Theme="{DynamicResource OutlineButton}"
 										Height="35" Width="150"
-										
+										Command="{Binding DisableVbmeta}"
 										Content="{DynamicResource Customizedflash_DisableVbmeta}" />
 								<Button Theme="{DynamicResource OutlineButton}"
 										Height="35" Width="150"
-										
+										Command="{Binding SetOther}"
 										Content="{DynamicResource Customizedflash_SwitchSlot}" />
 							</StackPanel>
 						</StackPanel>
@@ -272,7 +272,7 @@
 							 Width="930" Height="385"
 							 Watermark="{DynamicResource Common_Log}"
 							 Classes="TextArea"
-							 Text=""
+							 Text="{Binding CustomizedflashLog}"
 							 TextWrapping="Wrap"
 							 IsReadOnly="True"/>
 				</Border>
