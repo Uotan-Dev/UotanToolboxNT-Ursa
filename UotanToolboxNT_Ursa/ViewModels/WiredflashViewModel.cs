@@ -12,7 +12,7 @@ public partial class WiredflashViewModel : ObservableObject
     private string _fastbootFile = string.Empty, _fastbootdFile = string.Empty, _adbSideloadFile = string.Empty, _fastbootUpdatedFile = string.Empty, _batFile = string.Empty, _wiredflashLog = string.Empty;
 
     [ObservableProperty]
-    private bool _addRoot = false, _erasData = false;
+    private bool _addRoot = false, _erasData = false, _tXTFlash = false, _flashing = false;
 
     public WiredflashViewModel()
     {

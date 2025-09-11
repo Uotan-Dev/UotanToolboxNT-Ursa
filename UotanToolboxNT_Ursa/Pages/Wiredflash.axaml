@@ -18,7 +18,7 @@
             <StackPanel>
 				<u:LoadingContainer
 							Margin="5"
-							IsLoading=""
+							IsLoading="{Binding TXTFlash}"
 							LoadingMessage="{DynamicResource Basicflash_Executing}">
 					<Border Width="960"
 							Height="160"
@@ -97,7 +97,7 @@
 
 				<u:LoadingContainer
 							Margin="5"
-							IsLoading=""
+							IsLoading="{Binding Flashing}"
 							LoadingMessage="{DynamicResource Basicflash_Executing}">
 					<Border Width="960"
 							Height="210"
