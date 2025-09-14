@@ -14,7 +14,7 @@ public partial class BasicflashViewModel : ObservableObject
 
     [ObservableProperty]
     private bool _isUnlockExecuting = false, _isBasicCommandExecuting = false, _isRecoveryExecuting = false, _isRebootExecuting = false, _isBootRepairExecuting = false, _isEasyFlashExecuting = false;
-    
+
     #endregion
 
     #region 解锁相关属性
@@ -76,7 +76,7 @@ public partial class BasicflashViewModel : ObservableObject
 
     #endregion
 
-    
+
 
     public BasicflashViewModel()
     {
