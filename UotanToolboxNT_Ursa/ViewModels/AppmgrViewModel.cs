@@ -7,6 +7,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using UotanToolboxNT_Ursa.Helper;
 using UotanToolboxNT_Ursa.Models;
+using UotanToolboxNT_Ursa.Models.DeviceCore;
 using static UotanToolboxNT_Ursa.Models.GlobalLogModel;
 
 namespace UotanToolboxNT_Ursa.ViewModels;

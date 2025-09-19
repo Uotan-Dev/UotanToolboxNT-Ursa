@@ -9,7 +9,7 @@ using System.Timers;
 using AdvancedSharpAdbClient.Models;
 using static UotanToolboxNT_Ursa.Models.GlobalLogModel;
 
-namespace UotanToolboxNT_Ursa.Models;
+namespace UotanToolboxNT_Ursa.Models.DeviceCore;
 
 /// <summary>
 /// 设备管理器
@@ -114,7 +114,7 @@ public class DeviceManager
     }
 
     /// <summary>
-    /// 刷新当前设备信息（使用智能缓存）
+    /// 刷新当前设备信息（使用缓存）
     /// </summary>
     public async Task<bool> RefreshCurrentDeviceAsync()
     {
@@ -142,7 +142,7 @@ public class DeviceManager
     }
 
     /// <summary>
-    /// 手动扫描设备
+    /// 扫描设备
     /// </summary>
     public async Task ScanDevicesAsync()
     {

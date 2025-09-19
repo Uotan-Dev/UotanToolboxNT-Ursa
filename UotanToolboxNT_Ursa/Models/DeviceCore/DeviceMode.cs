@@ -1,4 +1,4 @@
-namespace UotanToolboxNT_Ursa.Models;
+namespace UotanToolboxNT_Ursa.Models.DeviceCore;
 
 /// <summary>
 /// 设备连接模式枚举

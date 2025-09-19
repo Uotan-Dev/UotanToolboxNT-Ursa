@@ -8,6 +8,7 @@ using Avalonia.Collections;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using UotanToolboxNT_Ursa.Models;
+using UotanToolboxNT_Ursa.Models.DeviceCore;
 using Ursa.Controls;
 using static UotanToolboxNT_Ursa.Helper.LanguageResourceHelper;
 using static UotanToolboxNT_Ursa.Models.GlobalLogModel;

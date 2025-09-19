@@ -9,7 +9,7 @@ using AdvancedSharpAdbClient.Models;
 using UotanToolboxNT_Ursa.Helper;
 using static UotanToolboxNT_Ursa.Models.GlobalLogModel;
 
-namespace UotanToolboxNT_Ursa.Models;
+namespace UotanToolboxNT_Ursa.Models.DeviceCore;
 
 /// <summary>
 /// ADB…Ë±∏¿‡

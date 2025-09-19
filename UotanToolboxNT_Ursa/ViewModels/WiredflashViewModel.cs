@@ -1,8 +1,6 @@
+using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System;
-using System.Threading.Tasks;
-using UotanToolboxNT_Ursa.Models;
 
 namespace UotanToolboxNT_Ursa.ViewModels;
 
@@ -22,7 +20,7 @@ public partial class WiredflashViewModel : ObservableObject
     [RelayCommand]
     public async Task OpenFastbootFile()
     {
-        
+
     }
 
     [RelayCommand]

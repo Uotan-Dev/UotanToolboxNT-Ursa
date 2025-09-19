@@ -2,6 +2,7 @@
 using System.IO;
 using AdvancedSharpAdbClient;
 using Hardware.Info;
+using UotanToolboxNT_Ursa.Models.DeviceCore;
 
 namespace UotanToolboxNT_Ursa.Models;
 

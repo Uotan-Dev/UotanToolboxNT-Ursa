@@ -5,6 +5,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
 using UotanToolboxNT_Ursa.Helper;
 using UotanToolboxNT_Ursa.Models;
+using UotanToolboxNT_Ursa.Models.DeviceCore;
 using Ursa.Controls;
 
 namespace UotanToolboxNT_Ursa.ViewModels;

@@ -1,11 +1,8 @@
-using Avalonia.Controls;
-using Avalonia.Controls.Notifications;
-using Avalonia.Input;
-using Avalonia.Interactivity;
-using Avalonia.Platform.Storage;
-using Avalonia.Threading;
 using System;
 using System.Threading.Tasks;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Platform.Storage;
 using UotanToolboxNT_Ursa.Models;
 using UotanToolboxNT_Ursa.ViewModels;
 using static UotanToolboxNT_Ursa.Models.GlobalLogModel;
@@ -85,11 +82,11 @@ public partial class Appmgr : UserControl
 
     private async Task UninstallApplication(string packageName)
     {
-        
+
     }
 
     public async void CopyButton_OnClick(object sender, RoutedEventArgs args)
     {
-        
+
     }
 }

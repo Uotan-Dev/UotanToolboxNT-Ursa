@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace UotanToolboxNT_Ursa.Models;
+namespace UotanToolboxNT_Ursa.Models.DeviceCore;
 
 /// <summary>
 /// 设备信息基类

@@ -12,6 +12,6 @@ public partial class Modifypartition : UserControl
 
     private async void SetFastboot(object sender, RoutedEventArgs args)
     {
-        
+
     }
 }

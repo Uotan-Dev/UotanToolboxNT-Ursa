@@ -5,7 +5,7 @@ using System.IO;
 using System.Threading.Tasks;
 using static UotanToolboxNT_Ursa.Models.GlobalLogModel;
 
-namespace UotanToolboxNT_Ursa.Models;
+namespace UotanToolboxNT_Ursa.Models.DeviceCore;
 
 /// <summary>
 /// Fastboot设备类
@@ -75,14 +75,14 @@ public class FastbootDevice : DeviceBase
     }
 
     /// <summary>
-    /// 刷新动态设备信息（Fastboot模式下大部分动态信息不可用）
+    /// 刷新动态设备信息
     /// </summary>
     /// <returns></returns>
     protected override async Task<bool> RefreshDynamicDeviceInfoAsync()
     {
         try
         {
-            AddLog($"正在增量刷新Fastboot设备 {SerialNumber} 的动态信息...", LogLevel.Debug);
+            AddLog($"正在刷新Fastboot设备 {SerialNumber} 的动态信息...", LogLevel.Debug);
 
             var variables = await GetFastbootVariables();
             var isUserspace = variables.GetValueOrDefault("is-userspace", "no");
