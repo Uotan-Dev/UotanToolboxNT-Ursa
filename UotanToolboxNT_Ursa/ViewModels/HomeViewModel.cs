@@ -1,5 +1,8 @@
 using System;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Avalonia.Collections;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -332,65 +335,188 @@ public partial class HomeViewModel : ObservableObject
     }
 
     [RelayCommand]
-    public async Task OpenAFDI() =>
-        await MessageBox.ShowAsync("此演示版本未包含驱动安装逻辑。", GetLanguageResource<string>("Common_Execution"), MessageBoxIcon.Information);
+    public async Task OpenAFDI()
+    {
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            if (RuntimeInformation.OSArchitecture == Architecture.X64)
+            {
+                Process.Start(@"Drive\adb.exe");
+            }
+            else if (RuntimeInformation.OSArchitecture == Architecture.Arm64)
+            {
+                var drvpath = string.Format($"\"{Path.Combine(Global.DriveDirectory.FullName, "adb", "*.inf")}\"");
+                var shell = string.Format("/add-driver {0} /subdirs /install", drvpath);
+                var drvlog = await Pnputil(shell);
+                AddLog(drvlog);
+                if (drvlog.Contains(GetLanguageResource<string>("Basicflash_Success")))
+                {
+                    await MessageBox.ShowAsync(GetLanguageResource<string>("Common_InstallSuccess"), GetLanguageResource<string>("Common_Succ"), MessageBoxIcon.Success);
+                }
+                else
+                {
+                    await MessageBox.ShowAsync(GetLanguageResource<string>("Common_InstallFailed"), GetLanguageResource<string>("Common_Error"), MessageBoxIcon.Warning);
+                }
+            }
+        }
+        else
+        {
+            await MessageBox.ShowAsync(GetLanguageResource<string>("Basicflash_NotUsed"), GetLanguageResource<string>("Common_Error"), MessageBoxIcon.Warning);
+        }
+    }
 
     [RelayCommand]
-    public async Task Open9008DI() =>
-        await MessageBox.ShowAsync("此演示版本未包含驱动安装逻辑。", GetLanguageResource<string>("Common_Execution"), MessageBoxIcon.Information);
+    public async Task Open9008DI()
+    {
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            if (RuntimeInformation.OSArchitecture == Architecture.X64)
+            {
+                Process.Start(@"Drive\Qualcomm_HS-USB_Driver.exe");
+            }
+            else if (RuntimeInformation.OSArchitecture == Architecture.Arm64)
+            {
+                var drvpath = string.Format($"\"{Path.Combine(Global.DriveDirectory.FullName, "9008", "*.inf")}\"");
+                var shell = string.Format("/add-driver {0} /subdirs /install", drvpath);
+                var drvlog = await Pnputil(shell);
+                AddLog(drvlog);
+                if (drvlog.Contains(GetLanguageResource<string>("Basicflash_Success")))
+                {
+                    await MessageBox.ShowAsync(GetLanguageResource<string>("Common_InstallSuccess"), GetLanguageResource<string>("Common_Succ"), MessageBoxIcon.Success);
+                }
+                else
+                {
+                    await MessageBox.ShowAsync(GetLanguageResource<string>("Common_InstallFailed"), GetLanguageResource<string>("Common_Error"), MessageBoxIcon.Warning);
+                }
+            }
+        }
+        else
+        {
+            await MessageBox.ShowAsync(GetLanguageResource<string>("Basicflash_NotUsed"), GetLanguageResource<string>("Common_Error"), MessageBoxIcon.Warning);
+        }
+    }
 
     [RelayCommand]
-    public async Task OpenUSBP() =>
-        await MessageBox.ShowAsync("此演示版本未包含 USB 配置逻辑。", GetLanguageResource<string>("Common_Execution"), MessageBoxIcon.Information);
+    public async Task OpenUSBP()
+    {
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            var cmd = @"drive\USB3.bat";
+            var cmdshell = new ProcessStartInfo(cmd)
+            {
+                CreateNoWindow = true,
+                UseShellExecute = false
+            };
+            Process.Start(cmdshell);
+            await MessageBox.ShowAsync(GetLanguageResource<string>("Common_Execution"), GetLanguageResource<string>("Common_Execution"), MessageBoxIcon.Information);
+        }
+        else
+        {
+            await MessageBox.ShowAsync(GetLanguageResource<string>("Basicflash_NotUsed"), GetLanguageResource<string>("Common_Error"), MessageBoxIcon.Warning);
+        }
+    }
+
 
     [RelayCommand]
-    public async Task OpenReUSBP() =>
-        await MessageBox.ShowAsync("此演示版本未包含 USB 配置逻辑。", GetLanguageResource<string>("Common_Execution"), MessageBoxIcon.Information);
+    public async Task OpenReUSBP()
+    {
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            var cmd = @"drive\ReUSB3.bat";
+            var cmdshell = new ProcessStartInfo(cmd)
+            {
+                CreateNoWindow = true,
+                UseShellExecute = false
+            };
+            Process.Start(cmdshell);
+            await MessageBox.ShowAsync(GetLanguageResource<string>("Common_Execution"), GetLanguageResource<string>("Common_Execution"), MessageBoxIcon.Information);
+        }
+        else
+        {
+            await MessageBox.ShowAsync(GetLanguageResource<string>("Basicflash_NotUsed"), GetLanguageResource<string>("Common_Error"), MessageBoxIcon.Warning);
+        }
+    }
 
     [RelayCommand]
     public async Task RebootSys()
     {
-        AddLog("重启操作在精简版本中已禁用。", LogLevel.Info);
-        await Task.CompletedTask;
+        var device = Global.DeviceManager.CurrentDevice;
+        if (device != null)
+        {
+            await device.RebootToModeAsync(DeviceMode.Adb);
+        }
     }
 
     [RelayCommand]
     public async Task RebootRec()
     {
-        AddLog("重启操作在精简版本中已禁用。", LogLevel.Info);
-        await Task.CompletedTask;
+        var device = Global.DeviceManager.CurrentDevice;
+        if (device != null)
+        {
+            await device.RebootToModeAsync(DeviceMode.Recovery);
+        }
     }
 
     [RelayCommand]
     public async Task RebootBL()
     {
-        AddLog("重启操作在精简版本中已禁用。", LogLevel.Info);
-        await Task.CompletedTask;
+        var device = Global.DeviceManager.CurrentDevice;
+        if (device != null)
+        {
+            await device.RebootToModeAsync(DeviceMode.Fastboot);
+        }
     }
 
     [RelayCommand]
     public async Task RebootFB()
     {
-        AddLog("重启操作在精简版本中已禁用。", LogLevel.Info);
-        await Task.CompletedTask;
+        var device = Global.DeviceManager.CurrentDevice;
+        if (device != null)
+        {
+            await device.RebootToModeAsync(DeviceMode.Fastbootd);
+        }
     }
 
     [RelayCommand]
     public async Task PowerOff()
     {
-        AddLog("关机操作在精简版本中已禁用。", LogLevel.Info);
-        await Task.CompletedTask;
+        var device = Global.DeviceManager.CurrentDevice;
+        if (device != null)
+        {
+            await device.PowerOffAsync();
+        }
     }
 
     [RelayCommand]
     public async Task RebootEDL()
     {
-        AddLog("重启操作在精简版本中已禁用。", LogLevel.Info);
-        await Task.CompletedTask;
+        var device = Global.DeviceManager.CurrentDevice;
+        if (device != null)
+        {
+            await device.RebootToModeAsync(DeviceMode.EDL);
+        }
     }
 
-    private void UpdateHardwareInfoCards()
+    private static async Task<string> Pnputil(string shell)
     {
-        // 精简版本不更新硬件卡片数据。
+        var cmd = @"pnputil.exe";
+        var pnputil = new ProcessStartInfo(cmd, shell)
+        {
+            CreateNoWindow = true,
+            UseShellExecute = false,
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+            StandardOutputEncoding = System.Text.Encoding.UTF8,
+            StandardErrorEncoding = System.Text.Encoding.UTF8
+        };
+        using var pnp = new Process();
+        pnp.StartInfo = pnputil;
+        _ = pnp.Start();
+        var output = await pnp.StandardError.ReadToEndAsync();
+        if (output == "")
+        {
+            output = await pnp.StandardOutput.ReadToEndAsync();
+        }
+        return output;
     }
 }
