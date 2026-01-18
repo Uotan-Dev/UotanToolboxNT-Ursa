@@ -1,29 +1,18 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Timers;
-using AdvancedSharpAdbClient.Models;
 using static UotanToolboxNT_Ursa.Models.GlobalLogModel;
 
 namespace UotanToolboxNT_Ursa.Models.DeviceCore;
 
-/// <summary>
-/// 设备管理器
-/// </summary>
-public class DeviceManager
+public class DeviceManager : IDisposable
 {
-    private readonly Timer _deviceScanTimer;
-    private readonly System.Threading.Lock _lockObject = new();
-    private bool _isScanning = false;
-
     /// <summary>
     /// 当前连接的设备列表
     /// </summary>
-    public ObservableCollection<DeviceBase> ConnectedDevices { get; private set; } = [];
+    public ObservableCollection<DeviceBase> ConnectedDevices { get; } = [];
 
     /// <summary>
     /// 当前选中的设备
@@ -40,21 +29,12 @@ public class DeviceManager
     /// </summary>
     public event EventHandler<DeviceChangedEventArgs>? CurrentDeviceChanged;
 
-    public DeviceManager()
-    {
-        _deviceScanTimer = new Timer(2000);
-        _deviceScanTimer.Elapsed += OnDeviceScanTimer;
-        _deviceScanTimer.AutoReset = true;
-    }
-
     /// <summary>
     /// 启动设备管理器
     /// </summary>
     public void Start()
     {
-        AddLog("设备管理器正在启动...", LogLevel.Info);
-        _deviceScanTimer.Start();
-        _ = Task.Run(ScanDevicesAsync); // 立即执行一次扫描
+        AddLog("设备管理器已启动 (精简模式)", LogLevel.Info);
     }
 
     /// <summary>
@@ -62,7 +42,6 @@ public class DeviceManager
     /// </summary>
     public void Stop()
     {
-        _deviceScanTimer.Stop();
         AddLog("设备管理器已停止", LogLevel.Info);
     }
 
@@ -74,17 +53,7 @@ public class DeviceManager
     {
         var oldDevice = CurrentDevice;
         CurrentDevice = device;
-
         CurrentDeviceChanged?.Invoke(this, new DeviceChangedEventArgs(oldDevice, CurrentDevice));
-
-        if (CurrentDevice != null)
-        {
-            AddLog($"当前设备已切换到：{CurrentDevice.SerialNumber} ({CurrentDevice.Mode})", LogLevel.Info);
-        }
-        else
-        {
-            AddLog("当前设备已清空", LogLevel.Info);
-        }
     }
 
     /// <summary>
@@ -92,237 +61,44 @@ public class DeviceManager
     /// </summary>
     /// <param name="serialNumber">设备序列号</param>
     /// <returns></returns>
-    public DeviceBase? GetDeviceBySerial(string serialNumber)
-    {
-        lock (_lockObject)
-        {
-            return ConnectedDevices.FirstOrDefault(d => d.SerialNumber == serialNumber);
-        }
-    }
+    public DeviceBase? GetDeviceBySerial(string serialNumber) => ConnectedDevices.FirstOrDefault(d => d.SerialNumber == serialNumber);
 
     /// <summary>
     /// 获取指定模式的设备列表
     /// </summary>
     /// <param name="mode">设备模式</param>
     /// <returns></returns>
-    public List<DeviceBase> GetDevicesByMode(DeviceMode mode)
-    {
-        lock (_lockObject)
-        {
-            return [.. ConnectedDevices.Where(d => d.Mode == mode)];
-        }
-    }
+    public List<DeviceBase> GetDevicesByMode(DeviceMode mode) => [.. ConnectedDevices.Where(d => d.Mode == mode)];
 
     /// <summary>
     /// 刷新当前设备信息（使用缓存）
     /// </summary>
-    public async Task<bool> RefreshCurrentDeviceAsync()
-    {
-        if (CurrentDevice == null)
-        {
-            AddLog("没有选中的设备", LogLevel.Warning);
-            return false;
-        }
-
-        return await CurrentDevice.RefreshDeviceInfoAsync();
-    }
+    public Task<bool> RefreshCurrentDeviceAsync() => CurrentDevice?.RefreshDeviceInfoAsync() ?? Task.FromResult(false);
 
     /// <summary>
     /// 强制完整刷新当前设备信息（忽略缓存）
     /// </summary>
-    public async Task<bool> ForceRefreshCurrentDeviceAsync()
-    {
-        if (CurrentDevice == null)
-        {
-            AddLog("没有选中的设备", LogLevel.Warning);
-            return false;
-        }
-
-        return await CurrentDevice.ForceRefreshFullDeviceInfoAsync();
-    }
+    public Task<bool> ForceRefreshCurrentDeviceAsync() => CurrentDevice?.ForceRefreshFullDeviceInfoAsync() ?? Task.FromResult(false);
 
     /// <summary>
     /// 扫描设备
     /// </summary>
-    public async Task ScanDevicesAsync()
+    public Task ScanDevicesAsync()
     {
-        if (_isScanning)
+        var removed = ConnectedDevices.ToList();
+        ConnectedDevices.Clear();
+        SetCurrentDevice(null);
+        if (removed.Count > 0)
         {
-            return;
+            DeviceListChanged?.Invoke(this, new DeviceListChangedEventArgs([], removed));
         }
-
-        lock (_lockObject)
-        {
-            if (_isScanning)
-            {
-                return;
-            }
-            _isScanning = true;
-        }
-
-        try
-        {
-            var newDevices = new List<DeviceBase>();
-
-            await ScanAdbDevicesAsync(newDevices);
-
-            await ScanFastbootDevicesAsync(newDevices);
-
-            UpdateDeviceList(newDevices);
-        }
-        catch (Exception ex)
-        {
-            AddLog($"扫描设备时出错：{ex.Message}", LogLevel.Error);
-        }
-        finally
-        {
-            lock (_lockObject)
-            {
-                _isScanning = false;
-            }
-        }
+        return Task.CompletedTask;
     }
-
-    /// <summary>
-    /// 扫描ADB设备
-    /// </summary>
-    private async Task ScanAdbDevicesAsync(List<DeviceBase> newDevices)
-    {
-        try
-        {
-            var adbDevices = await Task.Run(Global.AdbClient.GetDevices);
-
-            foreach (var deviceData in adbDevices)
-            {
-                if (deviceData.State == DeviceState.Online)
-                {
-                    var device = new AdbDevice(deviceData);
-                    newDevices.Add(device);
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            AddLog($"扫描ADB设备失败：{ex.Message}", LogLevel.Warning);
-        }
-    }
-
-    /// <summary>
-    /// 扫描Fastboot设备
-    /// </summary>
-    private async Task ScanFastbootDevicesAsync(List<DeviceBase> newDevices)
-    {
-        try
-        {
-            var fastbootPath = Path.Combine(Global.BinDirectory.FullName, "platform-tools", "fastboot.exe");
-            if (!File.Exists(fastbootPath))
-            {
-                return;
-            }
-
-            using var process = new Process();
-            process.StartInfo.FileName = fastbootPath;
-            process.StartInfo.Arguments = "devices";
-            process.StartInfo.UseShellExecute = false;
-            process.StartInfo.RedirectStandardOutput = true;
-            process.StartInfo.RedirectStandardError = true;
-            process.StartInfo.CreateNoWindow = true;
-
-            process.Start();
-            var output = await process.StandardOutput.ReadToEndAsync();
-            await process.WaitForExitAsync();
-
-            if (!string.IsNullOrEmpty(output))
-            {
-                var lines = output.Split('\n');
-                foreach (var line in lines)
-                {
-                    if (line.Contains("fastboot"))
-                    {
-                        var parts = line.Split('\t');
-                        if (parts.Length >= 2)
-                        {
-                            var serialNumber = parts[0].Trim();
-                            if (!string.IsNullOrEmpty(serialNumber))
-                            {
-                                var device = new FastbootDevice(serialNumber);
-                                newDevices.Add(device);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            AddLog($"扫描Fastboot设备失败：{ex.Message}", LogLevel.Warning);
-        }
-    }
-
-    /// <summary>
-    /// 更新设备列表
-    /// </summary>
-    private void UpdateDeviceList(List<DeviceBase> newDevices)
-    {
-        lock (_lockObject)
-        {
-            var oldDevices = ConnectedDevices.ToList();
-
-            var removedDevices = oldDevices.Where(old =>
-                !newDevices.Any(n => n.SerialNumber == old.SerialNumber && n.Mode == old.Mode)).ToList();
-
-            var addedDevices = newDevices.Where(newDev =>
-                !oldDevices.Any(old => old.SerialNumber == newDev.SerialNumber && old.Mode == newDev.Mode)).ToList();
-
-            foreach (var device in removedDevices)
-            {
-                ConnectedDevices.Remove(device);
-                AddLog($"设备已断开：{device.SerialNumber} ({device.Mode})", LogLevel.Info);
-            }
-
-            foreach (var device in addedDevices)
-            {
-                ConnectedDevices.Add(device);
-                AddLog($"发现新设备：{device.SerialNumber} ({device.Mode})", LogLevel.Info);
-            }
-
-            if (CurrentDevice != null)
-            {
-                var currentStillConnected = ConnectedDevices.Any(d =>
-                    d.SerialNumber == CurrentDevice.SerialNumber && d.Mode == CurrentDevice.Mode);
-
-                if (!currentStillConnected)
-                {
-                    AddLog($"当前设备已断开：{CurrentDevice.SerialNumber}", LogLevel.Warning);
-                    SetCurrentDevice(null);
-                }
-            }
-
-            if (CurrentDevice == null && ConnectedDevices.Count > 0)
-            {
-                SetCurrentDevice(ConnectedDevices[0]);
-            }
-
-            if (addedDevices.Count > 0 || removedDevices.Count > 0)
-            {
-                DeviceListChanged?.Invoke(this, new DeviceListChangedEventArgs(addedDevices, removedDevices));
-            }
-        }
-    }
-
-    /// <summary>
-    /// 定时器事件处理
-    /// </summary>
-    private async void OnDeviceScanTimer(object? sender, ElapsedEventArgs e) => await ScanDevicesAsync();
 
     /// <summary>
     /// 释放资源
     /// </summary>
-    public void Dispose()
-    {
-        Stop();
-        _deviceScanTimer?.Dispose();
-    }
+    public void Dispose() => Stop();
 }
 
 /// <summary>

@@ -4,9 +4,6 @@ using System.Threading.Tasks;
 
 namespace UotanToolboxNT_Ursa.Models.DeviceCore;
 
-/// <summary>
-/// 设备信息基类
-/// </summary>
 public abstract class DeviceBase
 {
     /// <summary>
@@ -168,7 +165,7 @@ public abstract class DeviceBase
     /// 刷新设备信息（智能缓存模式）
     /// </summary>
     /// <returns>是否刷新成功</returns>
-    public async Task<bool> RefreshDeviceInfoAsync()
+    public virtual async Task<bool> RefreshDeviceInfoAsync()
     {
         if (!_isFullInfoCached)
         {
@@ -179,17 +176,14 @@ public abstract class DeviceBase
             }
             return result;
         }
-        else
-        {
-            return await RefreshDynamicDeviceInfoAsync();
-        }
+
+        return await RefreshDynamicDeviceInfoAsync();
     }
 
     /// <summary>
     /// 强制完整刷新设备信息（忽略缓存）
     /// </summary>
-
-    public async Task<bool> ForceRefreshFullDeviceInfoAsync()
+    public virtual async Task<bool> ForceRefreshFullDeviceInfoAsync()
     {
         _isFullInfoCached = false;
         var result = await RefreshFullDeviceInfoAsync();
@@ -203,39 +197,41 @@ public abstract class DeviceBase
     /// <summary>
     /// 刷新完整设备信息（所有属性）
     /// </summary>
-
-    protected abstract Task<bool> RefreshFullDeviceInfoAsync();
+    protected virtual Task<bool> RefreshFullDeviceInfoAsync()
+    {
+        LastUpdated = DateTime.Now;
+        return Task.FromResult(true);
+    }
 
     /// <summary>
     /// 刷新动态设备信息（仅刷新变化频繁的属性）
     /// </summary>
-
-    protected abstract Task<bool> RefreshDynamicDeviceInfoAsync();
+    protected virtual Task<bool> RefreshDynamicDeviceInfoAsync()
+    {
+        LastUpdated = DateTime.Now;
+        return Task.FromResult(true);
+    }
 
     /// <summary>
     /// 获取应用列表
     /// </summary>
-
-    public abstract Task<List<ApplicationInfo>> GetApplicationListAsync();
+    public virtual Task<List<ApplicationInfo>> GetApplicationListAsync() => Task.FromResult(new List<ApplicationInfo>());
 
     /// <summary>
     /// 重启到指定模式
     /// </summary>
     /// <param name="mode">目标模式</param>
-
-    public abstract Task<bool> RebootToModeAsync(DeviceMode mode);
+    public virtual Task<bool> RebootToModeAsync(DeviceMode mode) => Task.FromResult(true);
 
     /// <summary>
     /// 关机
     /// </summary>
-
-    public abstract Task<bool> PowerOffAsync();
+    public virtual Task<bool> PowerOffAsync() => Task.FromResult(true);
 
     /// <summary>
     /// 检查设备连接状态
     /// </summary>
-
-    public abstract Task<bool> CheckConnectionAsync();
+    public virtual Task<bool> CheckConnectionAsync() => Task.FromResult(IsConnected);
 
     /// <summary>
     /// 设备状态变化事件
