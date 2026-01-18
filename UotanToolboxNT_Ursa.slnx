@@ -1,7 +1,3 @@
 <Solution>
-  <Project Path="BootPatcher/BootPatcher.csproj" Id="47b1ac82-dddb-4bb0-877a-480ca26aa31c" />
-  <Project Path="SpraseImg/SpraseImg.csproj" />
-  <Project Path="UotanToolboxNT_Ursa/UotanToolboxNT_Ursa.csproj">
-    <BuildDependency Project="SpraseImg/SpraseImg.csproj" />
-  </Project>
+  <Project Path="UotanToolboxNT_Ursa/UotanToolboxNT_Ursa.csproj" />
 </Solution>
