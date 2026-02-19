@@ -13,8 +13,8 @@
               x:DataType="vm:MainWindowViewModel"
               Background="{DynamicResource PageBackground}"
               Icon="/Assets/icon.ico"
-              IsFullScreenButtonVisible="False"
-              IsRestoreButtonVisible="False"
+              
+              
               Title="UotanToolboxNT">
     <Border>
 		<Grid>
