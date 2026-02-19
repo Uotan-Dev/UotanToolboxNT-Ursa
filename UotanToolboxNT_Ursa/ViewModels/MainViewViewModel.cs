@@ -26,62 +26,62 @@ public partial class MainViewViewModel : ViewModelBase, IDisposable
 
     public MainViewViewModel()
     {
-        Content = new HomeViewModel();
+        //Content = new FormatExtractViewModel();
         WeakReferenceMessenger.Default.Register<MainViewViewModel, string>(this, OnNavigation);
-        // 订阅资源变更事件以刷新菜单项
-        ResourceManager.LanguageChanged += OnLanguageChanged;
-        ResourceManager.ThemeChanged += OnThemeChanged;
+        //// 订阅资源变更事件以刷新菜单项
+        //ResourceManager.LanguageChanged += OnLanguageChanged;
+        //ResourceManager.ThemeChanged += OnThemeChanged;
 
-        // 订阅设备变化事件以更新设备状态信息
-        Global.DeviceManager.CurrentDeviceChanged += OnCurrentDeviceChanged;
+        //// 订阅设备变化事件以更新设备状态信息
+        //Global.DeviceManager.CurrentDeviceChanged += OnCurrentDeviceChanged;
 
-        // 初始化设备状态信息
-        // 不立即更新当前设备状态来避免重复获取设备信息，此为调试用
-        _ = UpdateDeviceStatusInfoAsync();
+        //// 初始化设备状态信息
+        //// 不立即更新当前设备状态来避免重复获取设备信息，此为调试用
+        //_ = UpdateDeviceStatusInfoAsync();
     }
 
     /// <summary>
     /// 语言变更事件处理
     /// </summary>
-    private void OnLanguageChanged(object? sender, string language) => Menus.RefreshMenuItems();
+    //private void OnLanguageChanged(object? sender, string language) => Menus.RefreshMenuItems();
 
     /// <summary>
     /// 主题变更事件处理
     /// 怎么说呢，虽然理论上主题变更不需要刷新菜单项，但为了保持一致性，这里还是刷新一下。天知道哪里会出奇怪的毛病
     /// </summary>
-    private void OnThemeChanged(object? sender, string theme) => Menus.RefreshMenuItems();
+    //private void OnThemeChanged(object? sender, string theme) => Menus.RefreshMenuItems();
 
     /// <summary>
     /// 当前设备变化事件处理
     /// </summary>
-    private async void OnCurrentDeviceChanged(object? sender, DeviceChangedEventArgs e) =>
-        await UpdateDeviceStatusInfoAsync();
+    //private async void OnCurrentDeviceChanged(object? sender, DeviceChangedEventArgs e) =>
+     //   await UpdateDeviceStatusInfoAsync();
 
     /// <summary>
     /// 更新设备状态信息
     /// </summary>
     private async Task UpdateDeviceStatusInfoAsync()
     {
-        var currentDevice = Global.DeviceManager.CurrentDevice;
+        //var currentDevice = Global.DeviceManager.CurrentDevice;
 
-        if (currentDevice != null)
-        {
-            // 强制刷新设备信息以获取最新数据，否则无法获得除Status外的其他信息。但会导致二次刷新，暂时先这样吧
+        //if (currentDevice != null)
+        //{
+        //    // 强制刷新设备信息以获取最新数据，否则无法获得除Status外的其他信息。但会导致二次刷新，暂时先这样吧
 
-            await currentDevice.RefreshDeviceInfoAsync();
+        //    await currentDevice.RefreshDeviceInfoAsync();
 
-            Status = currentDevice.Status;
-            CodeName = currentDevice.CodeName;
-            BlStatus = currentDevice.BootloaderStatus;
-            VabStatus = currentDevice.VABStatus;
-        }
-        else
-        {
-            Status = "--";
-            CodeName = "--";
-            BlStatus = "--";
-            VabStatus = "--";
-        }
+        //    Status = currentDevice.Status;
+        //    CodeName = currentDevice.CodeName;
+        //    BlStatus = currentDevice.BootloaderStatus;
+        //    VabStatus = currentDevice.VABStatus;
+        //}
+        //else
+        //{
+        //    Status = "--";
+        //    CodeName = "--";
+        //    BlStatus = "--";
+        //    VabStatus = "--";
+        //}
     }
 
     private void OnNavigation(MainViewViewModel vm, string s) =>
@@ -100,16 +100,16 @@ public partial class MainViewViewModel : ViewModelBase, IDisposable
             _ => throw new ArgumentOutOfRangeException(nameof(s), s, null)
         };
 
-    public ObservableCollection<MenuItemViewModel> MenuItems { get; set; } = [];
+    //public ObservableCollection<MenuItemViewModel> MenuItems { get; set; } = [];
 
     /// <summary>
     /// 释放资源，取消事件订阅
     /// </summary>
     public void Dispose()
     {
-        ResourceManager.LanguageChanged -= OnLanguageChanged;
-        ResourceManager.ThemeChanged -= OnThemeChanged;
-        Global.DeviceManager.CurrentDeviceChanged -= OnCurrentDeviceChanged;
-        GC.SuppressFinalize(this);
+        //ResourceManager.LanguageChanged -= OnLanguageChanged;
+        //ResourceManager.ThemeChanged -= OnThemeChanged;
+        //Global.DeviceManager.CurrentDeviceChanged -= OnCurrentDeviceChanged;
+        //GC.SuppressFinalize(this);
     }
 }
