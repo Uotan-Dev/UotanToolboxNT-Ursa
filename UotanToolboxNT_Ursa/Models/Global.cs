@@ -51,10 +51,30 @@ internal class Global
     // 使用属性代替静态字段，以确保障碍能够被延迟并更容易捕获错误
     private static string _basePath = AppContext.BaseDirectory ?? AppDomain.CurrentDomain.BaseDirectory ?? ".";
 
-    // 对于 HarmonyOS/Android/iOS 等平台，BaseDirectory 是只读的，我们需要一个可写目录
-    private static string _writablePath = (OperatingSystem.IsWindows() || OperatingSystem.IsMacOS() || OperatingSystem.IsLinux()) && !OperatingSystem.IsAndroid() && !OperatingSystem.IsIOS() 
+    // 对于 Windows，我们尝试在程序运行目录读写（便携模式优先）
+    // 对于 HarmonyOS/Android/Linux/MacOS 等系统，BaseDirectory 经常是只读的，或者是受限的，我们强制使用 LocalApplicationData
+    // 增加路径分隔符判断，以防一些环境错误报告 OS 平台
+    private static string _writablePath = (OperatingSystem.IsWindows() && Path.DirectorySeparatorChar == '\\') 
         ? _basePath 
-        : Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "UotanToolbox");
+        : GetBestUnixWritablePath();
+
+    private static string GetBestUnixWritablePath()
+    {
+        var path = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+        if (string.IsNullOrEmpty(path))
+        {
+            path = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+        }
+        if (string.IsNullOrEmpty(path))
+        {
+            path = "/data/local/tmp";
+        }
+        if (!Directory.Exists(path))
+        {
+             path = Path.GetTempPath();
+        }
+        return Path.Combine(path, "UotanToolbox");
+    }
 
     public static DirectoryInfo BaseDirectory { get; } = new(_basePath);
 

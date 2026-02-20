@@ -34,12 +34,12 @@ internal class ResourceManager
             }
 
             // 优先查找在 App.axaml 中静态定义的资源，这样更能适配 Native AOT
-            ResourceDictionary? newLanguage = null;
+            IResourceProvider? newLanguage = null;
             var languageKey = language == "zh-CN" || language == "简体中文" ? "zh_CN_Key" : "en_US_Key";
 
-            if (app.TryFindResource(languageKey, out var resource) && resource is ResourceDictionary dict)
+            if (app.TryFindResource(languageKey, out var resource) && resource is IResourceProvider provider)
             {
-                newLanguage = dict;
+                newLanguage = provider;
             }
             else
             {
@@ -48,7 +48,7 @@ internal class ResourceManager
                 {
                     var actualLang = language == "zh-CN" || language == "简体中文" ? "zh-CN" : "en-US";
                     var languageFile = $"avares://UotanToolboxNT_Ursa/Locale/{actualLang}.axaml";
-                    newLanguage = (ResourceDictionary)AvaloniaXamlLoader.Load(new Uri(languageFile, UriKind.Absolute));
+                    newLanguage = (IResourceProvider)AvaloniaXamlLoader.Load(new Uri(languageFile, UriKind.Absolute));
                 }
                 catch (Exception ex)
                 {
@@ -71,16 +71,16 @@ internal class ResourceManager
             }
             else
             {
-                // 如果没找 ResourceInclude，查找已有的 ResourceDictionary
-                ResourceDictionary? existingDict = null;
-                foreach (var provider in targetMergedDictionaries)
+                // 如果没找到 ResourceInclude，查找已有的 ResourceDictionary
+                IResourceProvider? existingDict = null;
+                foreach (var p in targetMergedDictionaries)
                 {
-                    if (provider is ResourceDictionary d && d.GetType() == typeof(ResourceDictionary) && d.Count > 0)
+                    if (p is ResourceDictionary d && d.Count > 0)
                     {
                         var keys = d.Keys.Cast<object>().ToList();
                         if (keys.Any(k => k.ToString()?.Contains("Home_") == true))
                         {
-                            existingDict = d;
+                            existingDict = p;
                             break;
                         }
                     }
@@ -98,19 +98,22 @@ internal class ResourceManager
                 }
             }
 
-            // 更新 SemiTheme 的 Locale
+            // 更新 SemiTheme 的 Locale (不使用反射)
             try
             {
                 var langStr = language == "简体中文" || language == "zh-CN" ? "zh-CN" : "en-US";
                 var culture = new CultureInfo(langStr);
                 foreach (var style in app.Styles)
                 {
-                    if (style is Semi.Avalonia.SemiTheme s) s.Locale = culture;
-                    // 使用反射适配 Ursa 的 SemiTheme
-                    if (style.GetType().Name == "SemiTheme" && style.GetType().Namespace?.Contains("Ursa") == true)
+                    if (style is Semi.Avalonia.SemiTheme s)
                     {
-                        var pi = style.GetType().GetProperty("Locale");
-                        pi?.SetValue(style, culture);
+                        s.Locale = culture;
+                    }
+                    else if (style.GetType().Name == "SemiTheme" && style.GetType().Namespace?.Contains("Ursa") == true)
+                    {
+                         // Ursa 的 SemiTheme 更新
+                         var prop = style.GetType().GetProperty("Locale");
+                         prop?.SetValue(style, culture);
                     }
                 }
             }
@@ -131,34 +134,23 @@ internal class ResourceManager
     public static void ApplyTheme(string themeKey)
     {
         var app = Application.Current;
-        if (app == null)
-        {
-            return;
-        }
+        if (app == null) return;
 
-        // 修改 RequestedThemeVariant 这是最重要的，它可以触发应用内大部分样式的自动切换
+        // 修改 RequestedThemeVariant 这最重要，它可以触发应用内大部分样式的自动切换
         app.RequestedThemeVariant = themeKey switch
         {
-            "LightColors" => ThemeVariant.Light,
-            "DarkColors" => ThemeVariant.Dark,
+            "Dark" or "DarkColors" => ThemeVariant.Dark,
+            "Light" or "LightColors" => ThemeVariant.Light,
             _ => ThemeVariant.Default
         };
 
-        // 同时也尝试替换旧有的颜色资源（如果代码其他地方有用到）
+        // 也尝试更新 ResourceDictionary，以防有些地方使用了静态资源
         try
         {
-            var themeFile = themeKey switch
+            // 优先查找静态定义的资源 (在 App.axaml 中定义的 LightColors / DarkColors Key)
+            if (app.TryFindResource(themeKey, out var resource) && resource is IResourceProvider provider)
             {
-                "LightColors" => "avares://UotanToolboxNT_Ursa/Themes/LightColors.axaml",
-                "DarkColors" => "avares://UotanToolboxNT_Ursa/Themes/DarkColors.axaml",
-                _ => null
-            };
-
-            if (!string.IsNullOrEmpty(themeFile))
-            {
-                var newTheme = (ResourceDictionary)AvaloniaXamlLoader.Load(new Uri(themeFile, UriKind.Absolute));
                 var targetMergedDictionaries = app.Resources.MergedDictionaries;
-
                 var existingThemeInclude = targetMergedDictionaries
                     .OfType<ResourceInclude>()
                     .FirstOrDefault(r => r.Source?.ToString()?.Contains("Themes") == true);
@@ -166,29 +158,7 @@ internal class ResourceManager
                 if (existingThemeInclude != null)
                 {
                     var index = targetMergedDictionaries.IndexOf(existingThemeInclude);
-                    targetMergedDictionaries[index] = newTheme;
-                }
-                else
-                {
-                    ResourceDictionary? existingDict = null;
-                    foreach (var provider in targetMergedDictionaries)
-                    {
-                        if (provider is ResourceDictionary d && d.GetType() == typeof(ResourceDictionary))
-                        {
-                            var keys = d.Keys.Cast<object>().ToList();
-                            if (keys.Any(k => k.ToString() == "PageBackground"))
-                            {
-                                existingDict = d;
-                                break;
-                            }
-                        }
-                    }
-
-                    if (existingDict != null)
-                    {
-                        var index = targetMergedDictionaries.IndexOf(existingDict);
-                        targetMergedDictionaries[index] = newTheme;
-                    }
+                    targetMergedDictionaries[index] = provider;
                 }
             }
         }

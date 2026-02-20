@@ -37,11 +37,18 @@ public partial class SettingsViewModel : ObservableObject
 
     private void SaveSettings()
     {
-        var settings = new SettingsModel
+        try
         {
-            IsLightTheme = IsLightTheme,
-            SelectedLanguageList = SelectedLanguageList
-        };
-        SettingsModel.Save(settings);
+            var settings = new SettingsModel
+            {
+                IsLightTheme = IsLightTheme,
+                SelectedLanguageList = SelectedLanguageList
+            };
+            SettingsModel.Save(settings);
+        }
+        catch (Exception ex)
+        {
+            GlobalLogModel.AddLog($"±£¥Ê…Ë÷√±®¥Ì: {ex.Message}", GlobalLogModel.LogLevel.Error);
+        }
     }
 }

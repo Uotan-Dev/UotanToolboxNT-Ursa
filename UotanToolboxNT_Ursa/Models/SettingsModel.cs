@@ -18,8 +18,24 @@ public partial class SettingsModel
     // 保存设置到 JSON 文件
     public static void Save(SettingsModel settings)
     {
-        var json = JsonSerializer.Serialize(settings, SettingsJsonContext.Default.SettingsModel);
-        File.WriteAllText(Global.SettingsFile.FullName, json);
+        try
+        {
+            var options = new JsonSerializerOptions { WriteIndented = true };
+            var json = JsonSerializer.Serialize(settings, SettingsJsonContext.Default.SettingsModel);
+            
+            // 确保目录存在
+            var directory = Path.GetDirectoryName(Global.SettingsFile.FullName);
+            if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
+            {
+                Directory.CreateDirectory(directory);
+            }
+
+            File.WriteAllText(Global.SettingsFile.FullName, json);
+        }
+        catch (Exception ex)
+        {
+            AddLog($"保存设置失败: {ex.Message}", LogLevel.Error);
+        }
     }
 
     // 从 JSON 文件加载设置
