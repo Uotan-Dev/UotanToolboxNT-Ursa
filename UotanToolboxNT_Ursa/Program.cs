@@ -11,8 +11,24 @@ internal sealed class Program
     [STAThread]
     public static void Main(string[] args)
     {
-        _ = BuildAvaloniaApp()
-        .StartWithClassicDesktopLifetime(args);
+        Console.WriteLine("Uotan Toolbox NT Starting...");
+        try
+        {
+            _ = BuildAvaloniaApp()
+                .StartWithClassicDesktopLifetime(args);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Application Startup Exception:");
+            Console.WriteLine(ex.ToString());
+            if (ex.InnerException != null)
+            {
+                Console.WriteLine("\nInner Exception:");
+                Console.WriteLine(ex.InnerException.ToString());
+            }
+            Console.WriteLine("\nPress any key to exit...");
+            _ = Console.ReadKey();
+        }
     }
 
     // Avalonia configuration, don't remove; also used by visual designer.
