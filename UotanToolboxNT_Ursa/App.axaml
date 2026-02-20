@@ -4,7 +4,7 @@
 			 xmlns:u-semi="https://irihi.tech/ursa/themes/semi"
 			 xmlns:u="https://irihi.tech/ursa"
              x:Class="UotanToolboxNT_Ursa.App"
-			 RequestedThemeVariant="Light">
+			 RequestedThemeVariant="Default">
              <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
   
     <Application.Styles>
@@ -26,12 +26,16 @@
 	</Application.Styles>
     <Application.Resources>
 		<ResourceDictionary>
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceInclude x:Key="Light" Source="avares://UotanToolboxNT_Ursa/Themes/LightColors.axaml" />
+                <ResourceInclude x:Key="Dark" Source="avares://UotanToolboxNT_Ursa/Themes/DarkColors.axaml" />
+            </ResourceDictionary.ThemeDictionaries>
+            <ResourceInclude x:Key="zh-CN" Source="avares://UotanToolboxNT_Ursa/Locale/zh-CN.axaml" />
+            <ResourceInclude x:Key="en-US" Source="avares://UotanToolboxNT_Ursa/Locale/en-US.axaml" />
             <ResourceDictionary.MergedDictionaries>
                 <ResourceInclude Source="avares://UotanToolboxNT_Ursa/Locale/zh-CN.axaml" />
             </ResourceDictionary.MergedDictionaries>
-			<ResourceInclude x:Key="LightColors" Source="avares://UotanToolboxNT_Ursa/Themes/LightColors.axaml"/>
-			<ResourceInclude x:Key="DarkColors" Source="avares://UotanToolboxNT_Ursa/Themes/DarkColors.axaml"/>
-		</ResourceDictionary>
+        </ResourceDictionary>
         <ControlTheme x:Key="InfoButton" TargetType="Button">
             <Setter Property="Foreground" Value="{DynamicResource SukiPrimaryColor}" />
             <Setter Property="Cursor" Value="Hand" />

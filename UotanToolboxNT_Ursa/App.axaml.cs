@@ -3,6 +3,7 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
+using UotanToolboxNT_Ursa.Models;
 using UotanToolboxNT_Ursa.ViewModels;
 using UotanToolboxNT_Ursa.Views;
 
@@ -14,6 +15,11 @@ public partial class App : Application
 
     public override void OnFrameworkInitializationCompleted()
     {
+        // 加载并应用设置
+        var settings = SettingsModel.Load();
+        SettingsModel.ChangeLaguage(settings.SelectedLanguageList);
+        SettingsModel.ChangeTheme(settings.IsLightTheme ? "LightColors" : "DarkColors");
+
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             // Avoid duplicate validations from both Avalonia and the CommunityToolkit. 
