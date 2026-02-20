@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
+using CommunityToolkit.Mvvm.Messaging;
 using UotanToolboxNT_Ursa.ViewModels;
 
 namespace UotanToolboxNT_Ursa.Models;
@@ -49,7 +50,7 @@ public partial class GlobalLogModel
         }
     }
 
-    private static void UpdateLogContent(string logEntry) => GlobalLogViewModel._logContent += logEntry + Environment.NewLine;
+    private static void UpdateLogContent(string logEntry) => WeakReferenceMessenger.Default.Send(new LogUpdateMessage(logEntry + Environment.NewLine));
 
     /// <summary>
     /// 更新硬件信息卡片
@@ -60,15 +61,15 @@ public partial class GlobalLogModel
         {
             // 卡片1：内存信息
             var memoryInfo = GetMemoryInfo();
-            GlobalLogViewModel._logContent1 = memoryInfo;
+            WeakReferenceMessenger.Default.Send(new HardwareInfoUpdateMessage(1, memoryInfo));
 
             // 卡片2：系统版本
             var systemNetworkInfo = GetSystemInfo();
-            GlobalLogViewModel._logContent2 = systemNetworkInfo;
+            WeakReferenceMessenger.Default.Send(new HardwareInfoUpdateMessage(2, systemNetworkInfo));
 
             // 卡片3：GPU信息
             var gpuInfo = GetGpuInfo();
-            GlobalLogViewModel._logContent3 = gpuInfo;
+            WeakReferenceMessenger.Default.Send(new HardwareInfoUpdateMessage(3, gpuInfo));
         }
         catch (Exception ex)
         {
@@ -79,7 +80,7 @@ public partial class GlobalLogModel
     /// <summary>
     /// 获取内存信息
     /// </summary>
-    private static string GetMemoryInfo()
+    public static string GetMemoryInfo()
     {
         try
         {
@@ -109,7 +110,7 @@ public partial class GlobalLogModel
     /// <summary>
     /// 获取系统版本和网络信息
     /// </summary>
-    private static string GetSystemInfo()
+    public static string GetSystemInfo()
     {
         try
         {
@@ -139,7 +140,7 @@ public partial class GlobalLogModel
     /// <summary>
     /// 获取GPU信息
     /// </summary>
-    private static string GetGpuInfo()
+    public static string GetGpuInfo()
     {
         try
         {

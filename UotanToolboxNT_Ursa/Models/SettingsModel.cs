@@ -6,7 +6,7 @@ using static UotanToolboxNT_Ursa.Models.GlobalLogModel;
 
 namespace UotanToolboxNT_Ursa.Models;
 
-public class SettingsModel
+public partial class SettingsModel
 {
     // 想要保存的设置属性就添加到这里，然后下面的new方法也要添加对应的默认值。最后再在vm那里添加对应的属性绑定
     [JsonPropertyName("isLightTheme")]
@@ -15,12 +15,10 @@ public class SettingsModel
     [JsonPropertyName("selectedLanguageList")]
     public string SelectedLanguageList { get; set; } = "Settings_Default";
 
-    private static readonly JsonSerializerOptions CachedJsonOptions = new() { WriteIndented = true };
-
     // 保存设置到 JSON 文件
     public static void Save(SettingsModel settings)
     {
-        var json = JsonSerializer.Serialize(settings, CachedJsonOptions);
+        var json = JsonSerializer.Serialize(settings, SettingsJsonContext.Default.SettingsModel);
         File.WriteAllText(Global.SettingsFile.FullName, json);
     }
 
@@ -37,8 +35,15 @@ public class SettingsModel
         }
 
         var json = File.ReadAllText(Global.SettingsFile.FullName);
-        return JsonSerializer.Deserialize<SettingsModel>(json, CachedJsonOptions) ?? new SettingsModel();
+        return JsonSerializer.Deserialize(json, SettingsJsonContext.Default.SettingsModel) ?? new SettingsModel();
     }
+
+    [JsonSourceGenerationOptions(WriteIndented = true)]
+    [JsonSerializable(typeof(SettingsModel))]
+    internal partial class SettingsJsonContext : JsonSerializerContext
+    {
+    }
+
     public static void ChangeLaguage(string value)
     {
         if (value == "Settings_Default")

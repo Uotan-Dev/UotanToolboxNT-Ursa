@@ -12,7 +12,29 @@ internal class Global
 
     public static AdbServer AdbServer = new(); //工具箱ADB服务实例
 
-    public static HardwareInfo HardwareInfo = new(timeoutInWMI: TimeSpan.FromMilliseconds(1000)); //设备查询超时设置为1000ms，避免21s的WMI首次调用初始化问题
+    private static HardwareInfo? _hardwareInfo;
+    public static HardwareInfo HardwareInfo
+    {
+        get
+        {
+            if (_hardwareInfo == null)
+            {
+                try
+                {
+                    _hardwareInfo = new HardwareInfo(timeoutInWMI: TimeSpan.FromMilliseconds(1000));
+                    // 尝试刷新以便验证是否可用
+                    _hardwareInfo.RefreshMemoryStatus();
+                }
+                catch (Exception ex)
+                {
+                    // 如果 AOT 环境下依然失败，退而求其次
+                    Console.WriteLine($"HardwareInfo init failed: {ex.Message}");
+                    _hardwareInfo = new HardwareInfo();
+                }
+            }
+            return _hardwareInfo;
+        }
+    }
 
     public static DeviceManager DeviceManager = new(); //设备管理器实例
 

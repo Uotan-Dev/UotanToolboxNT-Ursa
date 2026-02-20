@@ -10,7 +10,7 @@ using Ursa.Controls;
 
 namespace UotanToolboxNT_Ursa.ViewModels;
 
-public partial class MainViewViewModel : ViewModelBase, IDisposable
+public partial class MainViewViewModel : ViewModelBase, IDisposable, IRecipient<NavigationMessage>
 {
     [ObservableProperty] private string _status = "--", _codeName = "--", _blStatus = "--", _vabStatus = "--";
     public WindowNotificationManager? NotificationManager { get; set; }
@@ -26,11 +26,12 @@ public partial class MainViewViewModel : ViewModelBase, IDisposable
 
     public MainViewViewModel()
     {
-        //Content = new FormatExtractViewModel();
-        WeakReferenceMessenger.Default.Register<MainViewViewModel, string>(this, OnNavigation);
-        //// 订阅资源变更事件以刷新菜单项
-        //ResourceManager.LanguageChanged += OnLanguageChanged;
-        //ResourceManager.ThemeChanged += OnThemeChanged;
+        _globalLogViewModel = new GlobalLogViewModel();
+        Content = _homeViewModel = new HomeViewModel();
+        WeakReferenceMessenger.Default.Register<NavigationMessage>(this);
+        // 订阅资源变更事件以刷新菜单项
+        ResourceManager.LanguageChanged += OnLanguageChanged;
+        ResourceManager.ThemeChanged += OnThemeChanged;
 
         //// 订阅设备变化事件以更新设备状态信息
         //Global.DeviceManager.CurrentDeviceChanged += OnCurrentDeviceChanged;
@@ -84,10 +85,15 @@ public partial class MainViewViewModel : ViewModelBase, IDisposable
         //}
     }
 
-    private void OnNavigation(MainViewViewModel vm, string s) =>
-        Content = s switch
+    private GlobalLogViewModel? _globalLogViewModel;
+    private SettingsViewModel? _settingsViewModel;
+    private HomeViewModel? _homeViewModel;
+
+    public void Receive(NavigationMessage message)
+    {
+        Content = message.Key switch
         {
-            MenuKeys.MenuKeyHome => new HomeViewModel(),
+            MenuKeys.MenuKeyHome => _homeViewModel ??= new HomeViewModel(),
             MenuKeys.MenuKeyBasicflash => new BasicflashViewModel(),
             MenuKeys.MenuKeyAppmgr => new AppmgrViewModel(),
             MenuKeys.MenuKeyWiredflash => new WiredflashViewModel(),
@@ -95,10 +101,11 @@ public partial class MainViewViewModel : ViewModelBase, IDisposable
             MenuKeys.MenuKeyScrcpy => new ScrcpyViewModel(),
             MenuKeys.MenuKeyFormatExtract => new FormatExtractViewModel(),
             MenuKeys.MenuKeyModifypartition => new ModifypartitionViewModel(),
-            MenuKeys.MenuKeyGlobalLog => new GlobalLogViewModel(),
-            MenuKeys.MenuKeySettings => new SettingsViewModel(),
-            _ => throw new ArgumentOutOfRangeException(nameof(s), s, null)
+            MenuKeys.MenuKeyGlobalLog => _globalLogViewModel ??= new GlobalLogViewModel(),
+            MenuKeys.MenuKeySettings => _settingsViewModel ??= new SettingsViewModel(),
+            _ => Content
         };
+    }
 
     //public ObservableCollection<MenuItemViewModel> MenuItems { get; set; } = [];
 
