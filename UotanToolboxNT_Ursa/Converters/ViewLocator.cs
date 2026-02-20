@@ -1,6 +1,7 @@
 using System;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
+using CommunityToolkit.Mvvm.ComponentModel;
 using UotanToolboxNT_Ursa.Pages;
 using UotanToolboxNT_Ursa.ViewModels;
 
@@ -21,7 +22,7 @@ public class ViewLocator : IDataTemplate
 
     public bool Match(object? data)
     {
-        return data is ViewModelBase;
+        return data is ObservableObject;
     }
 
     private Control? GetViewByVM(object vm)
