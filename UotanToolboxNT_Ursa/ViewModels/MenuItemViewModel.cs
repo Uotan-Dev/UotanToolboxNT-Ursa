@@ -58,5 +58,9 @@ public partial class MenuItemViewModel : ViewModelBase
         {
             MenuHeader = LanguageResourceHelper.GetLanguageResource<string>(_resourceKey);
         }
+        foreach (var child in Children)
+        {
+            child.RefreshMenuHeader();
+        }
     }
 }

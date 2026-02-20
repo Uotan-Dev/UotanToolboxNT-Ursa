@@ -30,8 +30,8 @@ public partial class MainViewViewModel : ViewModelBase, IDisposable, IRecipient<
         Content = _homeViewModel = new HomeViewModel();
         WeakReferenceMessenger.Default.Register<NavigationMessage>(this);
         // 订阅资源变更事件以刷新菜单项
-        //ResourceManager.LanguageChanged += OnLanguageChanged;
-        //ResourceManager.ThemeChanged += OnThemeChanged;
+        ResourceManager.LanguageChanged += OnLanguageChanged;
+        ResourceManager.ThemeChanged += OnThemeChanged;
 
         //// 订阅设备变化事件以更新设备状态信息
         //Global.DeviceManager.CurrentDeviceChanged += OnCurrentDeviceChanged;
@@ -114,9 +114,9 @@ public partial class MainViewViewModel : ViewModelBase, IDisposable, IRecipient<
     /// </summary>
     public void Dispose()
     {
-        //ResourceManager.LanguageChanged -= OnLanguageChanged;
-        //ResourceManager.ThemeChanged -= OnThemeChanged;
+        ResourceManager.LanguageChanged -= OnLanguageChanged;
+        ResourceManager.ThemeChanged -= OnThemeChanged;
         //Global.DeviceManager.CurrentDeviceChanged -= OnCurrentDeviceChanged;
-        //GC.SuppressFinalize(this);
+        GC.SuppressFinalize(this);
     }
 }
