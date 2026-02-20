@@ -43,7 +43,15 @@ public partial class GlobalLogViewModel : ViewModelBase, IRecipient<LogUpdateMes
         }
         catch (Exception ex)
         {
-            LogContent = $"加载初始日志失败: {ex.Message}";
+            // 如果内部异常更具体，记录下来
+            var message = ex.InnerException != null 
+                ? $"{ex.Message}\nInner: {ex.InnerException.Message}" 
+                : ex.Message;
+            
+            LogContent = $"加载初始日志失败: {message}";
+            
+            // 同时记录到内存日志中
+            GlobalLogModel.AddLog($"GlobalLog Loading Error: {ex}", GlobalLogModel.LogLevel.Error);
         }
     }
 

@@ -8,9 +8,11 @@ namespace UotanToolboxNT_Ursa.Models;
 
 internal class Global
 {
-    public static AdbClient AdbClient = new(); //工具箱ADB客户端实例
+    private static AdbClient? _adbClient;
+    public static AdbClient AdbClient => _adbClient ??= new AdbClient(); //工具箱ADB客户端实例
 
-    public static AdbServer AdbServer = new(); //工具箱ADB服务实例
+    private static AdbServer? _adbServer;
+    public static AdbServer AdbServer => _adbServer ??= new AdbServer(); //工具箱ADB服务实例
 
     private static HardwareInfo? _hardwareInfo;
     public static HardwareInfo HardwareInfo
@@ -28,33 +30,42 @@ internal class Global
                 catch (Exception ex)
                 {
                     // 如果 AOT 环境下依然失败，退而求其次
-                    Console.WriteLine($"HardwareInfo init failed: {ex.Message}");
-                    _hardwareInfo = new HardwareInfo();
+                    try
+                    {
+                        _hardwareInfo = new HardwareInfo();
+                    }
+                    catch
+                    {
+                        // 这几乎不应发生，但作为最后手段
+                        _hardwareInfo = null!; 
+                    }
                 }
             }
             return _hardwareInfo;
         }
     }
 
-    public static DeviceManager DeviceManager = new(); //设备管理器实例
+    private static DeviceManager? _deviceManager;
+    public static DeviceManager DeviceManager => _deviceManager ??= new DeviceManager(); //设备管理器实例
 
-    public static DirectoryInfo? BaseDirectory = new(AppDomain.CurrentDomain.BaseDirectory);//工具箱根目录
+    // 使用属性代替静态字段，以确保障碍能够被延迟并更容易捕获错误
+    private static string _basePath = AppContext.BaseDirectory ?? AppDomain.CurrentDomain.BaseDirectory ?? ".";
 
-    public static DirectoryInfo TempDirectory = new(Path.GetTempPath());//系统临时目录
+    public static DirectoryInfo BaseDirectory { get; } = new(_basePath);
 
-    public static DirectoryInfo BinDirectory = new(Path.Join(BaseDirectory.FullName, "Bin"));//工具箱二进制目录
+    public static DirectoryInfo TempDirectory { get; } = new(Path.GetTempPath());
 
-    public static DirectoryInfo ImageDirectory = new(Path.Join(BaseDirectory.FullName, "Image"));//工具箱镜像目录
+    public static DirectoryInfo BinDirectory { get; } = new(Path.Combine(_basePath, "Bin"));
 
-    public static DirectoryInfo DriveDirectory = new(Path.Join(BaseDirectory.FullName, "Drive"));//工具箱驱动文件目录
+    public static DirectoryInfo ImageDirectory { get; } = new(Path.Combine(_basePath, "Image"));
 
-    public static DirectoryInfo PushDirectory = new(Path.Join(BaseDirectory.FullName, "Push"));//工具箱驱动文件目录
+    public static DirectoryInfo DriveDirectory { get; } = new(Path.Combine(_basePath, "Drive"));
 
-    public static DirectoryInfo LogDirectory = new(Path.Join(BaseDirectory.FullName, "Logs"));//工具箱日志目录
+    public static DirectoryInfo PushDirectory { get; } = new(Path.Combine(_basePath, "Push"));
 
-    public static FileInfo SettingsFile = new(Path.Join(BaseDirectory.FullName, "settings.json"));//工具箱配置文件信息
+    public static DirectoryInfo LogDirectory { get; } = new(Path.Combine(_basePath, "Logs"));
 
-    public static FileInfo LatestLogFile = new(Path.Join(LogDirectory.FullName, "latest.log"));//工具箱日志文件信息
+    public static FileInfo SettingsFile { get; } = new(Path.Combine(_basePath, "settings.json"));
 
-
+    public static FileInfo LatestLogFile { get; } = new(Path.Combine(Path.Combine(_basePath, "Logs"), "latest.log"));
 }

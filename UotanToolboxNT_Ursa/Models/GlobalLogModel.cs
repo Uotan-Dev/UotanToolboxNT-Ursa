@@ -22,31 +22,45 @@ public partial class GlobalLogModel
 
     static GlobalLogModel()
     {
-        if (!Global.LogDirectory.Exists)
+        try
         {
-            Directory.CreateDirectory(Global.LogDirectory.FullName);
+            if (!Global.LogDirectory.Exists)
+            {
+                Directory.CreateDirectory(Global.LogDirectory.FullName);
+            }
+            if (Global.LatestLogFile.Exists)
+            {
+                var firstLine = File.ReadLines(Global.LatestLogFile.FullName).FirstOrDefault();
+                var timestamp = ExtractTimestampFromLog(firstLine) ?? DateTime.Now.ToString("yyyyMMdd_HHmmss");
+                var archivedLogFile = Path.Combine(Global.LogDirectory.FullName, $"log_{timestamp}.log");
+                File.Move(Global.LatestLogFile.FullName, archivedLogFile);
+            }
         }
-        if (Global.LatestLogFile.Exists)
+        catch (Exception ex)
         {
-            var firstLine = File.ReadLines(Global.LatestLogFile.FullName).FirstOrDefault();
-            var timestamp = ExtractTimestampFromLog(firstLine) ?? DateTime.Now.ToString("yyyyMMdd_HHmmss");
-            var archivedLogFile = Path.Combine(Global.LogDirectory.FullName, $"log_{timestamp}.log");
-            File.Move(Global.LatestLogFile.FullName, archivedLogFile);
+            UpdateLogContent($"[Critical Error] 静态构造函数初始化失败: {ex.Message}");
         }
     }
 
     public static void AddLog(string message, LogLevel level = LogLevel.Info)
     {
-        if (message != string.Empty)
-        {
-            var timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-            var logEntry = $"[{timestamp}] [{level}] {message}";
+        if (string.IsNullOrEmpty(message)) return;
 
+        var timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+        var logLine = $"[{timestamp}] [{level}] {message}";
+
+        UpdateLogContent(logLine);
+
+        try
+        {
             lock (LockObject)
             {
-                File.AppendAllText(Global.LatestLogFile.FullName, logEntry + Environment.NewLine);
+                File.AppendAllText(Global.LatestLogFile.FullName, logLine + Environment.NewLine);
             }
-            UpdateLogContent(logEntry);
+        }
+        catch (Exception ex)
+        {
+            UpdateLogContent($"[{timestamp}] [Error] 写入日志文件失败: {ex.Message}");
         }
     }
 
@@ -85,7 +99,7 @@ public partial class GlobalLogModel
         try
         {
             var hardwareInfo = Global.HardwareInfo;
-            if (hardwareInfo.MemoryStatus == null)
+            if (hardwareInfo == null || hardwareInfo.MemoryStatus == null)
             {
                 return "内存信息\n\n暂无数据";
             }
@@ -117,6 +131,11 @@ public partial class GlobalLogModel
             var hardwareInfo = Global.HardwareInfo;
             var systemInfo = "系统\n\n";
 
+            if (hardwareInfo == null)
+            {
+                return systemInfo + "获取失败";
+            }
+
             // 系统版本
             if (hardwareInfo.OperatingSystem != null)
             {
@@ -145,7 +164,7 @@ public partial class GlobalLogModel
         try
         {
             var hardwareInfo = Global.HardwareInfo;
-            if (hardwareInfo.VideoControllerList?.Count > 0)
+            if (hardwareInfo != null && hardwareInfo.VideoControllerList?.Count > 0)
             {
                 var primaryGpu = hardwareInfo.VideoControllerList[0];
                 var gpuInfo = "GPU信息\n";
@@ -175,7 +194,7 @@ public partial class GlobalLogModel
                 return "GPU信息\n\n未检测到显卡";
             }
         }
-        catch
+        catch (Exception)
         {
             return "GPU信息\n\n获取失败";
         }
