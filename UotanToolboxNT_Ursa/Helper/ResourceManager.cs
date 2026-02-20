@@ -35,25 +35,30 @@ internal class ResourceManager
 
             // 优先查找在 App.axaml 中静态定义的资源，这样更能适配 Native AOT
             ResourceDictionary? newLanguage = null;
-            if (app.TryFindResource(language, out var resource) && resource is ResourceDictionary dict)
+            var languageKey = language == "zh-CN" || language == "简体中文" ? "zh_CN_Key" : "en_US_Key";
+
+            if (app.TryFindResource(languageKey, out var resource) && resource is ResourceDictionary dict)
             {
                 newLanguage = dict;
             }
             else
             {
                 // 如果没找到，尝试动态加载 (在 AOT 下可能会失败，但作为回退保留)
-                var languageFile = $"avares://UotanToolboxNT_Ursa/Locale/{language}.axaml";
-                newLanguage = (ResourceDictionary)AvaloniaXamlLoader.Load(new Uri(languageFile, UriKind.Absolute));
+                try
+                {
+                    var actualLang = language == "zh-CN" || language == "简体中文" ? "zh-CN" : "en-US";
+                    var languageFile = $"avares://UotanToolboxNT_Ursa/Locale/{actualLang}.axaml";
+                    newLanguage = (ResourceDictionary)AvaloniaXamlLoader.Load(new Uri(languageFile, UriKind.Absolute));
+                }
+                catch (Exception ex)
+                {
+                    AddLog($"ResourceManager.ApplyLanguage: Dynamic Load Error - {ex.Message}", LogLevel.Error);
+                }
             }
 
             if (newLanguage == null) return;
 
             var targetMergedDictionaries = app.Resources.MergedDictionaries;
-            // 兼容目前 App.axaml 中嵌套一层 ResourceDictionary 的结构
-            if (targetMergedDictionaries.Count > 0 && targetMergedDictionaries[0] is ResourceDictionary innerDict)
-            {
-                targetMergedDictionaries = innerDict.MergedDictionaries;
-            }
 
             var existingLanguageInclude = targetMergedDictionaries
                 .OfType<ResourceInclude>()
@@ -67,11 +72,10 @@ internal class ResourceManager
             else
             {
                 // 如果没找 ResourceInclude，查找已有的 ResourceDictionary
-                // 我们避开 ResourceInclude 类型本身
                 ResourceDictionary? existingDict = null;
                 foreach (var provider in targetMergedDictionaries)
                 {
-                    if (provider is ResourceDictionary d && d.GetType() != typeof(ResourceInclude) && d.Count > 0)
+                    if (provider is ResourceDictionary d && d.GetType() == typeof(ResourceDictionary) && d.Count > 0)
                     {
                         var keys = d.Keys.Cast<object>().ToList();
                         if (keys.Any(k => k.ToString()?.Contains("Home_") == true))
@@ -95,15 +99,24 @@ internal class ResourceManager
             }
 
             // 更新 SemiTheme 的 Locale
-            var culture = new CultureInfo(language == "简体中文" || language == "zh-CN" ? "zh-CN" : "en-US");
-            foreach (var style in app.Styles)
+            try
             {
-                if (style is Semi.Avalonia.SemiTheme s) s.Locale = culture;
-                if (style.GetType().Name == "SemiTheme" && style.GetType().Namespace?.Contains("Ursa") == true)
+                var langStr = language == "简体中文" || language == "zh-CN" ? "zh-CN" : "en-US";
+                var culture = new CultureInfo(langStr);
+                foreach (var style in app.Styles)
                 {
-                    var pi = style.GetType().GetProperty("Locale");
-                    pi?.SetValue(style, culture);
+                    if (style is Semi.Avalonia.SemiTheme s) s.Locale = culture;
+                    // 使用反射适配 Ursa 的 SemiTheme
+                    if (style.GetType().Name == "SemiTheme" && style.GetType().Namespace?.Contains("Ursa") == true)
+                    {
+                        var pi = style.GetType().GetProperty("Locale");
+                        pi?.SetValue(style, culture);
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                AddLog($"ResourceManager.ApplyLanguage: Locale Style Update Error - {ex.Message}", LogLevel.Warning);
             }
 
             // 触发语言变更事件
@@ -111,7 +124,7 @@ internal class ResourceManager
         }
         catch (Exception ex)
         {
-            AddLog($"ResourceManager.ApplyLanguage: Error - {ex.Message}", LogLevel.Error);
+            AddLog($"ResourceManager.ApplyLanguage: Critical Error - {ex.Message}", LogLevel.Error);
         }
     }
 
@@ -145,10 +158,6 @@ internal class ResourceManager
             {
                 var newTheme = (ResourceDictionary)AvaloniaXamlLoader.Load(new Uri(themeFile, UriKind.Absolute));
                 var targetMergedDictionaries = app.Resources.MergedDictionaries;
-                if (targetMergedDictionaries.Count > 0 && targetMergedDictionaries[0] is ResourceDictionary innerDict)
-                {
-                    targetMergedDictionaries = innerDict.MergedDictionaries;
-                }
 
                 var existingThemeInclude = targetMergedDictionaries
                     .OfType<ResourceInclude>()
@@ -164,7 +173,7 @@ internal class ResourceManager
                     ResourceDictionary? existingDict = null;
                     foreach (var provider in targetMergedDictionaries)
                     {
-                        if (provider is ResourceDictionary d && d.GetType() != typeof(ResourceInclude))
+                        if (provider is ResourceDictionary d && d.GetType() == typeof(ResourceDictionary))
                         {
                             var keys = d.Keys.Cast<object>().ToList();
                             if (keys.Any(k => k.ToString() == "PageBackground"))
@@ -183,9 +192,9 @@ internal class ResourceManager
                 }
             }
         }
-        catch
+        catch (Exception ex)
         {
-            // 对于 AOT，如果动态加载失败没关系，因为 RequestedThemeVariant 已经通过 ThemeDictionaries 工作了
+            AddLog($"ResourceManager.ApplyTheme: Error - {ex.Message}", LogLevel.Warning);
         }
 
         // 触发主题变更事件

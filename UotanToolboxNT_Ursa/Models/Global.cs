@@ -51,6 +51,11 @@ internal class Global
     // 使用属性代替静态字段，以确保障碍能够被延迟并更容易捕获错误
     private static string _basePath = AppContext.BaseDirectory ?? AppDomain.CurrentDomain.BaseDirectory ?? ".";
 
+    // 对于 HarmonyOS/Android/iOS 等平台，BaseDirectory 是只读的，我们需要一个可写目录
+    private static string _writablePath = (OperatingSystem.IsWindows() || OperatingSystem.IsMacOS() || OperatingSystem.IsLinux()) && !OperatingSystem.IsAndroid() && !OperatingSystem.IsIOS() 
+        ? _basePath 
+        : Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "UotanToolbox");
+
     public static DirectoryInfo BaseDirectory { get; } = new(_basePath);
 
     public static DirectoryInfo TempDirectory { get; } = new(Path.GetTempPath());
@@ -63,9 +68,9 @@ internal class Global
 
     public static DirectoryInfo PushDirectory { get; } = new(Path.Combine(_basePath, "Push"));
 
-    public static DirectoryInfo LogDirectory { get; } = new(Path.Combine(_basePath, "Logs"));
+    public static DirectoryInfo LogDirectory { get; } = new(Path.Combine(_writablePath, "Logs"));
 
-    public static FileInfo SettingsFile { get; } = new(Path.Combine(_basePath, "settings.json"));
+    public static FileInfo SettingsFile { get; } = new(Path.Combine(_writablePath, "settings.json"));
 
-    public static FileInfo LatestLogFile { get; } = new(Path.Combine(Path.Combine(_basePath, "Logs"), "latest.log"));
+    public static FileInfo LatestLogFile { get; } = new(Path.Combine(Path.Combine(_writablePath, "Logs"), "latest.log"));
 }

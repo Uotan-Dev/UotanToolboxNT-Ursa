@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
@@ -16,9 +17,17 @@ public partial class App : Application
     public override void OnFrameworkInitializationCompleted()
     {
         // 加载并应用设置
-        var settings = SettingsModel.Load();
-        SettingsModel.ChangeLaguage(settings.SelectedLanguageList);
-        SettingsModel.ChangeTheme(settings.IsLightTheme ? "LightColors" : "DarkColors");
+        try
+        {
+            var settings = SettingsModel.Load();
+            SettingsModel.ChangeLaguage(settings.SelectedLanguageList);
+            SettingsModel.ChangeTheme(settings.IsLightTheme ? "LightColors" : "DarkColors");
+        }
+        catch (Exception ex)
+        {
+            // 记录错误但继续启动，避免黑屏
+            GlobalLogModel.AddLog($"Settings application failed on startup: {ex.Message}", GlobalLogModel.LogLevel.Error);
+        }
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {

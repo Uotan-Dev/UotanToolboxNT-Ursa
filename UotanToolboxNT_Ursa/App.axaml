@@ -25,13 +25,13 @@
 		</Style>
 	</Application.Styles>
     <Application.Resources>
-		<ResourceDictionary>
+        <ResourceDictionary>
             <ResourceDictionary.ThemeDictionaries>
                 <ResourceInclude x:Key="Light" Source="avares://UotanToolboxNT_Ursa/Themes/LightColors.axaml" />
                 <ResourceInclude x:Key="Dark" Source="avares://UotanToolboxNT_Ursa/Themes/DarkColors.axaml" />
             </ResourceDictionary.ThemeDictionaries>
-            <ResourceInclude x:Key="zh-CN" Source="avares://UotanToolboxNT_Ursa/Locale/zh-CN.axaml" />
-            <ResourceInclude x:Key="en-US" Source="avares://UotanToolboxNT_Ursa/Locale/en-US.axaml" />
+            <ResourceInclude x:Key="zh_CN_Key" Source="avares://UotanToolboxNT_Ursa/Locale/zh-CN.axaml" />
+            <ResourceInclude x:Key="en_US_Key" Source="avares://UotanToolboxNT_Ursa/Locale/en-US.axaml" />
             <ResourceDictionary.MergedDictionaries>
                 <ResourceInclude Source="avares://UotanToolboxNT_Ursa/Locale/zh-CN.axaml" />
             </ResourceDictionary.MergedDictionaries>
