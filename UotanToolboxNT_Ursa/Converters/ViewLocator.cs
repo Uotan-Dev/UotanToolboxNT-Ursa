@@ -1,6 +1,8 @@
-using System;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
+using CommunityToolkit.Mvvm.ComponentModel;
+using UotanToolboxNT_Ursa.Pages;
+using UotanToolboxNT_Ursa.ViewModels;
 
 namespace UotanToolboxNT_Ursa.Converters;
 
@@ -13,10 +15,21 @@ public class ViewLocator : IDataTemplate
             return null;
         }
 
-        var name = param.GetType().Name.Replace("ViewModel", "");
-        var type = Type.GetType("UotanToolboxNT_Ursa.Pages." + name);
-        return type != null ? (Control)Activator.CreateInstance(type)! : new TextBlock { Text = "Not Found: " + name };
+        return param switch
+        {
+            HomeViewModel => new Home(),
+            BasicflashViewModel => new Basicflash(),
+            AppmgrViewModel => new Appmgr(),
+            WiredflashViewModel => new Wiredflash(),
+            CustomizedflashViewModel => new Customizedflash(),
+            ScrcpyViewModel => new Scrcpy(),
+            FormatExtractViewModel => new FormatExtract(),
+            ModifypartitionViewModel => new Modifypartition(),
+            GlobalLogViewModel => new GlobalLog(),
+            SettingsViewModel => new Settings(),
+            _ => new TextBlock { Text = "Not Found: " + param.GetType().Name }
+        };
     }
 
-    public bool Match(object? data) => true;
+    public bool Match(object? data) => data is ObservableObject;
 }

@@ -35,9 +35,9 @@
                     <u:NavMenu
                         Name="menu"
                         ExpandWidth="190"
-                        SubMenuBinding="{Binding Children}"
-                        HeaderBinding="{Binding MenuHeader}"
-                        CommandBinding="{Binding ActivateCommand}"
+                        SubMenuBinding="{Binding Children, x:DataType=vm:MenuItemViewModel}"
+                        HeaderBinding="{Binding MenuHeader, x:DataType=vm:MenuItemViewModel}"
+                        CommandBinding="{Binding ActivateCommand, x:DataType=vm:MenuItemViewModel}"
                         ItemsSource="{Binding Menus.MenuItems}">
                         <u:NavMenu.Header>
                             <StackPanel Orientation="Vertical">
